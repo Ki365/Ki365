@@ -1,10 +1,16 @@
-# Ki365
-Connect KiCad projects together with useful tools
-
+<div align=center>
+  <img src="logos/large/ki365_logo_hi_res_transparent.png" alt="Ki365 logo" width="400" height="auto" />
+  <h2>Connecting KiCad projects with useful tools, on the web!</h2>
+</div>
+  
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![built with Go badge](https://img.shields.io/badge/built_with-Go-367B99.svg)](https://go.dev/talks/2012/splash.article)
 [![Docker Pulls](https://img.shields.io/docker/pulls/ki365/ki365)](https://hub.docker.com/r/ki365/ki365)
 [![Contributors](https://img.shields.io/github/contributors/ki365/ki365)](https://github.com/ki365/ki365/graphs/contributors)
+
+KiCad is a great tool! Until you realize the files are only on your computer and not on your coworkers! By combining industry standard web technologies and support for your favorite hosted platform (including self-hosted), we bring KiCad to your browser! 
+
+**_NOTE:_** Ki365 just got started, please bear with us while we create an amazing experience!
 
 ## Tech Stack
 
@@ -79,3 +85,11 @@ Come back for some information on our supported platforms!
   <summary>Why was the tech stack chosen?</summary>
   To bring KiCad to the web, many customer stories needed to be met. To meet this goal, we made specific decisions on the tech stack to balance performance, community familiarity, and reliability. If someone knows of a change to the tech stack to help bring us closer to this goal, please, create an issue!
 </details>
+
+<details>
+  <summary>Is Ki365 officially affiliated with KiCad?</summary>
+  No, Ki365 is not officially affiliated with KiCad. Although we strive to create a prominent software ecosystem with KiCad and other tools, we also want to respect the projects and branding of these tools. We hope the remixing of KiCad's branding can uplift both projects in a fair and equitable manner.
+</details>
+
+### Logo Disclaimer
+The official Ki365 logo is a modified version of the KiCad official logo. The source for this logo is protected under the CC BY-SA 4.0 license which permits remixing and reuse under the condition of providing this disclaimer. This file and its derivatives continue to be protected under the CC BY-SA 4.0 license and shall only be used in compliance with this license. The Ki365 license shall apply to all source content besides the KiCad logo, its derivatives, and any other content which may have their own respective licenses.
