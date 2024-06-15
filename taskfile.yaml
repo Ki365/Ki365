@@ -1,0 +1,15 @@
+version: '3'
+
+tasks:
+  check-deps:
+    desc: Checks all dependencies are installed
+    cmds:
+      - task --version
+      - go version
+
+  dev:
+    desc: Runs the development server
+    dir: './frontend'
+    cmds:
+      - yarn
+      - yarn dev
