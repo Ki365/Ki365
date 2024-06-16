@@ -83,6 +83,20 @@ KiCad is a great tool! Until you realize the files are only on your computer and
 Come back for some information on our supported platforms! 
 ```
 
+## Contributing
+
+To start the development environment run:
+
+```
+git clone https://github.com/Ki365/Ki365.git
+cd Ki365
+task dev
+```
+
+**_NOTE:_** These commands require that the git, task, npm, yarn and golang CLI tools are installed 
+
+For further information on contributing please read the [CONTRIBUTING.md](https://github.com/Ki365/Ki365/blob/main/CONTRIBUTING.md)
+
 ## Design Goals
 - Provide a first-class experience for viewing, documenting, and collaborating on KiCad projects
 - Foster a community around managing KiCad projects with scalability in mind
