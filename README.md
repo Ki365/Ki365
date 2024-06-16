@@ -135,4 +135,4 @@ For further information on contributing please read the [CONTRIBUTING.md](https:
 </details>
 
 ### Logo Disclaimer
-The official Ki365 logo is a modified version of the KiCad official logo. The source for this logo is protected under the CC BY-SA 4.0 license which permits remixing and reuse under the condition of providing this disclaimer. This file and its derivatives continue to be protected under the CC BY-SA 4.0 license and shall only be used in compliance with this license. The Ki365 license shall apply to all source content besides the KiCad logo, its derivatives, and any other content which may have their own respective licenses.
+The official Ki365 logo is a modified version of the official KiCad logo. The source for this logo is protected under the CC BY-SA 4.0 license which permits remixing and reuse under the condition of providing this disclaimer. This file and its derivatives continue to be protected under the CC BY-SA 4.0 license and shall only be used in compliance with this license. The Ki365 license shall apply to all source content besides the KiCad logo, its derivatives, and any other content which may have their own respective licenses.
