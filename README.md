@@ -46,6 +46,8 @@ KiCad is a great tool! Until you realize the files are only on your computer and
   <ui>
     <li><a href="https://react.dev/">React</a></li>
     <li><a href="https://yarnpkg.com/">Yarn</a></li>
+    <li><a href="https://tailwindcss.com/">Tailwind CSS</a></li>
+    <li><a href="https://vitejs.dev/">Vite</a></li>
     <li>For more informaton on what frontend packages we use click <a href="">here</a>.</li>
   </ui>
 </details>
@@ -62,8 +64,8 @@ KiCad is a great tool! Until you realize the files are only on your computer and
 <details>
   <summary>Server</summary>
   <ui>
-    <li><a href="test">Golang</a></li>
-    <li><a href="test">Gorilla</a></li>
+    <li><a href="https://go.dev/">Golang</a></li>
+    <li><a href="https://gorilla.github.io/">Gorilla</a></li>
   </ui>
 </details>
 
