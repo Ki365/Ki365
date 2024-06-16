@@ -10,6 +10,33 @@
 
 KiCad is a great tool! Until you realize the files are only on your computer and not on your coworkers! By combining industry standard web technologies and support for your favorite hosted platform (including self-hosted), we bring KiCad to your browser! 
 
+<div align=center>
+  <table>
+    <tr>
+      <td>
+        <img src="images/login.png" alt="Ki365 login page" width="400" height="auto" />
+      </td>
+      <td>
+        <img src="images/dashboard.png" alt="Ki365 dashboard page" width="400" height="auto" />
+      </td>
+      <td>
+        <img src="images/project.png" alt="Ki365 project page" width="400" height="auto" />
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <h3>Login</h3>
+      </td>
+      <td>
+        <h3>Dashboard</h3>
+      </td>
+      <td>
+        <h3>Project</h3>
+      </td>
+    </tr>
+    </table>
+</div>
+
 **_NOTE:_** Ki365 just got started, please bear with us while we create an amazing experience!
 
 ## Tech Stack
