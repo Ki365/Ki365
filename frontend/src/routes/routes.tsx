@@ -12,7 +12,7 @@ const PATH = {
     },
 
     USER: {
-        HOME: "/dashboard/home",
+        HOME: "/dashboard",
         PROJECT: "/dashboard/project",
     },
 
