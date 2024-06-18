@@ -188,7 +188,7 @@ export default function DashboardPage() {
                         </div>
                         <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm" x-chunk="dashboard-02-chunk-1">
                             <div className="flex flex-col items-center gap-1 text-center">
-                                <ImportIcon size={100} strokeWidth={1} className="text-muted-foreground m-4"/>
+                                <ImportIcon size={100} strokeWidth={1} className="text-muted-foreground m-4" />
                                 <h3 className="text-2x1 font-bold tracking-tight">
                                     You have no projects yet
                                 </h3>
