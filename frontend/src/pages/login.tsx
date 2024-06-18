@@ -2,8 +2,9 @@ import { useState } from 'react'
 
 import { ProfileForm } from '@/components/auth/user-auth-form'
 
-import img from '../assets/wall.jpg'
-import ico from '../assets/ico.png'
+import img from '@/assets/wall.jpg'
+import ico from '@/assets/ico.png'
+
 
 export default function LoginPage() {
   return (
