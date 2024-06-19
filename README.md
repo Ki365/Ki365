@@ -79,8 +79,15 @@ KiCad is a great tool! Until you realize the files are only on your computer and
 
 ## Installation
 
+### Docker
 ```
-Come back for some information on our supported platforms! 
+docker pull ki365:latest
+docker run ki365:latest
+```
+
+### Bare metal
+```
+Coming soon!
 ```
 
 ## Contributing
