@@ -81,9 +81,10 @@ KiCad is a great tool! Until you realize the files are only on your computer and
 
 ### Docker
 ```
-docker pull ki365:latest
-docker run ki365:latest
+docker pull ghcr.io/ki365/ki365:latest
+docker run -d -p 8080:8080 ghcr.io/ki365/ki365:latest
 ```
+Vist: [localhost:8080](http://localhost:8080)
 
 ### Bare metal
 ```
