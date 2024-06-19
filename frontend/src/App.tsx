@@ -1,12 +1,23 @@
 import { createBrowserRouter, RouterProvider, Outlet} from "react-router-dom"
 
-import ROUTES from '@/routes/routes'
+import { ROUTES_GENERAL, ROUTES_DASHBOARD } from '@/routes/routes'
+import DashboardTemplate from "./templates/dashboard-template"
 
 function App() {
   const router = createBrowserRouter([
     {
       element: <Outlet />,
-      children: ROUTES
+      errorElement: <div className="flex justify-center text-lg">404 not found</div>,
+      children: [
+        {
+          element: <Outlet />,
+          children: ROUTES_GENERAL,
+        },
+        {
+          element: <DashboardTemplate />,
+          children: ROUTES_DASHBOARD,
+        },
+      ]
     }
   ])
 

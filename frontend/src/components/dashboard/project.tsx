@@ -1,6 +1,7 @@
 import { CircleUserIcon, FullscreenIcon } from "lucide-react"
 import React from "react"
 import { Button } from "@/components/ui/button"
+import { Link } from "react-router-dom"
 
 // TODO: turn any into types for typescript to do its job
 const Project = (props: any) => {
@@ -8,11 +9,11 @@ const Project = (props: any) => {
 
         <div className="w-full relative group border rounded-lg">
             <div className="max-w-80 max-h-80 relative overflow-y-hidden ">
-                <a href="/dashboard/project" >
+                <Link to="/dashboard/project" >
                     <div className="h-52 flex justify-center pt-2">
                         <img className="max-h-60 p-4" src={props.image}></img>
                     </div>
-                </a>
+                </Link>
                 <div className="w-full h-16 absolute bg-white -bottom-[130px] group-hover:bottom-0 duration-700 border-t rounded-lg">
                     <ul className="h-full flex flex-col items-end justify-center gap-2 font-titleFont px-4">
                         <li className="text-[#767676] hover:text-primeColor text-sm font-normal border-b-[1px] border-b-gray-200 hover:border-b-primColor flex items-center justify-start gap-2 hover:cursor-pointer pb-1 duration-300 w-full">
