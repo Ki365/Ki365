@@ -1,6 +1,9 @@
-version: '3'
 services:
   ki365:
+    container_name: ki365
     build:
       context: .
       dockerfile: ./docker/Dockerfile
+    ports:
+      - "8080:8080"
+    image: ghcr.io/ki365/ki365:latest
