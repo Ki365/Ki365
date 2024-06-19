@@ -1,11 +1,20 @@
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs";
-import DashboardTemplate from "@/templates/dashboard-template";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 
-// import script from '@/assets/kicanvas.js'
+declare global {
+    namespace JSX {
+      interface IntrinsicElements {
+        ['kicanvas-embed']: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+            src: React.ReactNode;
+            theme: React.ReactNode;
+            controls: React.ReactNode;
+        };
+      }
+    }
+  }
 
 const useScript: any = (url: any) => {
     useEffect(() => {

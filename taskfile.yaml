@@ -13,3 +13,9 @@ tasks:
     cmds:
       - yarn
       - yarn dev
+
+  build-frontend:
+    desc: builds the frontend for production
+    dir: './frontend'
+    cmds:
+      - yarn build 

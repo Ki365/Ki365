@@ -1,5 +1,4 @@
 import { CircleUserIcon, FullscreenIcon } from "lucide-react"
-import React from "react"
 import { Button } from "@/components/ui/button"
 import { Link } from "react-router-dom"
 

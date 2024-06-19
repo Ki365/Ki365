@@ -1,0 +1,6 @@
+version: '3'
+services:
+  ki365:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile

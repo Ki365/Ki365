@@ -1,5 +1,3 @@
-import { useState } from 'react'
-
 import { ProfileForm } from '@/components/auth/user-auth-form'
 
 import img from '@/assets/wall.jpg'

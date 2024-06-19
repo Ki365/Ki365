@@ -1,0 +1,4 @@
+.DS_STORE
+.git
+build
+*/node_modules
