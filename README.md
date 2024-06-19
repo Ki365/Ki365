@@ -42,7 +42,7 @@ KiCad is a great tool! Until you realize the files are only on your computer and
 ## Tech Stack
 
 <details>
-  <summary>Frontend</summary>
+  <summary>💻Frontend</summary>
   <ui>
     <li><a href="https://react.dev/">React</a></li>
     <li><a href="https://yarnpkg.com/">Yarn</a></li>
@@ -53,7 +53,7 @@ KiCad is a great tool! Until you realize the files are only on your computer and
 </details>
 
 <details>
-  <summary>Database</summary>
+  <summary>🔢 Database</summary>
   <ui>
     <li><a href="https://github.com/ostafen/clover">CloverDB: Internal database</a></li>
     <li><a href="https://github.com/etcd-io/bbolt">bbolt: CloverDB key-value store</a></li>
@@ -62,7 +62,7 @@ KiCad is a great tool! Until you realize the files are only on your computer and
 </details>
 
 <details>
-  <summary>Server</summary>
+  <summary>📱Server</summary>
   <ui>
     <li><a href="https://go.dev/">Golang</a></li>
     <li><a href="https://gorilla.github.io/">Gorilla</a></li>
@@ -70,7 +70,7 @@ KiCad is a great tool! Until you realize the files are only on your computer and
 </details>
 
 <details>
-  <summary>DevOps</summary>
+  <summary>🚀 DevOps</summary>
   <ui>
     <li><a href="https://taskfile.dev/">Task</a></li>
     <li><a href="https://github.com/h2non/gock">Gock</a></li>
