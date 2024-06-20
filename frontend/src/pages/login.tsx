@@ -1,7 +1,10 @@
 import { ProfileForm } from '@/components/auth/user-auth-form'
 
 import img from '@/assets/wall.jpg'
-import ico from '@/assets/ico.png'
+import ico from '@/assets/ico.svg'
+import { Link } from 'react-router-dom'
+import { PATH } from '@/routes/routes'
+import { Button } from '@/components/ui/button'
 
 
 export default function LoginPage() {
@@ -60,6 +63,9 @@ export default function LoginPage() {
               </a>
               .
             </p>
+            <Link to={PATH.USER.ALL_PROJECTS}>
+              <Button>Bypass login</Button>
+            </Link>
           </div>
         </div>
         <div className="grow"></div>

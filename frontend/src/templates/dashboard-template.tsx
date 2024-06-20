@@ -5,7 +5,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 import { BellOffIcon, BookOpenIcon, CircleUserIcon, CpuIcon, FoldersIcon, MenuIcon, PartyPopperIcon, SearchIcon, ShieldEllipsisIcon, SunMoonIcon, UserRoundCogIcon, UsersIcon } from "lucide-react";
 
-import banner from '@/assets/banner.png'
+import banner from '@/assets/banner.svg'
 
 import { SiGithub } from '@icons-pack/react-simple-icons'
 import { Toaster } from "sonner";

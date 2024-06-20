@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="340.76199"
+   height="136.763"
+   id="svg3509"
+   version="1.1"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
+   sodipodi:docname="ki365_logo_paths_op.svg"
+   inkscape:export-filename="/home/fabrizio/Desktop/kicad_logo2.png"
+   inkscape:export-xdpi="130.52866"
+   inkscape:export-ydpi="130.52866"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <defs
+     id="defs3511" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="2"
+     inkscape:cx="185.5"
+     inkscape:cy="112.75"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:window-width="2256"
+     inkscape:window-height="1398"
+     inkscape:window-x="-11"
+     inkscape:window-y="-11"
+     inkscape:window-maximized="1"
+     inkscape:snap-grids="false"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:snap-to-guides="false"
+     inkscape:document-rotation="0"
+     inkscape:showpageshadow="2"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" />
+  <metadata
+     id="metadata3514">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-9.118681,-878.62366)">
+    <rect
+       style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.16593;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect3001"
+       width="340.76199"
+       height="136.76265"
+       x="9.118681"
+       y="878.62366"
+       rx="0.79142594"
+       ry="0.68401301"
+       inkscape:export-filename="/home/fabrizio/Desktop/kicad_logo_final.png"
+       inkscape:export-xdpi="130.52866"
+       inkscape:export-ydpi="130.52866" />
+    <rect
+       style="fill:#b0314d;fill-opacity:1;fill-rule:nonzero;stroke:#681d2d;stroke-width:4.85049;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect3438-4-1-6-9-8-4"
+       width="116.24297"
+       height="111.73183"
+       x="19.324575"
+       y="896.97614"
+       rx="0.92550105"
+       ry="0.96813995"
+       inkscape:export-filename="/home/fabrizio/Desktop/kicad_logo_final.png"
+       inkscape:export-xdpi="130.52866"
+       inkscape:export-ydpi="130.52866" />
+    <g
+       id="text3428-5-7-3-3-5-7"
+       style="font-size:120.794px;line-height:122%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#1b2b63"
+       aria-label="Ki365">
+      <path
+         style="font-weight:bold;line-height:122%;font-family:'Tiresias LPfont';-inkscape-font-specification:'Tiresias LPfont Bold';fill:#ffffff"
+         d="m 48.84104,943.26009 16.927674,-21.41026 q 5.190368,-6.54694 5.190368,-9.79092 0,-1.17963 -0.294908,-1.88741 h 29.549706 q -3.361944,1.88741 -8.434348,7.9625 -1.356574,1.5925 -4.777497,5.83916 l -22.177024,27.60332 26.482669,36.45053 q 2.418239,3.30296 6.13407,7.43166 1.002685,1.06167 2.89009,2.5362 H 70.015378 q 0.353889,-1.35657 0.353889,-2.41824 0,-3.24398 -4.48259,-9.37805 L 48.84104,962.95989 v 23.5336 q 0,8.19842 3.302961,11.50138 H 24.422722 q 2.300276,-2.30027 2.949072,-5.24935 0.353889,-1.65148 0.353889,-6.19305 V 921.6139 q 0,-4.54157 -0.353889,-6.19305 -0.648796,-2.94907 -2.949072,-5.24935 h 27.721279 q -3.302961,3.30296 -3.302961,11.4424 z m 79.1531,-9.79092 v 54.14497 q 0,4.24666 0.23592,5.54425 0.47186,2.65417 2.47723,4.83648 h -25.95184 q 2.00537,-2.18231 2.47722,-4.83648 0.23593,-1.29759 0.23593,-5.54425 v -43.8822 q 0,-4.24666 -0.23593,-5.48527 -0.47185,-2.59518 -2.41824,-4.7775 z m -10.26277,-30.84729 q 4.89546,0 8.31638,3.4799 3.47991,3.42093 3.47991,8.31639 0,5.01342 -3.42093,8.43434 -3.36194,3.36194 -8.37536,3.36194 -4.89546,0 -8.37537,-3.42092 -3.42092,-3.4799 -3.42092,-8.37536 0,-5.01343 3.36194,-8.37537 3.42092,-3.42092 8.43435,-3.42092 z"
+         id="path1" />
+      <path
+         style="font-weight:bold;line-height:122%;font-family:'Tiresias LPfont';-inkscape-font-specification:'Tiresias LPfont Bold';letter-spacing:-6.6px;fill:#681d2d;fill-opacity:1"
+         d="m 153.65106,926.3914 q -5.95712,0 -8.84721,2.89009 V 910.1715 h 56.85811 v 14.21453 l -19.46388,18.40221 q 7.54963,-0.47185 15.21722,5.24935 9.2011,6.90083 9.2011,20.58452 0,15.2762 -13.09388,23.71054 -11.26546,7.25472 -27.36739,7.25472 -3.47991,0 -10.32175,-0.82574 -6.84185,-0.76676 -10.32176,-0.76676 -0.58981,0 -1.8874,0.11797 v -19.75879 q 11.4424,5.13139 22.05906,5.13139 19.22795,0 19.22795,-15.04027 0,-7.84453 -9.20111,-10.79361 -4.01073,-1.29759 -8.90619,-1.29759 -5.4263,0 -12.32713,1.65148 V 946.74 l 20.46656,-20.3486 z m 92.96069,29.96257 q -7.90351,0 -12.56304,4.36463 0.2949,22.47193 12.91693,22.47193 10.61666,0 10.61666,-14.98129 0,-11.85527 -10.97055,-11.85527 z m 0.35389,43.11544 q -35.15294,0 -35.15294,-45.17979 0,-13.74267 5.13139,-24.30035 5.78018,-11.85527 17.1636,-17.39953 7.90351,-3.83379 18.52017,-3.83379 4.95444,0 11.26546,1.12064 7.25471,1.2976 9.08314,0.70778 l -4.7775,18.28425 q -5.30833,-4.42361 -14.56841,-4.42361 -16.2199,0 -19.10999,18.81508 6.13407,-2.71314 14.80434,-2.71314 13.32981,0 21.46925,7.13675 8.49332,7.43166 8.49332,20.64351 0,14.27351 -9.08314,22.76683 -8.84722,8.37537 -23.23869,8.37537 z m 92.60678,-70.18792 q -2.89009,-2.89009 -8.84721,-2.89009 h -24.06443 v 14.09656 q 1.53351,-0.11796 4.24666,-0.11796 12.56305,0 21.52823,4.7775 12.44508,6.6649 12.44508,23.5336 0,15.98397 -12.50406,24.06442 -10.55768,6.84185 -27.42638,6.84185 -2.8311,0 -8.5523,-0.82574 -5.66222,-0.76676 -8.49333,-0.76676 -2.59519,0 -3.42093,0.23593 v -21.11536 q 8.13944,6.07509 19.81777,6.07509 18.87406,0 18.87406,-14.21453 0,-12.79897 -20.23063,-12.79897 -7.19574,0 -16.2199,1.53352 V 910.1715 h 52.84737 z"
+         id="path2" />
+    </g>
+    <rect
+       style="fill:#b0314d;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="rect4352-5-1"
+       width="28.315174"
+       height="27.030817"
+       x="103.86147"
+       y="901.65179"
+       rx="0"
+       ry="0"
+       inkscape:export-filename="/home/fabrizio/Desktop/kicad_logo_final.png"
+       inkscape:export-xdpi="130.52866"
+       inkscape:export-ydpi="130.52866" />
+    <ellipse
+       style="fill:#00ff77;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.656931"
+       id="path3552-6-3-7"
+       inkscape:export-filename="/home/fabrizio/Desktop/kicad_logo_final.png"
+       inkscape:export-xdpi="130.52866"
+       inkscape:export-ydpi="130.52866"
+       cx="117.74959"
+       cy="897.00507"
+       rx="11.990145"
+       ry="11.954748" />
+  </g>
+</svg>

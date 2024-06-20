@@ -2,6 +2,7 @@ import LoginPage from "@/pages/login";
 import DashboardPage from "@/pages/dashboard";
 import ProjectPage from "@/pages/project";
 import { AllProjectsPage } from "@/pages/all-projects";
+import { HomePage } from "@/pages/homepage";
 
 export const PATH = {
     GENERAL: {
@@ -26,7 +27,7 @@ export const PATH = {
 
 export const ROUTES_GENERAL = [
     // GENERAL ROUTES
-    { path: PATH.GENERAL.HOME, element: <div>home, go to ./login to login.</div> },
+    { path: PATH.GENERAL.HOME, element: <HomePage /> },
     { path: PATH.GENERAL.LOGIN, element: <LoginPage /> },
 
     // INVITEE ROUTES
