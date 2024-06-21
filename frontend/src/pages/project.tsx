@@ -1,8 +1,18 @@
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs";
-import React, { useEffect } from "react";
+import React, { Suspense, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Model } from "@/components/gltf/Interf"
+import { Canvas } from "@react-three/fiber"
+import { PerspectiveCamera, Stage } from '@react-three/drei'
+import { OrbitControls } from '@react-three/drei'
+
+// function Model() {
+//     // const gltf = useGLTF('https://thinkuldeep.com/modelviewer/astronaut/Astronaut.glb')
+//     // const gltf = useGLTF('/interf-transformed.glb')
+//     // return (<primitive object={gltf.scene} />)
+// }
 
 declare global {
     namespace JSX {
@@ -92,6 +102,30 @@ export default function ProjectPage() {
                     <TabsContent value="pcb">
                         <div className="h-[75vh]">
                             <kicanvas-embed src="/interf_u/interf_u.kicad_pcb" theme="kicad" controls="full" />
+                        </div>
+                    </TabsContent>
+                    <TabsContent value="3dv">
+                        <div className="h-[75vh]">
+                            <Suspense>
+                                <Canvas style={{ background: '#dfdfdf' }}>
+                                    <PerspectiveCamera makeDefault position={[0,1,5]} />
+                                    {/* <ambientLight /> */}
+                                    <Stage preset="rembrandt" intensity={1} environment="city">
+                                        <Model />
+                                    </Stage>
+                                <OrbitControls />
+                                </Canvas>
+                            </Suspense>
+                        </div>
+                    </TabsContent>
+                    <TabsContent forceMount value="bom" className='data-[state=inactive]:hidden'>
+                        <div className="h-[75vh]">
+                            <div className="flex flex-col min-h-full justify-center items-center">
+                                <div>
+                                    BOM data coming soon 🧨💥🤯
+                                </div>
+                                <div className="grow-2 p-28"></div>
+                            </div>
                         </div>
                     </TabsContent>
                 </Tabs>
