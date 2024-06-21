@@ -94,17 +94,17 @@ export default function ProjectPage() {
                             <TabsTrigger value="bom">BOM</TabsTrigger>
                         </TabsList>
                     </div>
-                    <TabsContent value="sch">
+                    <TabsContent forceMount value="sch" className='data-[state=inactive]:hidden'>
                         <div className="h-[75vh]">
                             <kicanvas-embed src="/interf_u/interf_u.kicad_sch" theme="kicad" controls="full" />
                         </div>
                     </TabsContent>
-                    <TabsContent value="pcb">
+                    <TabsContent forceMount value="pcb" className='data-[state=inactive]:hidden'>
                         <div className="h-[75vh]">
                             <kicanvas-embed src="/interf_u/interf_u.kicad_pcb" theme="kicad" controls="full" />
                         </div>
                     </TabsContent>
-                    <TabsContent value="3dv">
+                    <TabsContent forceMount value="3dv" className='data-[state=inactive]:hidden'>
                         <div className="h-[75vh]">
                             <Suspense>
                                 <Canvas style={{ background: '#dfdfdf' }}>
