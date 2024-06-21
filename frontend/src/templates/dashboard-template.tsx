@@ -47,38 +47,38 @@ export default function DashboardTemplate() {
                                 Projects
                             </Link>
 
-                            <a href="#"
+                            <Link to={PATH.USER.COMPONENTS}
                                 className="flex items-center gap-3 rounded-lg px-3 py-2 trainsition-all hover:text-primary text-muted-foreground">
                                 <CpuIcon className="h-4 w-4" />
                                 Components
-                            </a>
+                            </Link>
                             <Separator className="my-2" />
 
-                            <a href="#"
+                            <Link to={PATH.USER.MEMBERS}
                                 className="flex items-center gap-3 rounded-lg px-3 py-2 trainsition-all hover:text-primary text-muted-foreground">
                                 <UsersIcon className="h-4 w-4" />
                                 Members
-                            </a>
-                            <a href="#"
+                            </Link>
+                            <Link to={PATH.USER.PREFERENCES}
                                 className="flex items-center gap-3 rounded-lg px-3 py-2 trainsition-all hover:text-primary text-muted-foreground">
                                 <UserRoundCogIcon className="h-4 w-4" />
                                 Preferences
-                            </a>
+                            </Link>
                             <Separator className="my-2" />
-                            <a href="#"
+                            <Link to={PATH.ADMIN.ADMIN_SETTINGS}
                                 className="flex items-center gap-3 rounded-lg px-3 py-2 trainsition-all hover:text-primary text-muted-foreground">
                                 <ShieldEllipsisIcon className="h-4 w-4" />
                                 Admin
-                            </a>
+                            </Link>
                             <Separator className="my-2" />
 
                             <br className="" />
                             <br className="" />
-                            <a href="#"
+                            <Link to={PATH.USER.SURPRISE}
                                 className="flex items-center gap-3 rounded-lg px-3 py-2 trainsition-all hover:text-primary text-muted-foreground">
                                 <PartyPopperIcon className="h-4 w-4" />
                                 Surprise Me!
-                            </a>
+                            </Link>
                         </nav>
                     </div>
                 </div>
@@ -117,38 +117,38 @@ export default function DashboardTemplate() {
                                     <FoldersIcon className="h-4 w-4" />
                                     Projects
                                 </Link>
-                                <a href="#"
+                                <Link to={PATH.USER.COMPONENTS}
                                     className="flex items-center gap-3 rounded-lg px-3 py-2 trainsition-all hover:text-primary text-muted-foreground">
                                     <CpuIcon className="h-4 w-4" />
                                     Components
-                                </a>
+                                </Link>
                                 <Separator className="my-2" />
 
-                                <a href="#"
+                                <Link to={PATH.USER.MEMBERS}
                                     className="flex items-center gap-3 rounded-lg px-3 py-2 trainsition-all hover:text-primary text-muted-foreground">
                                     <UsersIcon className="h-4 w-4" />
                                     Members
-                                </a>
-                                <a href="#"
+                                </Link>
+                                <Link to={PATH.USER.PREFERENCES}
                                     className="flex items-center gap-3 rounded-lg px-3 py-2 trainsition-all hover:text-primary text-muted-foreground">
                                     <UserRoundCogIcon className="h-4 w-4" />
                                     Preferences
-                                </a>
+                                </Link>
                                 <Separator className="my-2" />
-                                <a href="#"
+                                <Link to={PATH.ADMIN.ADMIN_SETTINGS}
                                     className="flex items-center gap-3 rounded-lg px-3 py-2 trainsition-all hover:text-primary text-muted-foreground">
                                     <ShieldEllipsisIcon className="h-4 w-4" />
                                     Admin
-                                </a>
+                                </Link>
                                 <Separator className="my-2" />
 
                                 <br className="" />
                                 <br className="" />
-                                <a href="#"
+                                <Link to={PATH.USER.SURPRISE}
                                     className="flex items-center gap-3 rounded-lg px-3 py-2 trainsition-all hover:text-primary text-muted-foreground">
                                     <PartyPopperIcon className="h-4 w-4" />
                                     Surprise Me!
-                                </a>
+                                </Link>
                             </nav>
                         </SheetContent>
                     </Sheet>
