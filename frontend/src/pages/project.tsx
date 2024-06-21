@@ -72,18 +72,18 @@ export default function ProjectPage() {
             </Breadcrumb>
             <div className="h-[80vh]">
                 {/* <script type="module" src="@/assets/kicanvas.js"></script> */}
-                {/* TODO: Get theme selector to work by default */}
                 <Tabs defaultValue="sch">
                     <div className="flex">
-                        <Select>
+                        <Select defaultValue="main" >
                             <SelectTrigger className="w-[150px]">
                                 <div className="text-muted-foreground">Branch: </div>
-                                <SelectValue defaultValue="main" />
+                                <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="main">main</SelectItem>
                                 <SelectItem value="dev">dev</SelectItem>
-                                {/* Make responsive to selected project */}
+                                {/* TODO: Make responsive to selected project */}
+                                {/* TODO: Limit KiCanvas to just this page*/}
                             </SelectContent>
                         </Select>
                         <div className="px-2"></div>
