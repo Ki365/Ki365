@@ -9,7 +9,6 @@ Generated_at: 2024-06-20T20:53:40-0700
 */
 
 import * as THREE from 'three'
-import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 import { GLTF } from 'three-stdlib'
 
@@ -20,10 +19,7 @@ type GLTFResult = GLTF & {
   materials: {
     mat_0: THREE.MeshStandardMaterial
   }
-  animations: GLTFAction[]
 }
-
-type ContextType = Record<string, React.ForwardRefExoticComponent<JSX.IntrinsicElements['mesh']>>
 
 export function Model(props: JSX.IntrinsicElements['group']) {
   const { nodes, materials } = useGLTF('/interf-transformed.glb') as GLTFResult
