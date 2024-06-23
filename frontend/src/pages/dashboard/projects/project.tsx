@@ -110,7 +110,7 @@ export default function ProjectPage() {
                                 <Canvas style={{ background: '#dfdfdf' }}>
                                     <PerspectiveCamera makeDefault position={[0,1,5]} />
                                     {/* <ambientLight /> */}
-                                    <Stage preset="rembrandt" intensity={1} environment="city">
+                                    <Stage preset="rembrandt" intensity={0.01} environment="city">
                                         <Model />
                                     </Stage>
                                 <OrbitControls />
