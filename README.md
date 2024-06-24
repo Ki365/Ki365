@@ -48,7 +48,9 @@ KiCad is a great tool! Until you realize the files are only on your computer and
     <li><a href="https://yarnpkg.com/">Yarn</a></li>
     <li><a href="https://tailwindcss.com/">Tailwind CSS</a></li>
     <li><a href="https://vitejs.dev/">Vite</a></li>
-    <li>For more informaton on what frontend packages we use click <a href="">here</a>.</li>
+    <li><a href="https://radix-ui.com/">Radix, through ShadCN</a></li>
+    <li><a href="https://threejs.org/">Three.js</a></li>
+    <li><a href="https://kicanvas.org/">KiCanvas</a></li>
   </ui>
 </details>
 
@@ -66,6 +68,7 @@ KiCad is a great tool! Until you realize the files are only on your computer and
   <ui>
     <li><a href="https://go.dev/">Golang</a></li>
     <li><a href="https://gorilla.github.io/">Gorilla</a></li>
+    <li><a href="https://keratin.github.io/">AuthN</a></li>
   </ui>
 </details>
 
