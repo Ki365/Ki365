@@ -91,6 +91,7 @@ export default function ProjectPage() {
                             <TabsTrigger value="sch">Schematic</TabsTrigger>
                             <TabsTrigger value="pcb">Board</TabsTrigger>
                             <TabsTrigger value="3dv">3D</TabsTrigger> {/* NOTE: Stands for 3D View */}
+                            <TabsTrigger value="drt">Drafting</TabsTrigger> {/* NOTE: Stands for 3D View */}
                             <TabsTrigger value="bom">BOM</TabsTrigger>
                         </TabsList>
                     </div>
@@ -116,6 +117,26 @@ export default function ProjectPage() {
                                 <OrbitControls />
                                 </Canvas>
                             </Suspense>
+                        </div>
+                    </TabsContent>
+					<TabsContent forceMount value="drt" className='data-[state=inactive]:hidden'>
+                        <div className="h-[75vh]">
+                            <div className="flex flex-col min-h-full justify-center items-center">
+                                <div>
+                                    Drafting View requires additional changes to the KiCad source code.
+                                </div>
+								<div className="py-1"></div>
+								<div>
+									To learn more visit this&nbsp;
+									<a href="https://gitlab.com/kicad/code/kicad/-/issues/2276"
+									target="_blank"
+									rel="noreferrer noopener">
+										<b>Link</b>
+									</a>
+									.
+								</div>
+                                <div className="grow-2 p-28"></div>
+                            </div>
                         </div>
                     </TabsContent>
                     <TabsContent forceMount value="bom" className='data-[state=inactive]:hidden'>
