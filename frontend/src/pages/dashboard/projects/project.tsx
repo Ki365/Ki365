@@ -7,6 +7,8 @@ import { Model } from "@/components/gltf/Interf"
 import { Canvas } from "@react-three/fiber"
 import { PerspectiveCamera, Stage } from '@react-three/drei'
 import { OrbitControls } from '@react-three/drei'
+import { PATH } from "@/routes/routes";
+import { Button } from "@/components/ui/button";
 
 // function Model() {
 //     // const gltf = useGLTF('https://thinkuldeep.com/modelviewer/astronaut/Astronaut.glb')
@@ -94,6 +96,10 @@ export default function ProjectPage() {
                             <TabsTrigger value="drt">Drafting</TabsTrigger> {/* NOTE: Stands for 3D View */}
                             <TabsTrigger value="bom">BOM</TabsTrigger>
                         </TabsList>
+                        <div className="px-2"></div>
+						<Link to={PATH.USER.PROJECT_RELEASES}>
+							<Button>View Releases</Button>
+						</Link>
                     </div>
                     <TabsContent forceMount value="sch" className='data-[state=inactive]:hidden'>
                         <div className="h-[75vh]">

@@ -7,6 +7,7 @@ import AdminPage from "@/pages/dashboard/admin/admin";
 import ComponentsPage from "@/pages/dashboard/components/components";
 import MembersPage from "@/pages/dashboard/members/members";
 import PreferencesPage from "@/pages/dashboard/preferences/preferences";
+import ReleasesPage from "@/pages/dashboard/projects/releases";
 
 export const PATH = {
     GENERAL: {
@@ -22,6 +23,7 @@ export const PATH = {
         HOME: "/dashboard/",
         ALL_PROJECTS: "/dashboard/projects/",
         PROJECT: "/dashboard/project/",
+        PROJECT_RELEASES: "/dashboard/project/releases",
         COMPONENTS: "/dashboard/components/",
         MEMBERS: "/dashboard/members/",
         PREFERENCES: "/dashboard/preferences/",
@@ -50,6 +52,7 @@ export const ROUTES_DASHBOARD = [
     { path: PATH.USER.HOME, element: <DashboardPage /> },
     { path: PATH.USER.ALL_PROJECTS, element: <AllProjectsPage /> },
     { path: PATH.USER.PROJECT, element: <ProjectPage /> },
+    { path: PATH.USER.PROJECT_RELEASES, element: <ReleasesPage /> },
     { path: PATH.USER.COMPONENTS, element: <ComponentsPage /> },
     { path: PATH.USER.MEMBERS, element: <MembersPage /> },
     { path: PATH.USER.PREFERENCES, element: <PreferencesPage /> },
