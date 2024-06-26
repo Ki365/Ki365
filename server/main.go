@@ -11,22 +11,49 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/gorilla/mux"
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 )
 
-type spaHandler struct {
-	staticPath string
-	indexPath  string
+// SPAHandler serves a single page application.
+func SPAHandler(staticPath string) http.HandlerFunc {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// Join internally call path.Clean to prevent directory traversal
+		path := filepath.Join(staticPath, r.URL.Path)
+
+		// check whether a file exists or is a directory at the given path
+		fi, err := os.Stat(path)
+		if os.IsNotExist(err) || fi.IsDir() {
+
+			// set cache control header to prevent caching
+			// this is to prevent the browser from caching the index.html
+			// and serving old build of SPA App
+			w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+
+			// file does not exist or path is a directory, serve index.html
+			http.ServeFile(w, r, filepath.Join(staticPath, "index.html"))
+			return
+		}
+
+		if err != nil {
+			// if we got an error (that wasn't that the file doesn't exist) stating the
+			// file, return a 500 internal server error and stop
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		// set cache control header to serve file for a year
+		// static files in this case need to be cache busted
+		// (usualy by appending a hash to the filename)
+		w.Header().Set("Cache-Control", "public, max-age=31536000, immutable")
+
+		// otherwise, use http.FileServer to serve the static file
+		http.FileServer(http.Dir(staticPath)).ServeHTTP(w, r)
+	})
 }
 
-func uploadProject(w http.ResponseWriter, r *http.Request) {
+func EndpointUploadProject(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Uploading file...")
-	fmt.Println(r.Header)
-	fmt.Println(r.Body)
-	fmt.Println(r.Host)
-	fmt.Println(r.Method)
-	fmt.Println(r.Response)
-	fmt.Println(r.Trailer)
 
 	// Fixed 167.7MB limit on file upload
 	r.ParseMultipartForm(10 << 2)
@@ -43,37 +70,36 @@ func uploadProject(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("Filesize: %+v\n", header.Size)
 	fmt.Printf("MIME: header: %+v\n", header.Header)
 
-	dst, err := os.Create(filepath.Join("./", header.Filename))
+	// TODO: Add environment variable to point to mount
+	// Create folder structure if does not exist
+	folderPath := filepath.Join("./repos/upload/archives")
+	err = os.MkdirAll(folderPath, os.ModePerm)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	// TODO: remove original filename and obscure to increase security
+	// Create empty file
+	dst, err := os.Create(filepath.Join(folderPath, header.Filename))
 	if err != nil {
 		fmt.Println(err)
 	}
 	defer dst.Close()
 
+	// Write contents of upload to file
 	fileBytes, err := io.Copy(dst, file)
 	if err != nil {
 		fmt.Println(err)
 	}
 
+	// TODO: Add more information to JSON response for client
+	// Return JSON response with success
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(fileBytes)
-}
 
-func (h spaHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	path := filepath.Join(h.staticPath, r.URL.Path)
-
-	fi, err := os.Stat(path)
-	if os.IsNotExist(err) || fi.IsDir() {
-		http.ServeFile(w, r, filepath.Join(h.staticPath, h.indexPath))
-		return
-	}
-
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	http.FileServer(http.Dir(h.staticPath)).ServeHTTP(w, r)
+	// Handle new imported file
+	// handleNewProjectArchive()
 }
 
 func main() {
@@ -81,11 +107,13 @@ func main() {
 	directory := flag.String("d", ".", "directory of files to serve")
 	flag.Parse()
 
-	router := mux.NewRouter()
+	router := chi.NewRouter()
+	router.Use(middleware.Logger)
 
-	spa := spaHandler{staticPath: *directory, indexPath: "index.html"}
-	router.HandleFunc("/api/upload/project", uploadProject)
-	router.PathPrefix("/").Handler(spa)
+	// spa := spaHandler{staticPath: *directory, indexPath: "index.html"}
+	router.HandleFunc("/api/upload/project", EndpointUploadProject)
+	router.Get("/", SPAHandler(*directory))
+	router.NotFound(SPAHandler(*directory))
 
 	srv := &http.Server{
 		Handler:      router,
