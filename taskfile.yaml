@@ -9,8 +9,14 @@ tasks:
 
   dev:
     desc: Runs the development server
-    dir: './frontend'
     cmds:
+      - task dev-frontend &
+      - go run ./server/
+
+  dev-frontend:
+    desc: Runs the development frontend
+    dir: './frontend'
+    cmds: 
       - yarn
       - yarn dev
 
@@ -19,3 +25,8 @@ tasks:
     dir: './frontend'
     cmds:
       - yarn build 
+
+  build-server:
+    desc: Builds the server for production
+    cmds:
+      - go build -o ki365 -ldflags="-s -w" -trimpath ./server/ 
