@@ -56,6 +56,7 @@ func EndpointUploadProject(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Uploading file...")
 
 	// Fixed 167.7MB limit on file upload
+	// TODO: have a better way to handle this
 	r.ParseMultipartForm(10 << 2)
 
 	file, header, err := r.FormFile("project-archive")
@@ -80,7 +81,9 @@ func EndpointUploadProject(w http.ResponseWriter, r *http.Request) {
 
 	// TODO: remove original filename and obscure to increase security
 	// Create empty file
-	dst, err := os.Create(filepath.Join(folderPath, header.Filename))
+	fp := filepath.Join(folderPath, header.Filename)
+
+	dst, err := os.Create(fp)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -99,7 +102,16 @@ func EndpointUploadProject(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(fileBytes)
 
 	// Handle new imported file
-	// handleNewProjectArchive()
+	err = handleNewProjectArchive(fp, "./repos/repos")
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	// pass newly created project to handle project function
+	err = handleNewProject(fp, "./repos/repos", "./repos/store/repos.json")
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 
 func main() {
@@ -110,8 +122,10 @@ func main() {
 	router := chi.NewRouter()
 	router.Use(middleware.Logger)
 
-	// spa := spaHandler{staticPath: *directory, indexPath: "index.html"}
-	router.HandleFunc("/api/upload/project", EndpointUploadProject)
+	apiPrefix := "/api"
+	router.HandleFunc(apiPrefix+"/upload/project", EndpointUploadProject) // upload project endpoint
+	router.Get(apiPrefix+"/ping", EndpointGetPing)                        // responds with pong
+	router.Get(apiPrefix+"/projects", EndpointGetProjects)                // get list of all projects in federation
 	router.Get("/", SPAHandler(*directory))
 	router.NotFound(SPAHandler(*directory))
 

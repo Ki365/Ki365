@@ -108,7 +108,7 @@ export function AddProject() {
 				onChange={handleFileAdd}
 				onSubmit={handleSubmit}
 			>
-				<input type="file" ref={file} name="project-archive" accept=".zip,.rar,.7zip" />
+				<input type="file" ref={file} name="project-archive" accept=".zip,.tar" />
 			</form>
 			<div className="px-2">
 				<Button onClick={handleAddProjectButton}>
