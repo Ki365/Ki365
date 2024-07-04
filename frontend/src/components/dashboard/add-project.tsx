@@ -4,8 +4,11 @@ import { PlusIcon } from "lucide-react";
 import { FormEvent, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogClose } from "@/components/ui/dialog";
 import { DialogHeader, DialogFooter } from "@/components/ui/dialog";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 
 export function AddProject() {
 
@@ -15,6 +18,8 @@ export function AddProject() {
 	const [isConfirmationDialogOpen, setIsConfirmationDialogOpen] = useState(false);
 	const [isWarningDialogOpen, setIsWarningDialogOpen] = useState(false);
 	const [imageURL, setImageURL] = useState("");
+
+	const [isLinkOpen, setIsLinkOpen] = useState(false);
 
 	const handleAddProjectButton = () => {
 		setIsWarningDialogOpen(true)
@@ -111,10 +116,49 @@ export function AddProject() {
 				<input type="file" ref={file} name="project-archive" accept=".zip,.tar" />
 			</form>
 			<div className="px-2">
-				<Button onClick={handleAddProjectButton}>
-					<PlusIcon size={20} />
-				</Button>
+				<DropdownMenu modal={false}>
+					<DropdownMenuTrigger asChild>
+						<Button variant="secondary" className="rounded" title='Add project'>
+							<PlusIcon size={20} className="h-6 w-6" />
+							<span className="sr-only">Toggle user menu</span>
+						</Button>
+					</DropdownMenuTrigger>
+					<DropdownMenuContent align="end">
+						<DropdownMenuItem onClick={() => setIsLinkOpen(true)}>Link</DropdownMenuItem>
+						<DropdownMenuItem>Mirror</DropdownMenuItem>
+						<DropdownMenuItem>Local</DropdownMenuItem>
+						<DropdownMenuSeparator />
+						<DropdownMenuItem onClick={handleAddProjectButton}>Import archive</DropdownMenuItem>
+					</DropdownMenuContent>
+				</DropdownMenu>
 			</div>
+
+			<Dialog open={isLinkOpen} onOpenChange={() => (setIsLinkOpen(false))}>
+				<DialogContent>
+					<DialogHeader>
+						<DialogTitle>Add a project as a Linked Connection</DialogTitle>
+						<DialogDescription>
+						Linked repositories allow data owners to submit changes to Ki365 and have them forwarded to the linked data store as a form of offsite backup.
+						</DialogDescription>
+					</DialogHeader>
+					<div className="grid flex-1 gap-2">
+						<Label htmlFor="link" className="sr-only">Link</Label>
+						<Input id="link" placeholder="https://github.io/Ki365/example-project" />
+					</div>
+					<DialogFooter className="sm:justify-start">
+						<div className="grid flex-1 gap-2">
+							<Label className="p-2">Coming soon: Authentication for private repos!</Label>
+							<div className="flex flex-row justify-between w-full p-">
+								<DialogClose asChild>
+									<Button type="button" variant="secondary">Close</Button>
+								</DialogClose>
+								{/* TODO: Add functionality to this button */}
+								<Button type="button" variant="default">Submit</Button>
+							</div>
+						</div>
+					</DialogFooter>
+				</DialogContent>
+			</Dialog>
 
 			<AlertDialog open={isConfirmationDialogOpen}>
 				<AlertDialogContent>
