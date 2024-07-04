@@ -1,7 +1,9 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
+	"errors"
 	"flag"
 	"fmt"
 	"io"
@@ -114,6 +116,33 @@ func EndpointUploadProject(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func ProjectCtx(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		projectID := chi.URLParam(r, "projectID")
+		project, err := dbGetProject(projectID)
+		if err != nil {
+			http.Error(w, http.StatusText(404), 404)
+			return
+		}
+		ctx := context.WithValue(r.Context(), "project", project)
+		next.ServeHTTP(w, r.WithContext(ctx))
+	})
+}
+
+func dbGetProject(id string) (*Project, error) {
+	projects, err := parseProjectsJSON()
+	if err != nil {
+		return nil, err
+	}
+
+	for _, a := range projects.Projects {
+		if a.Id == id {
+			return &a, nil
+		}
+	}
+	return nil, errors.New("project not found")
+}
+
 func main() {
 	port := flag.String("p", "8100", "port to serve directory on")
 	directory := flag.String("d", ".", "directory of files to serve")
@@ -121,11 +150,22 @@ func main() {
 
 	router := chi.NewRouter()
 	router.Use(middleware.Logger)
+	router.Use(middleware.Recoverer)
 
 	apiPrefix := "/api"
 	router.HandleFunc(apiPrefix+"/upload/project", EndpointUploadProject) // upload project endpoint
 	router.Get(apiPrefix+"/ping", EndpointGetPing)                        // responds with pong
-	router.Get(apiPrefix+"/projects", EndpointGetProjects)                // get list of all projects in federation
+	router.Route(apiPrefix+"/projects", func(r chi.Router) {
+		r.Get("/", EndpointGetProjects) // get list of all projects in federation
+		r.Route("/{projectID}", func(r chi.Router) {
+			r.Use(ProjectCtx)
+			r.Get("/", EndpointGetProject)
+			r.Get("/schematics", EndpointGetProjectSchematics)
+			r.Get("/layouts", EndpointGetProjectLayouts)
+			r.Get("/models", EndpointGetProjectModels)
+		}) // get files of specific project
+
+	})
 	router.Get("/", SPAHandler(*directory))
 	router.NotFound(SPAHandler(*directory))
 

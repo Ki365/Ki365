@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"net/http"
 	"os"
@@ -46,4 +47,60 @@ func EndpointGetProjects(w http.ResponseWriter, r *http.Request) {
 	// TODO: add error checking to make sure data is valid before sending
 
 	w.Write(b)
+}
+
+// Gets latest project zip of repository
+func EndpointGetProject(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	// TODO: Call function to update zip file of project
+	project, ok := ctx.Value("project").(*Project)
+	if !ok {
+		http.Error(w, http.StatusText(http.StatusUnprocessableEntity), http.StatusUnprocessableEntity)
+		return
+	}
+	// TODO: Serve zip file
+	// http.ServeFile(w, r, )
+	w.Write([]byte(fmt.Sprintf("title:%s", project.Id)))
+}
+
+func EndpointGetProjectSchematics(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	project, ok := ctx.Value("project").(*Project)
+	if !ok {
+		http.Error(w, http.StatusText(http.StatusUnprocessableEntity), http.StatusUnprocessableEntity)
+		return
+	}
+	// TODO: remove this in favor of calling during git push receive operation
+	s := processProjectFilePaths(project.ProjectFolder, project.Schematics)
+
+	// TODO: obscure filename to increase security
+	http.ServeFile(w, r, s[0])
+	// TODO: maybe include metadata for parsing client side
+	// w.Write([]byte(fmt.Sprintf("title:%s", project.Image)))
+}
+
+func EndpointGetProjectLayouts(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	project, ok := ctx.Value("project").(*Project)
+	if !ok {
+		http.Error(w, http.StatusText(http.StatusUnprocessableEntity), http.StatusUnprocessableEntity)
+		return
+	}
+	// TODO: remove this in favor of calling during git push receive operation
+	s := processProjectFilePaths(project.ProjectFolder, project.Layouts)
+
+	// TODO: obscure filename to increase security
+	http.ServeFile(w, r, s[0])
+	// TODO: maybe include metadata for parsing client side
+	// w.Write([]byte(fmt.Sprintf("title:%s", project.Image)))
+}
+
+func EndpointGetProjectModels(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	project, ok := ctx.Value("project").(*Project)
+	if !ok {
+		http.Error(w, http.StatusText(http.StatusUnprocessableEntity), http.StatusUnprocessableEntity)
+		return
+	}
+	w.Write([]byte(fmt.Sprintf("title:%s", project.Description)))
 }

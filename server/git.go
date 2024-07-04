@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"strings"
@@ -23,7 +23,7 @@ func (e *ErrorRepoNotClean) Error() string {
 
 func handleNewProject(archivePath string, unarchivePath string, repoConfig string) error {
 
-	repoPath, err := createProjectFolderPath(archivePath, unarchivePath)
+	repoPath, err := createAbsoluteProjectFolderPath(archivePath, unarchivePath)
 	if err != nil {
 		return err
 	}
@@ -61,45 +61,32 @@ func handleNewProject(archivePath string, unarchivePath string, repoConfig strin
 		}
 	}
 
-	// repoConfig: ./repos/store/repos.json + unarchivepath: ./repos/repos"
-
-	// TODO: change os.Executable() for repo directory
-	expath, err := os.Getwd()
+	rel, err := createRelativeProjectFolderPath(archivePath, unarchivePath)
 	if err != nil {
 		return err
 	}
 
-	t1 := filepath.Join(expath, repoConfig) // absolute path
-	t2 := filepath.Dir(t1)
+	projects, err := parseProjectsJSON()
 	if err != nil {
 		return err
 	}
 
-	err = os.MkdirAll(t2, 0755)
-	if err != nil {
-		return err
-	}
-
-	file, err := os.OpenFile(repoConfig, os.O_CREATE, os.ModePerm)
-	if err != nil {
-		return err
-	}
-	defer file.Close()
-
-	// Read in current json store
-	// TODO: make this process able to just "add" project without reading in entire list
-	// TODO: move this to a seperate function along with similar code in endpoints
-	by, err := io.ReadAll(file)
-	if err != nil {
-		return err
-	}
-
-	var projects Projects
-
-	json.Unmarshal(by, &projects)
+	fmt.Printf("repoPath: %v", rel)
+	list_sch := find(rel, ".kicad_sch")
+	list_pcb := find(rel, ".kicad_pcb")
 
 	// TODO: maybe want to move away from JSON file store for project repos, (fixed project index right now)
-	proj := Project{100, "https://dummyimage.com/470x300/0F6983/fff&text=Temp+Image", strings.TrimSuffix(filepath.Base(archivePath), filepath.Ext(archivePath)), "No description available", ""}
+	proj := Project{
+		"100",
+		"https://dummyimage.com/470x300/0F6983/fff&text=Temp+Image",
+		strings.TrimSuffix(filepath.Base(archivePath), filepath.Ext(archivePath)),
+		strings.TrimSuffix(filepath.Base(archivePath), filepath.Ext(archivePath)),
+		"No description available",
+		"",
+		list_sch,
+		list_pcb,
+		[]string{},
+	}
 
 	projects.Projects = append(projects.Projects, proj)
 
@@ -120,4 +107,31 @@ func handleNewProject(archivePath string, unarchivePath string, repoConfig strin
 
 	// new project is valid, return no error
 	return nil
+}
+
+// TODO: iterate over all in slice argument
+func processProjectFilePaths(projectPath string, filepathSlice []string) []string {
+	// TODO: make a global variable for consistent changes
+	str := "./repos/repos"
+	var s []string
+	s = append(s, filepath.Join(str, projectPath, filepathSlice[0]))
+	return s
+}
+
+func find(root, ext string) []string {
+	var a []string
+	var b []string
+	filepath.WalkDir(root, func(s string, d fs.DirEntry, e error) error {
+		if e != nil {
+			return e
+		}
+		if filepath.Ext(d.Name()) == ext {
+			a = append(a, s)
+		}
+		return nil
+	})
+	for _, e := range a {
+		b = append(b, strings.TrimPrefix(e, filepath.Join(root)))
+	}
+	return b
 }

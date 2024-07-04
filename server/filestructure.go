@@ -26,7 +26,7 @@ func handleNewProjectArchive(archivePath string, unarchivePath string) error {
 	fmt.Println(archivePath)
 	fmt.Println(unarchivePath)
 	// EXAMPLE: repos\upload\archives\ki-102.zip + ./repos/repos = C:\Users\{USER}\Code\Ki365\Ki365\repos\repos\ki-102
-	t3, err := createProjectFolderPath(archivePath, unarchivePath)
+	t3, err := createAbsoluteProjectFolderPath(archivePath, unarchivePath)
 	if err != nil {
 		return err
 	}
@@ -142,7 +142,7 @@ func handleNewProjectArchive(archivePath string, unarchivePath string) error {
 	return nil
 }
 
-func createProjectFolderPath(archivePath string, unarchivePath string) (projectPath string, err error) {
+func createAbsoluteProjectFolderPath(archivePath string, unarchivePath string) (projectPath string, err error) {
 
 	// TODO: change os.Executable() for repo directory
 	expath, err := os.Getwd()
@@ -153,4 +153,12 @@ func createProjectFolderPath(archivePath string, unarchivePath string) (projectP
 	t1 := filepath.Join(expath, unarchivePath)                                      // absolute path
 	t2 := strings.TrimSuffix(filepath.Base(archivePath), filepath.Ext(archivePath)) // archive filename without suffix
 	return filepath.Join(t1, t2), nil                                               // project folder
+}
+
+func createRelativeProjectFolderPath(archivePath string, unarchivePath string) (projectPath string, err error) {
+
+	// TODO: change os.Executable() for repo directory
+	// create project folder path
+	t2 := strings.TrimSuffix(filepath.Base(archivePath), filepath.Ext(archivePath)) // archive filename without suffix
+	return filepath.Join(unarchivePath, t2), nil                                    // project folder
 }

@@ -1,14 +1,15 @@
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs";
-import React, { Suspense, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { Suspense, useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import { Model } from "@/components/gltf/Interf"
 import { Canvas } from "@react-three/fiber"
 import { PerspectiveCamera, Stage } from '@react-three/drei'
 import { OrbitControls } from '@react-three/drei'
 import { PATH } from "@/routes/routes";
 import { Button } from "@/components/ui/button";
+import RingLoader from "react-spinners/RingLoader";
 
 // function Model() {
 //     // const gltf = useGLTF('https://thinkuldeep.com/modelviewer/astronaut/Astronaut.glb')
@@ -20,6 +21,7 @@ declare global {
     namespace JSX {
       interface IntrinsicElements {
         ['kicanvas-embed']: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
+			fileType: React.ReactNode;
             src: React.ReactNode;
             theme: React.ReactNode;
             controls: React.ReactNode;
@@ -43,7 +45,68 @@ const useScript: any = (url: any) => {
     }, [url]);
 };
 
+const RenderKiCanvas = (props: any) => {
+	// const [resources, setResources] = useState<File[]>([])
+	// const [resourcesPath, setResourcesPath] = useState<String[]>([])
+	const [resources, setResources] = useState<File>()
+	const [resourcesPath, setResourcesPath] = useState<String>()
+	const [startCanvas, setStartCanvas] = useState(false)
+
+	useEffect(() => {
+		var apiTtype : string
+		if (props.type == "sch") {
+			apiTtype = "schematics"
+		} else if (props.type == "pcb") {
+			apiTtype = "layouts"
+		} else if (props.type == "pro") {
+			apiTtype = "project"
+		} else {
+			return
+		}
+		
+		console.log(`/api/projects/${props._id}/${apiTtype}`)
+		fetch(`/api/projects/${props._id}/${apiTtype}`)
+		.then((response) => {
+			return response.blob()
+		}).then((blob) => {
+			// setResource(existing => [...existing, (new File([blob], "ii.kicad_sch"))])
+			setResources(new File([blob], `${props._id}-${apiTtype}-temp`, {
+				type: blob.type,
+			}))
+		})
+	}, [])
+
+	useEffect(() => {
+		if(resources) {
+			setResourcesPath(URL.createObjectURL(resources))
+			setStartCanvas(true)
+		} else {
+			console.error("No resource found")
+			
+		}
+	}, [resources])
+
+	if (startCanvas) {
+		return (
+			<>
+				<kicanvas-embed fileType={props.type} src={resourcesPath} theme="kicad" controls="full" />
+			</>
+		)
+	} else {
+		return (
+			<>
+				<div className="flex flex-col items-center justify-center content-center h-full gap-8">
+					<RingLoader />
+					<div>Loading schematic...</div>
+				</div>
+			</>
+		)
+	}
+}
+
 export default function ProjectPage() {
+	const { id } = useParams()
+
     useScript("/kicanvas.js")
 
     return (
@@ -103,12 +166,12 @@ export default function ProjectPage() {
                     </div>
                     <TabsContent forceMount value="sch" className='data-[state=inactive]:hidden'>
                         <div className="h-[75vh]">
-                            <kicanvas-embed src="/interf_u/interf_u.kicad_sch" theme="kicad" controls="full" />
+                            <RenderKiCanvas _id={id} type="sch"/>
                         </div>
                     </TabsContent>
                     <TabsContent forceMount value="pcb" className='data-[state=inactive]:hidden'>
                         <div className="h-[75vh]">
-                            <kicanvas-embed src="/interf_u/interf_u.kicad_pcb" theme="kicad" controls="full" />
+							<RenderKiCanvas _id={id} type="pcb"/>
                         </div>
                     </TabsContent>
                     <TabsContent forceMount value="3dv" className='data-[state=inactive]:hidden'>

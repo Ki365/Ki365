@@ -22,7 +22,7 @@ export const PATH = {
     USER: {
         HOME: "/dashboard/",
         ALL_PROJECTS: "/dashboard/projects/",
-        PROJECT: "/dashboard/project/",
+        PROJECT: "/dashboard/project/:id",
         PROJECT_RELEASES: "/dashboard/project/releases",
         COMPONENTS: "/dashboard/components/",
         MEMBERS: "/dashboard/members/",
