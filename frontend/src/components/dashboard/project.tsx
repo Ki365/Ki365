@@ -5,7 +5,6 @@ import { Link, generatePath } from "react-router-dom"
 // TODO: turn any into types for typescript to do its job
 const Project = (props: any) => {
     return (
-
         <div className="w-full relative group border rounded-lg">
             <div className="max-w-80 max-h-80 relative overflow-y-hidden ">
                 <Link to={generatePath("/dashboard/projects/:id", {id: props._id})} >
@@ -15,7 +14,7 @@ const Project = (props: any) => {
                 </Link>
                 <div className="w-full h-16 absolute bg-white -bottom-[130px] group-hover:bottom-0 duration-700 border-t rounded-lg">
                     <ul className="h-full flex flex-col items-end justify-center gap-2 font-titleFont px-4">
-                        <li className="text-[#767676] hover:text-primeColor text-sm font-normal border-b-[1px] border-b-gray-200 hover:border-b-primColor flex items-center justify-start gap-2 hover:cursor-pointer pb-1 duration-300 w-full">
+                        <li onClick={() => props.enableDialog(props.projectName, props.projectLink)} className="text-[#767676] hover:text-primeColor text-sm font-normal border-b-[1px] border-b-gray-200 hover:border-b-primColor flex items-center justify-start gap-2 hover:cursor-pointer pb-1 duration-300 w-full">
                             <span className="p-2">
                                 <FullscreenIcon size={16}>b</FullscreenIcon>
                             </span>

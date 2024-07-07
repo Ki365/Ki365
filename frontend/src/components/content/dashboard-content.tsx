@@ -1,4 +1,4 @@
-import { ImportIcon } from "lucide-react";
+import { CopyIcon, ImportIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
 import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "../ui/pagination";
@@ -8,6 +8,12 @@ import Project from "../dashboard/project";
 import RingLoader from "react-spinners/RingLoader";
 import { useEffect, useState } from "react";
 
+import { Dialog, DialogClose, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { DialogContent } from "@/components/ui/dialog"
+import { Label } from "@/components/ui/label"
+import { Input } from "@/components/ui/input"
+import { TabsContent, TabsTrigger, Tabs, TabsList } from "@/components/ui/tabs";
+
 interface Project {
 	ID: number
 	Image: String
@@ -16,6 +22,33 @@ interface Project {
 }
 
 function RenderProjects(props : any) {
+	const [showDialog, setShowDialog] = useState(false)
+	const [dialogTitle, setDialogTitle] = useState("")
+	const [dialogProtocol, setDialogProtocol] = useState("https")
+	// @ts-ignore
+	const [dialogHTTPSLink, setDialogHTTPSLink] = useState("https://ki365.org/example.git")
+	// @ts-ignore
+	const [dialogSSHLink, setDialogSSHLink] = useState("https://ki365.org/example.ssh")
+	const [dialogLink, setDialogLink] = useState("https://ki365.org/example.git")
+
+	// @ts-ignore
+	function enableDialog(title : string, HTTPSLink : string, SSHLink : string) {
+		setDialogTitle(title)
+		// TODO: uncomment line once git repo links are available
+		// setDialogHTTPSLink(HTTPSLink)
+		// setDialogSSHLink(SSHLink)
+		setShowDialog(true)
+	}
+
+	useEffect(() => {
+		if(dialogProtocol == "ssh") {
+			setDialogLink(dialogSSHLink)
+		} else {
+			setDialogLink(dialogHTTPSLink)
+		}
+	}, [dialogProtocol])
+
+
 	if (props.projects) {
 		return (
 			<>
@@ -26,8 +59,52 @@ function RenderProjects(props : any) {
 						image={project.Image}
 						projectName={project.ProjectName}
 						description={project.Description}
+						enableDialog={enableDialog}
 					/>
 				))}
+				<Dialog open={showDialog} onOpenChange={() => setShowDialog(false)}>
+				<DialogContent>
+					<DialogHeader>
+						<DialogTitle>Project Link for: {dialogTitle}</DialogTitle>
+						<DialogDescription>This project link will allow project changes</DialogDescription>
+
+					</DialogHeader>
+					<div>
+						<Tabs defaultValue="https" className="w-[400px]">
+							<TabsList>
+								<TabsTrigger value="https" onClick={() => setDialogProtocol("https")}>HTTPS</TabsTrigger>
+								<TabsTrigger value="ssh" onClick={() => setDialogProtocol("ssh")}>SSH</TabsTrigger>
+							</TabsList>
+							<TabsContent value="https"></TabsContent>
+							<TabsContent value="ssh" ></TabsContent>
+						</Tabs>
+						<div className="flex items-center space-x-2">
+							<div className="grid flex-1 gap-2">
+								<Label htmlFor="link" className="sr-only">
+									Link
+								</Label>
+								<Input
+									id="link"
+									value={dialogLink}
+									readOnly
+								>
+								</Input>
+							</div>
+							<Button type="submit" size="sm" className="px-3">
+								<span className="sr-only">Copy</span>
+								<CopyIcon className="h-4 w-4" />
+							</Button>
+						</div>
+					</ div>
+					<DialogFooter className="sm:justify-start">
+						<DialogClose asChild>
+							<Button type="button" variant="secondary">
+								Close
+							</Button>
+						</DialogClose>
+					</DialogFooter>
+				</DialogContent>
+			</Dialog>
 			</>
 		)
 	} else {
