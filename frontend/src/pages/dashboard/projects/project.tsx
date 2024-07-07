@@ -25,6 +25,7 @@ declare global {
             src: React.ReactNode;
             theme: React.ReactNode;
             controls: React.ReactNode;
+			controlslist: React.ReactNode;
         };
       }
     }
@@ -89,7 +90,7 @@ const RenderKiCanvas = (props: any) => {
 	if (startCanvas) {
 		return (
 			<>
-				<kicanvas-embed fileType={props.type} src={resourcesPath} theme="kicad" controls="full" />
+				<kicanvas-embed fileType={props.type} src={resourcesPath} theme="kicad" controls="full" controlslist="nooverlay"/>
 			</>
 		)
 	} else {
