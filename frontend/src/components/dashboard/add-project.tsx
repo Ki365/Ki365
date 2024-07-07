@@ -21,6 +21,8 @@ export function AddProject() {
 
 	const [isLinkOpen, setIsLinkOpen] = useState(false);
 
+	const [isEnableExampleProjects, setEnableExampleProjects] = useState(false);
+
 	const handleAddProjectButton = () => {
 		setIsWarningDialogOpen(true)
 	}
@@ -129,6 +131,14 @@ export function AddProject() {
 						<DropdownMenuItem>Local</DropdownMenuItem>
 						<DropdownMenuSeparator />
 						<DropdownMenuItem onClick={handleAddProjectButton}>Import archive</DropdownMenuItem>
+						<DropdownMenuSeparator />
+						<DropdownMenuItem 
+							onClick={() => setEnableExampleProjects(!isEnableExampleProjects)}
+							// TODO: remove this line once functionality is implemented
+							disabled
+							>
+								Toggle example projects
+						</DropdownMenuItem>
 					</DropdownMenuContent>
 				</DropdownMenu>
 			</div>
