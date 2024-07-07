@@ -65,7 +65,6 @@ const RenderKiCanvas = (props: any) => {
 			return
 		}
 		
-		console.log(`/api/projects/${props._id}/${apiTtype}`)
 		fetch(`/api/projects/${props._id}/${apiTtype}`)
 		.then((response) => {
 			return response.blob()
@@ -81,9 +80,6 @@ const RenderKiCanvas = (props: any) => {
 		if(resources) {
 			setResourcesPath(URL.createObjectURL(resources))
 			setStartCanvas(true)
-		} else {
-			console.error("No resource found")
-			
 		}
 	}, [resources])
 

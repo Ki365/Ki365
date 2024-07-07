@@ -140,12 +140,9 @@ export default function DashboardContnet() {
 			fetch("/api/projects", {
 				method: "GET",
 			}).then((data) => {
-				console.log(data)
 				if (data?.ok) {
 					if(data?.status != 204) {
 						data.json().then((data) => {
-							console.log(data)
-							console.log("success")
 							setProjects(data.projects)
 							setHasResolved(true)
 							setHasErrors(false)
