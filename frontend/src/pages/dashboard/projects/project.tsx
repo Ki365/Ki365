@@ -114,15 +114,11 @@ export default function ProjectPage() {
             <Breadcrumb className="">
                 <BreadcrumbList>
                     <BreadcrumbItem>
-                        <BreadcrumbLink>
                             <Link to="/dashboard/">Dashboard</Link>
-                        </BreadcrumbLink>
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
                     <BreadcrumbItem>
-                        <BreadcrumbLink>
                             <Link to="/dashboard/projects">Projects</Link>
-                        </BreadcrumbLink>
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
                     <BreadcrumbItem>

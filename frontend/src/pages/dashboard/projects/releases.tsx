@@ -10,21 +10,15 @@ export default function ReleasesPage() {
 			<Breadcrumb className="">
 				<BreadcrumbList>
 					<BreadcrumbItem>
-						<BreadcrumbLink>
 							<Link to={PATH.USER.HOME}>Dashboard</Link>
-						</BreadcrumbLink>
 					</BreadcrumbItem>
 					<BreadcrumbSeparator />
 					<BreadcrumbItem>
-						<BreadcrumbLink>
 							<Link to={PATH.USER.ALL_PROJECTS}>Projects</Link>
-						</BreadcrumbLink>
 					</BreadcrumbItem>
 					<BreadcrumbSeparator />
 					<BreadcrumbItem>
-						<BreadcrumbPage>
 							<Link to={PATH.USER.PROJECT}>KiCad: Universal Interface</Link>
-						</BreadcrumbPage>
 					</BreadcrumbItem>
 					<BreadcrumbSeparator />
 					<BreadcrumbItem>
