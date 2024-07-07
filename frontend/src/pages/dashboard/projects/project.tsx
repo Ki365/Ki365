@@ -114,11 +114,11 @@ export default function ProjectPage() {
             <Breadcrumb className="">
                 <BreadcrumbList>
                     <BreadcrumbItem>
-                            <Link to="/dashboard/">Dashboard</Link>
+                            <Link to={PATH.USER.HOME}>Dashboard</Link>
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
                     <BreadcrumbItem>
-                            <Link to="/dashboard/projects">Projects</Link>
+                            <Link to={PATH.USER.ALL_PROJECTS}>Projects</Link>
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
                     <BreadcrumbItem>
