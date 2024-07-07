@@ -126,11 +126,11 @@ export function AddProject() {
 						</Button>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent align="end">
-						<DropdownMenuItem onClick={() => setIsLinkOpen(true)}>Link</DropdownMenuItem>
-						<DropdownMenuItem>Mirror</DropdownMenuItem>
-						<DropdownMenuItem>Local</DropdownMenuItem>
+						<DropdownMenuItem onClick={() => setIsLinkOpen(true)}>Add Link</DropdownMenuItem>
+						<DropdownMenuItem>Add Mirror</DropdownMenuItem>
+						<DropdownMenuItem>Add Local</DropdownMenuItem>
 						<DropdownMenuSeparator />
-						<DropdownMenuItem onClick={handleAddProjectButton}>Import archive</DropdownMenuItem>
+						<DropdownMenuItem onClick={handleAddProjectButton}>Import Archive</DropdownMenuItem>
 						<DropdownMenuSeparator />
 						<DropdownMenuItem 
 							onClick={() => setEnableExampleProjects(!isEnableExampleProjects)}
