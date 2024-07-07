@@ -20,10 +20,11 @@ export const PATH = {
     },
 
     USER: {
-        HOME: "/dashboard/",
+		// NOTE: Do not add /dashboard as conditional formatting will always make the nav button look clicked.
+        HOME: "/dashboard/home",
         ALL_PROJECTS: "/dashboard/projects/",
-        PROJECT: "/dashboard/project/:id",
-        PROJECT_RELEASES: "/dashboard/project/releases",
+        PROJECT: "/dashboard/projects/:id",
+        PROJECT_RELEASES: "/dashboard/projects/:id/releases",
         COMPONENTS: "/dashboard/components/",
         MEMBERS: "/dashboard/members/",
         PREFERENCES: "/dashboard/preferences/",

@@ -12,6 +12,7 @@ import { Toaster } from "sonner";
 
 import { Link, Outlet } from "react-router-dom";
 import { PATH } from "@/routes/routes";
+import Sidebar from "@/components/dashboard/sidebar";
 
 export default function DashboardTemplate() {
     return (
@@ -30,56 +31,7 @@ export default function DashboardTemplate() {
                         </Button>
                     </div>
                     <div className="flex-1">
-                        <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
-                            <br className="" />
-
-                            <Link to={PATH.USER.HOME}
-                                className="flex items-center gap-3 rounded-lg px-3 py-2 trainsition-all hover:text-primary text-muted-foreground">
-                                <BookOpenIcon className="h-4 w-4" />
-                                Home
-                            </Link>
-                            {/* <br className="" /> */}
-                            <Separator className="my-2" />
-
-                            <Link to={PATH.USER.ALL_PROJECTS}
-                                className="flex items-center gap-3 rounded-lg px-3 py-2 trainsition-all hover:text-primary text-primary bg-muted">
-                                <FoldersIcon className="h-4 w-4" />
-                                Projects
-                            </Link>
-
-                            <Link to={PATH.USER.COMPONENTS}
-                                className="flex items-center gap-3 rounded-lg px-3 py-2 trainsition-all hover:text-primary text-muted-foreground">
-                                <CpuIcon className="h-4 w-4" />
-                                Components
-                            </Link>
-                            <Separator className="my-2" />
-
-                            <Link to={PATH.USER.MEMBERS}
-                                className="flex items-center gap-3 rounded-lg px-3 py-2 trainsition-all hover:text-primary text-muted-foreground">
-                                <UsersIcon className="h-4 w-4" />
-                                Members
-                            </Link>
-                            <Link to={PATH.USER.PREFERENCES}
-                                className="flex items-center gap-3 rounded-lg px-3 py-2 trainsition-all hover:text-primary text-muted-foreground">
-                                <UserRoundCogIcon className="h-4 w-4" />
-                                Preferences
-                            </Link>
-                            <Separator className="my-2" />
-                            <Link to={PATH.ADMIN.ADMIN_SETTINGS}
-                                className="flex items-center gap-3 rounded-lg px-3 py-2 trainsition-all hover:text-primary text-muted-foreground">
-                                <ShieldEllipsisIcon className="h-4 w-4" />
-                                Admin
-                            </Link>
-                            <Separator className="my-2" />
-
-                            <br className="" />
-                            <br className="" />
-                            <Link to={PATH.USER.SURPRISE}
-                                className="flex items-center gap-3 rounded-lg px-3 py-2 trainsition-all hover:text-primary text-muted-foreground">
-                                <PartyPopperIcon className="h-4 w-4" />
-                                Surprise Me!
-                            </Link>
-                        </nav>
+                        <Sidebar adaptive={false} />
                     </div>
                 </div>
 
@@ -105,51 +57,7 @@ export default function DashboardTemplate() {
                                     <span className="sr-only">Toggle Notifications</span>
                                 </Button>
                             </div>
-                            <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
-                                <Link to={PATH.USER.HOME}
-                                    className="flex items-center gap-3 rounded-lg px-3 py-2 trainsition-all hover:text-primary text-muted-foreground">
-                                    <BookOpenIcon className="h-4 w-4" />
-                                    Home
-                                </Link>
-                                {/* <Separator className="my-2"/> */}
-                                <Link to={PATH.USER.ALL_PROJECTS}
-                                    className="flex items-center gap-3 rounded-lg px-3 py-2 trainsition-all hover:text-primary text-primary bg-muted">
-                                    <FoldersIcon className="h-4 w-4" />
-                                    Projects
-                                </Link>
-                                <Link to={PATH.USER.COMPONENTS}
-                                    className="flex items-center gap-3 rounded-lg px-3 py-2 trainsition-all hover:text-primary text-muted-foreground">
-                                    <CpuIcon className="h-4 w-4" />
-                                    Components
-                                </Link>
-                                <Separator className="my-2" />
-
-                                <Link to={PATH.USER.MEMBERS}
-                                    className="flex items-center gap-3 rounded-lg px-3 py-2 trainsition-all hover:text-primary text-muted-foreground">
-                                    <UsersIcon className="h-4 w-4" />
-                                    Members
-                                </Link>
-                                <Link to={PATH.USER.PREFERENCES}
-                                    className="flex items-center gap-3 rounded-lg px-3 py-2 trainsition-all hover:text-primary text-muted-foreground">
-                                    <UserRoundCogIcon className="h-4 w-4" />
-                                    Preferences
-                                </Link>
-                                <Separator className="my-2" />
-                                <Link to={PATH.ADMIN.ADMIN_SETTINGS}
-                                    className="flex items-center gap-3 rounded-lg px-3 py-2 trainsition-all hover:text-primary text-muted-foreground">
-                                    <ShieldEllipsisIcon className="h-4 w-4" />
-                                    Admin
-                                </Link>
-                                <Separator className="my-2" />
-
-                                <br className="" />
-                                <br className="" />
-                                <Link to={PATH.USER.SURPRISE}
-                                    className="flex items-center gap-3 rounded-lg px-3 py-2 trainsition-all hover:text-primary text-muted-foreground">
-                                    <PartyPopperIcon className="h-4 w-4" />
-                                    Surprise Me!
-                                </Link>
-                            </nav>
+							<Sidebar adaptive={true} />
                         </SheetContent>
                     </Sheet>
                     <div className="w-full flex-1">

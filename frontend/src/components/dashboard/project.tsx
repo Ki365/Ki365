@@ -8,7 +8,7 @@ const Project = (props: any) => {
 
         <div className="w-full relative group border rounded-lg">
             <div className="max-w-80 max-h-80 relative overflow-y-hidden ">
-                <Link to={generatePath("/dashboard/project/:id", {id: props._id})} >
+                <Link to={generatePath("/dashboard/projects/:id", {id: props._id})} >
                     <div className="h-52 flex justify-center pt-2">
                         <img className="max-h-60 p-4" src={props.image}></img>
                     </div>
