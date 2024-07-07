@@ -1,13 +1,14 @@
 import { CircleUserIcon, FullscreenIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Link, generatePath } from "react-router-dom"
+import { PATH } from "@/routes/routes"
 
 // TODO: turn any into types for typescript to do its job
 const Project = (props: any) => {
     return (
         <div className="w-full relative group border rounded-lg">
             <div className="max-w-80 max-h-80 relative overflow-y-hidden ">
-                <Link to={generatePath("/dashboard/projects/:id", {id: props._id})} >
+                <Link to={generatePath(PATH.USER.PROJECT, {id: props._id})} >
                     <div className="h-52 flex justify-center pt-2">
                         <img className="max-h-60 p-4" src={props.image}></img>
                     </div>
