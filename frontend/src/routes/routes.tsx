@@ -8,6 +8,8 @@ import ComponentsPage from "@/pages/dashboard/components/components";
 import MembersPage from "@/pages/dashboard/members/members";
 import PreferencesPage from "@/pages/dashboard/preferences/preferences";
 import ReleasesPage from "@/pages/dashboard/projects/releases";
+import MechanicalPage from "@/pages/dashboard/subprojects/mechanical";
+import ElectricalPage from "@/pages/dashboard/subprojects/electrical";
 
 export const PATH = {
     GENERAL: {
@@ -25,6 +27,8 @@ export const PATH = {
         ALL_PROJECTS: "/dashboard/projects/",
         PROJECT: "/dashboard/projects/:id",
         PROJECT_RELEASES: "/dashboard/projects/:id/releases",
+        MECHANICAL: "/dashboard/subproject/mechanical/:id",
+        ELECTRICAL: "/dashboard/subproject/electrical/:id",
         COMPONENTS: "/dashboard/components/",
         MEMBERS: "/dashboard/members/",
         PREFERENCES: "/dashboard/preferences/",
@@ -54,6 +58,8 @@ export const ROUTES_DASHBOARD = [
     { path: PATH.USER.ALL_PROJECTS, element: <AllProjectsPage /> },
     { path: PATH.USER.PROJECT, element: <ProjectPage /> },
     { path: PATH.USER.PROJECT_RELEASES, element: <ReleasesPage /> },
+    { path: PATH.USER.MECHANICAL, element: <MechanicalPage /> },
+    { path: PATH.USER.ELECTRICAL, element: <ElectricalPage /> },
     { path: PATH.USER.COMPONENTS, element: <ComponentsPage /> },
     { path: PATH.USER.MEMBERS, element: <MembersPage /> },
     { path: PATH.USER.PREFERENCES, element: <PreferencesPage /> },

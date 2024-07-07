@@ -1,5 +1,5 @@
 import { PATH } from "@/routes/routes";
-import { BookOpenIcon, CpuIcon, FoldersIcon, PartyPopperIcon, ShieldEllipsisIcon, UserRoundCogIcon, UsersIcon } from "lucide-react";
+import { BookOpenIcon, CableIcon, CpuIcon, DraftingCompassIcon, FoldersIcon, PartyPopperIcon, ShieldEllipsisIcon, UserRoundCogIcon, UsersIcon } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { Separator } from "@/components/ui/separator";
 import { ReactNode } from "react";
@@ -65,6 +65,19 @@ export default function Sidebar(props : SidebarProps) {
 			<ButtonLink path={PATH.USER.ALL_PROJECTS} text="Projects">
 				<FoldersIcon className="h-4 w-4" />
 			</ButtonLink>
+
+			<Separator className="my-2" />
+
+
+			<ButtonLink path={PATH.USER.MECHANICAL} text="Mechanical">
+				<DraftingCompassIcon className="h-4 w-4" />
+			</ButtonLink>
+			<ButtonLink path={PATH.USER.ELECTRICAL} text="Electrical">
+				<CableIcon className="h-4 w-4" />
+			</ButtonLink>
+
+			<Separator className="my-2" />
+
 			<ButtonLink path={PATH.USER.COMPONENTS} text="Components">
 				<CpuIcon className="h-4 w-4" />
 			</ButtonLink>
