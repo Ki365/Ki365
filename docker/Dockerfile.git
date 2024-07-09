@@ -7,8 +7,6 @@ RUN apk add git curl-dev openssl autoconf musl-dev build-base zlib-static g++ ge
 RUN mkdir /app/build -p
 WORKDIR	/app
 
-RUN ls
-
 RUN git clone --branch v2.45.2 https://github.com/git/git.git --depth 1
 WORKDIR /app/git
 
