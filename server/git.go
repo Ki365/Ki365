@@ -83,6 +83,7 @@ func handleNewProject(archivePath string, unarchivePath string, repoConfig strin
 		strings.TrimSuffix(filepath.Base(archivePath), filepath.Ext(archivePath)),
 		"No description available",
 		"",
+		strings.TrimSuffix(filepath.Base(archivePath), filepath.Ext(archivePath)),
 		list_sch,
 		list_pcb,
 		[]string{},

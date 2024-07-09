@@ -1,12 +1,17 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
+	"net/http/cgi"
+	"net/http/httputil"
 	"os"
+	"path/filepath"
 )
 
 func EndpointGetPing(w http.ResponseWriter, r *http.Request) {
@@ -103,4 +108,49 @@ func EndpointGetProjectModels(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Write([]byte(fmt.Sprintf("title:%s", project.Description)))
+}
+
+var (
+	// WARNING: This binary only correctly compiles and runs on x86-64 linux.
+	// TODO: enable correct binary compilation based on running OS
+	git_http_backend_bin = "./bin/git-http-backend"
+	git_repos            = "./repos/repos"
+)
+
+func EndpointGetRepository(w http.ResponseWriter, r *http.Request) {
+	rp, err := filepath.Abs(git_repos)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	bp, err := filepath.Abs(git_http_backend_bin)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	env := []string{
+		fmt.Sprintf("GIT_PROJECT_ROOT=%s", rp),
+		"GIT_HTTP_EXPORT_ALL=",
+		"REMOTE_USER=githttp",
+	}
+
+	// debug git request
+	requestDump, err := httputil.DumpRequest(r, true)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(string(requestDump))
+
+	var stdErr bytes.Buffer
+	handler := &cgi.Handler{
+		Path:   bp,
+		Root:   "/repos",
+		Env:    env,
+		Stderr: &stdErr,
+	}
+	http.StripPrefix("/api/git/project", handler).ServeHTTP(w, r)
+
+	if stdErr.Len() > 0 {
+		log.Println("[backend]", stdErr.String())
+	}
 }

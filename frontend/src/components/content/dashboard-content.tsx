@@ -14,29 +14,32 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { TabsContent, TabsTrigger, Tabs, TabsList } from "@/components/ui/tabs";
 
-interface Project {
+export interface ProjectInterface {
 	ID: number
-	Image: String
+	Image: string
 	ProjectName: String
+	ProjectLink?: String
 	Description: String
+	RepositoryLink: String
+	EnableDialog: Function
 }
 
 function RenderProjects(props : any) {
+	const errorString = "error retrieving"
+	// TODO: make this domain responsive to current domain, ideally site-wide
+	const domain = "localhost:5173"
+
 	const [showDialog, setShowDialog] = useState(false)
 	const [dialogTitle, setDialogTitle] = useState("")
 	const [dialogProtocol, setDialogProtocol] = useState("https")
-	// @ts-ignore
-	const [dialogHTTPSLink, setDialogHTTPSLink] = useState("https://ki365.org/example.git")
-	// @ts-ignore
-	const [dialogSSHLink, setDialogSSHLink] = useState("https://ki365.org/example.ssh")
-	const [dialogLink, setDialogLink] = useState("https://ki365.org/example.git")
+	const [dialogHTTPSLink, setDialogHTTPSLink] = useState("")
+	const [dialogSSHLink, setDialogSSHLink] = useState("")
+	const [dialogLink, setDialogLink] = useState(errorString)
 
-	// @ts-ignore
-	function enableDialog(title : string, HTTPSLink : string, SSHLink : string) {
+	function enableDialog(title : string, baseLink : string) {
 		setDialogTitle(title)
-		// TODO: uncomment line once git repo links are available
-		// setDialogHTTPSLink(HTTPSLink)
-		// setDialogSSHLink(SSHLink)
+		setDialogHTTPSLink("https://" + domain + "/" + baseLink)
+		setDialogSSHLink("ssh://" + domain + "/" + baseLink)
 		setShowDialog(true)
 	}
 
@@ -52,14 +55,15 @@ function RenderProjects(props : any) {
 	if (props.projects) {
 		return (
 			<>
-				{props.projects.map((project : Project, index: number) => (
+				{props.projects.map((project : ProjectInterface, index: number) => (
 					<Project
 						key={index}
-						_id={project.ID}
-						image={project.Image}
-						projectName={project.ProjectName}
-						description={project.Description}
-						enableDialog={enableDialog}
+						ID={project.ID}
+						Image={project.Image}
+						ProjectName={project.ProjectName}
+						Description={project.Description}
+						RepositoryLink={project.RepositoryLink}
+						EnableDialog={enableDialog}
 					/>
 				))}
 				<Dialog open={showDialog} onOpenChange={() => setShowDialog(false)}>

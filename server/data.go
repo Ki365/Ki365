@@ -18,6 +18,7 @@ type Project struct {
 	ProjectFolder    string   `json:"ProjectFolder"`
 	Description      string   `json:"Description"`
 	ShortDescription string   `json:"Short Description"` // TODO delete in favor of dynamically generated short description on react
+	RepositoryLink   string   `json:"RepositoryLink"`
 	Schematics       []string `json:"Schematics`
 	Layouts          []string `json:"Layouts`
 	Models           []string `json:"Models`
