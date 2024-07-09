@@ -35,3 +35,14 @@ tasks:
     desc: Builds the server for production
     cmds:
       - go build -o ki365 -ldflags="-s -w" -trimpath ./server/ 
+
+  build-git:
+    desc: Build the static git binary dependency
+    dir: './bin'
+    cmds:
+      - docker compose build ki365-git
+      - docker rm tc || true
+      - docker cp $(docker create --name tc ki365-ki365-git:latest --sleep 10):/libexec/git-core/git-http-backend . && docker rm tc
+      - docker cp $(docker create --name tc ki365-ki365-git:latest --sleep 10):/libexec/git-core/git-http-backend.dbg . && docker rm tc
+      # NOTE: To verify version uncomment this line and run ./bin/git --version
+      # - docker cp $(docker create --name tc ki365-ki365-git:latest --sleep 10):/bin/git . && docker rm tc
