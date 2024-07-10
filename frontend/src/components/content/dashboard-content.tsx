@@ -6,13 +6,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui
 import Project from "../dashboard/project";
 
 import RingLoader from "react-spinners/RingLoader";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { Dialog, DialogClose, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { DialogContent } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { TabsContent, TabsTrigger, Tabs, TabsList } from "@/components/ui/tabs";
+
+import Shuffle from 'shufflejs';
+import { UserContext } from "@/pages/dashboard/projects/all-projects";
 
 export interface ProjectInterface {
 	ID: number
@@ -24,7 +27,7 @@ export interface ProjectInterface {
 	EnableDialog: Function
 }
 
-function RenderProjects(props : any) {
+function RenderProjects(props : {projects : ProjectInterface[]}) {
 	const errorString = "error retrieving"
 	// TODO: make this domain responsive to current domain, ideally site-wide
 	const domain = "localhost:5173"
@@ -35,6 +38,8 @@ function RenderProjects(props : any) {
 	const [dialogHTTPSLink, setDialogHTTPSLink] = useState("")
 	const [dialogSSHLink, setDialogSSHLink] = useState("")
 	const [dialogLink, setDialogLink] = useState(errorString)
+
+	const [realProjects] = useState<ProjectInterface[]>(props.projects)
 
 	function enableDialog(title : string, baseLink : string) {
 		setDialogTitle(title)
@@ -51,12 +56,28 @@ function RenderProjects(props : any) {
 		}
 	}, [dialogProtocol])
 
+	var shuffleInstance : Shuffle
+
+	useEffect(() => {
+		var gr = document.getElementById('photo-gallery')
+		if (gr != null) {
+			shuffleInstance = new Shuffle(gr, {
+			  itemSelector: '.picture-item',
+			  columnWidth: 10,
+			  gutterWidth: 10,
+			  isRTL: false,
+			//   sizer: '.sizer',
+			});
+			shuffleInstance.filter(Shuffle.ALL_ITEMS)
+		}
+	})
 
 	if (props.projects) {
+
 		return (
 			<>
-				{props.projects.map((project : ProjectInterface, index: number) => (
-					<Project
+				{realProjects.map((project : ProjectInterface, index: number) => (
+						<Project
 						key={index}
 						ID={project.ID}
 						Image={project.Image}
@@ -64,12 +85,12 @@ function RenderProjects(props : any) {
 						Description={project.Description}
 						RepositoryLink={project.RepositoryLink}
 						EnableDialog={enableDialog}
-					/>
+						/>
 				))}
 				<Dialog open={showDialog} onOpenChange={() => setShowDialog(false)}>
 				<DialogContent>
 					<DialogHeader>
-						<DialogTitle>Project Link for: {dialogTitle}</DialogTitle>
+						<DialogTitle> Project Link for: {dialogTitle}</DialogTitle>
 						<DialogDescription>This project link will allow project changes</DialogDescription>
 
 					</DialogHeader>
@@ -152,13 +173,13 @@ function ContentEmpty() {
     )
 }
 
-function ContentFull(props : any) {
+function ContentFull(props: {projects: ProjectInterface[]} ) {
     return (
         <div className="flex flex-1 items-center justify-center rounded-lg border shadow-sm" x-chunk="dashboard-02-chunk-1">
             <div className="container my-6s">
-                <div className="grid md:grid-cols-2 sm:grid-cols-1 lg:grid-cols-4 gap-4">
+                <div id="photo-gallery" className="max-w-80grid md:grid-cols-2 sm:grid-cols-1 lg:grid-cols-4 gap-4 m-2">
 						<RenderProjects projects={props.projects}/>
-                    <div className="flex">
+                    <div className="flex picture-item max-w-80 p-2 sizer" data-groups='["nature","city"]'>
                         <Card x-chunk="dashboard-02-chunk-0" className="p-4 flex flex-col justify-between bg-[linear-gradient(to_bottom_right,var(--cyan-500),var(--emerald-500))]"> {/* bg-[linear-gradient(to_bottom_right,var(--cyan-500),var(--emerald-500))] */}
                             <CardHeader className="p-2 pt-0 md:p-4 text-white">
                                 <CardTitle>Visit the docs!</CardTitle>
@@ -212,11 +233,15 @@ export default function DashboardContnet() {
     const [hasResolved, setHasResolved] = useState(false)
     const [hasErrors, setHasErrors] = useState(false)
     const [hasProjects, setHasProjects] = useState(false)
-    const [projects, setProjects] = useState([])
+    const [projects, setProjects] = useState<ProjectInterface[]>([])
+
+	const  context = useContext(UserContext)
+
 	
 	// TODO: Add better user visibility of errors
 	// TODO: Add timeout to promise
 	useEffect(() => {
+		context?.setUser(false)
 		new Promise<any>(() => 
 			fetch("/api/projects", {
 				method: "GET",
@@ -250,7 +275,7 @@ export default function DashboardContnet() {
 				setHasErrors(true)
 			})
 		)
-	}, [])
+	}, [context?.user])
 		
 
 	if(hasResolved) {

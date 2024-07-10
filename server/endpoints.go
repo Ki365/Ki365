@@ -41,6 +41,11 @@ func EndpointGetProjects(w http.ResponseWriter, r *http.Request) {
 
 	json.Unmarshal(b, &projects)
 
+	if len(projects.Projects) < 1 {
+		http.Error(w, "no projects", http.StatusNoContent)
+		return
+	}
+
 	b, err = json.Marshal(projects)
 	if err != nil {
 		// TODO: is there a better error code?
@@ -153,4 +158,103 @@ func EndpointGetRepository(w http.ResponseWriter, r *http.Request) {
 	if stdErr.Len() > 0 {
 		log.Println("[backend]", stdErr.String())
 	}
+}
+
+func EndpointAddExampleProjects(w http.ResponseWriter, r *http.Request) {
+
+	projects, err := parseProjectsJSON("./repos/store/repos-demo.json")
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	var prj *Project
+
+	for _, a := range projects.Projects {
+		// if a.RepositoryLink == "ext-con-breakout-board.git" {
+		prj = &a
+		// }
+
+		// Handle new imported file
+		// TODO: iterate over all example files
+		fp := filepath.Join("./repos/examples/" + prj.ProjectFolder + ".zip")
+
+		// err = handleNewProjectArchive(fp, "./repos/repos")
+		// if err != nil {
+		// 	fmt.Println(err)
+		// }
+		fmt.Println(prj)
+		fmt.Println(prj.Id)
+		fmt.Println(&prj.Id)
+
+		// TODO: verify project integrity
+
+		// pass newly created project to handle project function
+		err = handleNewProject(fp, "./repos/repos", prj.Id, prj.Image, prj.ProjectName, prj.ProjectFolder, prj.Description, prj.RepositoryLink)
+		if err != nil {
+			fmt.Println(err)
+		}
+
+	}
+
+	// TODO: add response JSON
+}
+
+func EndpointRemoveExampleProjects(w http.ResponseWriter, r *http.Request) {
+	projects, err := parseProjectsJSON("./repos/store/repos-demo.json")
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	var prj *Project
+
+	for _, a := range projects.Projects {
+		// if a.RepositoryLink == "ext-con-breakout-board.git" {
+		prj = &a
+
+		handleRemoveProject(prj.Id)
+	}
+
+	// TODO: add response JSON
+}
+
+func EndpointRemoveProject(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	project, ok := ctx.Value("project").(*Project)
+	if !ok {
+		http.Error(w, http.StatusText(http.StatusUnprocessableEntity), http.StatusUnprocessableEntity)
+		return
+	}
+
+	handleRemoveProject(project.Id)
+
+	// TODO: add response JSON
+
+}
+
+// TODO: This should be cached
+func EndpointCheckExampleProjects(w http.ResponseWriter, r *http.Request) {
+	examples, err := parseProjectsJSON("./repos/store/repos-demo.json")
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	projects, err := parseProjectsJSON("./repos/store/repos.json")
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	for _, a := range projects.Projects {
+		for _, b := range examples.Projects {
+			if a.Id == b.Id {
+				fmt.Println(a)
+				fmt.Println(b)
+				w.Write([]byte("true"))
+				return
+			}
+		}
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("false"))
 }

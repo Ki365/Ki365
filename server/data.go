@@ -30,7 +30,7 @@ type PathStruct struct {
 	RepoConfig string
 }
 
-func parseProjectsJSON() (*Projects, error) {
+func parseProjectsJSON(conf string) (*Projects, error) {
 	// repoConfig: ./repos/store/repos.json + unarchivepath: ./repos/repos"
 
 	// TODO: change os.Executable() for repo directory
@@ -39,7 +39,7 @@ func parseProjectsJSON() (*Projects, error) {
 		return nil, err
 	}
 
-	t1 := filepath.Join(expath, RepoConfig) // absolute path
+	t1 := filepath.Join(expath, conf) // absolute path
 	t2 := filepath.Dir(t1)
 	if err != nil {
 		return nil, err
@@ -50,7 +50,7 @@ func parseProjectsJSON() (*Projects, error) {
 		return nil, err
 	}
 
-	file, err := os.OpenFile(RepoConfig, os.O_CREATE, os.ModePerm)
+	file, err := os.OpenFile(conf, os.O_CREATE, os.ModePerm)
 	if err != nil {
 		return nil, err
 	}

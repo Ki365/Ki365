@@ -6,7 +6,7 @@ import { ProjectInterface } from "@/components/content/dashboard-content"
 
 const Project = (props: ProjectInterface) => {
     return (
-        <div className="w-full relative group border rounded-lg">
+        <div className="relative group border rounded-lg picture-item bg-white" data-groups='nature,city'>
             <div className="max-w-80 max-h-80 relative overflow-y-hidden ">
                 <Link to={generatePath(PATH.USER.PROJECT, {id: props.ID})} >
                     <div className="h-52 flex justify-center pt-2">

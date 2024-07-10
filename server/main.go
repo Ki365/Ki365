@@ -110,7 +110,7 @@ func EndpointUploadProject(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// pass newly created project to handle project function
-	err = handleNewProject(fp, "./repos/repos", "./repos/store/repos.json")
+	err = handleNewProject(fp, "./repos/repos", "", "", "", "", "", "")
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -130,7 +130,7 @@ func ProjectCtx(next http.Handler) http.Handler {
 }
 
 func dbGetProject(id string) (*Project, error) {
-	projects, err := parseProjectsJSON()
+	projects, err := parseProjectsJSON(RepoConfig)
 	if err != nil {
 		return nil, err
 	}
@@ -153,8 +153,12 @@ func main() {
 	router.Use(middleware.Recoverer)
 
 	apiPrefix := "/api"
-	router.HandleFunc(apiPrefix+"/upload/project", EndpointUploadProject) // upload project endpoint
 	router.Get(apiPrefix+"/ping", EndpointGetPing)                        // responds with pong
+	router.HandleFunc(apiPrefix+"/upload/project", EndpointUploadProject) // upload project endpoint
+	router.HandleFunc(apiPrefix+"/git/project/*", EndpointGetRepository)
+	router.Post(apiPrefix+"/toggle-example-projects", EndpointAddExampleProjects)      // lists all example projects
+	router.Delete(apiPrefix+"/toggle-example-projects", EndpointRemoveExampleProjects) // unlists all example projects
+	router.Get(apiPrefix+"/toggle-example-projects", EndpointCheckExampleProjects)     // check if example projects are listed
 	router.Route(apiPrefix+"/projects", func(r chi.Router) {
 		r.Get("/", EndpointGetProjects) // get list of all projects in federation
 		r.Route("/{projectID}", func(r chi.Router) {
@@ -163,6 +167,7 @@ func main() {
 			r.Get("/schematics", EndpointGetProjectSchematics)
 			r.Get("/layouts", EndpointGetProjectLayouts)
 			r.Get("/models", EndpointGetProjectModels)
+			r.Delete("/", EndpointRemoveProject) // delete specific project
 		}) // get files of specific project
 
 	})

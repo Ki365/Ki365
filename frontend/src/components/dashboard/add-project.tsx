@@ -1,7 +1,7 @@
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useContext, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogClose } from "@/components/ui/dialog";
@@ -9,6 +9,7 @@ import { DialogHeader, DialogFooter } from "@/components/ui/dialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { UserContext } from '@/pages/dashboard/projects/all-projects'
 
 export function AddProject() {
 
@@ -22,6 +23,39 @@ export function AddProject() {
 	const [isLinkOpen, setIsLinkOpen] = useState(false);
 
 	const [isEnableExampleProjects, setEnableExampleProjects] = useState(false);
+
+	const [hasResolvedExampleProjectsResponse, setHasResolvedExampleProjectsResponse] = useState(false);
+
+	const  context = useContext(UserContext)
+	
+	useEffect(() => {
+		new Promise<any>(() =>
+			fetch('/api/toggle-example-projects', {
+				method: "GET",
+				headers: {
+					Accept: 'application/json',
+				},
+				// signal: cancelRequest.signal
+			}).then((data) => {
+				// console.log(data)
+				return data.json()
+			}).then((data) => {
+				console.log(data)
+				if (data == true) {
+					setEnableExampleProjects(true)
+					setHasResolvedExampleProjectsResponse(true)
+				} else if (data == false) {
+					setEnableExampleProjects(false)
+					setHasResolvedExampleProjectsResponse(true)
+				} else {
+					setEnableExampleProjects(false)
+					setHasResolvedExampleProjectsResponse(false)
+				}
+			}).catch(error => {
+				console.error(error)
+				// reject()
+			}))
+	}, [])
 
 	const handleAddProjectButton = () => {
 		setIsWarningDialogOpen(true)
@@ -46,6 +80,44 @@ export function AddProject() {
 		// TODO: local error checking here
 		if (!errors) {
 			sendData(form)
+		}
+	}
+
+	const handleToggleExampleProjects = () => {
+		setEnableExampleProjects(!isEnableExampleProjects)
+		var method : string
+		if (isEnableExampleProjects) {
+			method = "DELETE"
+		} else {
+			method = "POST"
+		}
+		try {
+			const response = new Promise<any>((resolve, reject) =>
+				fetch('/api/toggle-example-projects', {
+					method: method,
+					body: "",
+					signal: cancelRequest.signal
+				})
+					.then((data) => {
+						if (data?.ok) {
+							resolve(1)
+						} else {
+							reject()
+						}
+					})
+					.catch(error => {
+						console.error(error)
+						reject()
+					}).finally(() => {
+						// props.setShouldResolve(true)
+						context?.setUser(true)
+					}))
+
+			// TODO: make toaster component unique to this toggle
+			toaster(response)
+
+		} catch (e) {
+			console.log(e)
 		}
 	}
 
@@ -133,9 +205,8 @@ export function AddProject() {
 						<DropdownMenuItem onClick={handleAddProjectButton}>Import Archive</DropdownMenuItem>
 						<DropdownMenuSeparator />
 						<DropdownMenuItem 
-							onClick={() => setEnableExampleProjects(!isEnableExampleProjects)}
-							// TODO: remove this line once functionality is implemented
-							disabled
+							onClick={handleToggleExampleProjects}
+							disabled={!hasResolvedExampleProjectsResponse}
 							>
 								Toggle example projects
 						</DropdownMenuItem>
