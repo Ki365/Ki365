@@ -33,6 +33,7 @@
     "react-hook-form": "^7.52.0",
     "react-router-dom": "^6.23.1",
     "react-spinners": "^0.14.1",
+    "shufflejs": "^6.1.1",
     "sonner": "^1.5.0",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
