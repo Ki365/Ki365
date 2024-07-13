@@ -3,19 +3,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs";
 import React, { Suspense, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { Model } from "@/components/gltf/Interf"
 import { Canvas } from "@react-three/fiber"
-import { PerspectiveCamera, Stage } from '@react-three/drei'
+import { PerspectiveCamera, Stage, useGLTF } from '@react-three/drei'
 import { OrbitControls } from '@react-three/drei'
 import { PATH } from "@/routes/routes";
 import { Button } from "@/components/ui/button";
 import RingLoader from "react-spinners/RingLoader";
-
-// function Model() {
-//     // const gltf = useGLTF('https://thinkuldeep.com/modelviewer/astronaut/Astronaut.glb')
-//     // const gltf = useGLTF('/interf-transformed.glb')
-//     // return (<primitive object={gltf.scene} />)
-// }
 
 declare global {
     namespace JSX {
@@ -46,7 +39,7 @@ const useScript: any = (url: any) => {
     }, [url]);
 };
 
-const RenderKiCanvas = (props: any) => {
+const RenderCanvas = (props: {type : string, id : any}) => {
 	// const [resources, setResources] = useState<File[]>([])
 	// const [resourcesPath, setResourcesPath] = useState<String[]>([])
 	const [resources, setResources] = useState<File>()
@@ -54,23 +47,25 @@ const RenderKiCanvas = (props: any) => {
 	const [startCanvas, setStartCanvas] = useState(false)
 
 	useEffect(() => {
-		var apiTtype : string
+		var apiType : string
 		if (props.type == "sch") {
-			apiTtype = "schematics"
+			apiType = "schematics"
 		} else if (props.type == "pcb") {
-			apiTtype = "layouts"
+			apiType = "layouts"
 		} else if (props.type == "pro") {
-			apiTtype = "project"
+			apiType = "project"
+		} else if (props.type == "mod") {
+			apiType = "models"
 		} else {
-			return
-		}
+            return
+        }
 		
-		fetch(`/api/projects/${props._id}/${apiTtype}`)
+		fetch(`/api/projects/${props.id}/${apiType}`)
 		.then((response) => {
 			return response.blob()
 		}).then((blob) => {
 			// setResource(existing => [...existing, (new File([blob], "ii.kicad_sch"))])
-			setResources(new File([blob], `${props._id}-${apiTtype}-temp`, {
+			setResources(new File([blob], `${props.id}-${apiType}-temp`, {
 				type: blob.type,
 			}))
 		})
@@ -84,12 +79,44 @@ const RenderKiCanvas = (props: any) => {
 	}, [resources])
 
 	if (startCanvas) {
+        if (props.type == "mod") {
+            if (resourcesPath != null) {
+                const gltf = useGLTF(`${resourcesPath}`)
+
+                return (
+                    <>
+                        <Suspense>
+                            <Canvas style={{ background: '#dfdfdf' }}>
+                                <PerspectiveCamera makeDefault position={[0, 1, 5]} />
+                                <ambientLight />
+                                <Stage preset="rembrandt" intensity={0.01} environment="warehouse">
+                                    <primitive
+                                        object={gltf.scene}
+                                        />
+                                </Stage>
+                                <OrbitControls />
+                            </Canvas>
+                        </Suspense>
+                    </>
+                )
+            }
+        }
 		return (
 			<>
 				<kicanvas-embed fileType={props.type} src={resourcesPath} theme="kicad" controls="full" controlslist="nooverlay"/>
 			</>
 		)
 	} else {
+        if (props.type == "mod") {
+            return (
+                <>
+                    <div className="flex flex-col items-center justify-center content-center h-full gap-8">
+                        <RingLoader />
+                        <div>Loading Model viewer...</div>
+                    </div>
+                </>
+            )
+        }
 		return (
 			<>
 				<div className="flex flex-col items-center justify-center content-center h-full gap-8">
@@ -159,26 +186,17 @@ export default function ProjectPage() {
                     </div>
                     <TabsContent forceMount value="sch" className='data-[state=inactive]:hidden'>
                         <div className="h-[75vh]">
-                            <RenderKiCanvas _id={id} type="sch"/>
+                            <RenderCanvas id={id} type="sch"/>
                         </div>
                     </TabsContent>
                     <TabsContent forceMount value="pcb" className='data-[state=inactive]:hidden'>
                         <div className="h-[75vh]">
-							<RenderKiCanvas _id={id} type="pcb"/>
+							<RenderCanvas id={id} type="pcb"/>
                         </div>
                     </TabsContent>
                     <TabsContent forceMount value="3dv" className='data-[state=inactive]:hidden'>
                         <div className="h-[75vh]">
-                            <Suspense>
-                                <Canvas style={{ background: '#dfdfdf' }}>
-                                    <PerspectiveCamera makeDefault position={[0,1,5]} />
-                                    {/* <ambientLight /> */}
-                                    <Stage preset="rembrandt" intensity={0.01} environment="city">
-                                        <Model />
-                                    </Stage>
-                                <OrbitControls />
-                                </Canvas>
-                            </Suspense>
+                            <RenderCanvas id={id} type="mod"/>
                         </div>
                     </TabsContent>
 					<TabsContent forceMount value="drt" className='data-[state=inactive]:hidden'>

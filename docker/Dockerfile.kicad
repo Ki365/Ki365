@@ -1,0 +1,11 @@
+FROM kicad/kicad:nightly-full
+
+USER root
+
+RUN apt-get update && apt-get -y install openssh-server ssh
+
+RUN sed -i '/PasswordAuthentication yes/s/^#//g' /etc/ssh/sshd_config
+
+RUN service ssh start
+
+CMD ["sh", "-c", "echo kicad:$KI365_KICAD_PASSWORD | chpasswd ; /usr/sbin/sshd -D"]

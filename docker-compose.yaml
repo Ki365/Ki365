@@ -11,3 +11,11 @@ services:
     container_name: ki365-git
     build:
       dockerfile: ./docker/Dockerfile.git
+  kicad:
+    container_name: kicad
+    build:
+      dockerfile: ./docker/Dockerfile.kicad
+    environment:
+      KI365_KICAD_PASSWORD: ${KI365_KICAD_PASSWORD}
+    ports:
+      - "22"

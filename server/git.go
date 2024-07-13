@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/go-git/go-git/v5"
+	"github.com/ki365/ki365/kicad"
 )
 
 type ErrorRepoNotClean struct {
@@ -76,6 +77,13 @@ func handleNewProject(archivePath string, unarchivePath string, id string, image
 	list_sch := find(rel, ".kicad_sch")
 	list_pcb := find(rel, ".kicad_pcb")
 
+	list_glb := []string{}
+	for _, p := range list_pcb {
+		// TODO: each folder should have a unique generated cache dir
+		s := filepath.Join(strings.TrimSuffix(filepath.Base(p), filepath.Ext(p)) + ".glb")
+		list_glb = append(list_glb, s)
+	}
+
 	var projectName string
 
 	if prjName != "" {
@@ -127,10 +135,21 @@ func handleNewProject(archivePath string, unarchivePath string, id string, image
 		projectLink,
 		list_sch,
 		list_pcb,
-		[]string{},
+		list_glb, // TODO: add a isgenerating flag to notify users of progress
 	}
 
 	projects.Projects = append(projects.Projects, proj)
+
+	// TODO: move long processes like zip and generating files to asynchronous operations
+	// TODO: frontend: expose multi model boards to the interface
+
+	//  TODO: iterate over range of glb paths
+	err = kicad.RequestGLTFModelFromKiCadCLI(
+		"./"+filepath.Join(RepoDir, projectFolder, list_pcb[0]),
+		"./"+filepath.Join(CacheGLBDir, projectFolder, filepath.Base(list_glb[0])))
+	if err != nil {
+		return err
+	}
 
 	// Marshal new data
 	fmt.Println("Marshalling JSON")
@@ -197,11 +216,10 @@ func handleRemoveProject(id string) error {
 }
 
 // TODO: iterate over all in slice argument
-func processProjectFilePaths(projectPath string, filepathSlice []string) []string {
-	// TODO: make a global variable for consistent changes
-	str := "./repos/repos"
+func processProjectFilePaths(basepath string, projectPath string, filepathSlice []string) []string {
 	var s []string
-	s = append(s, filepath.Join(str, projectPath, filepathSlice[0]))
+	s = append(s, filepath.Join(basepath, projectPath, filepathSlice[0]))
+	fmt.Println(s)
 	return s
 }
 

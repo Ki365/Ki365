@@ -4,3 +4,4 @@ repos
 ki365
 bin
 node_modules
+.env

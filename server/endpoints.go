@@ -81,7 +81,7 @@ func EndpointGetProjectSchematics(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// TODO: remove this in favor of calling during git push receive operation
-	s := processProjectFilePaths(project.ProjectFolder, project.Schematics)
+	s := processProjectFilePaths(RepoDir, project.ProjectFolder, project.Schematics)
 
 	// TODO: obscure filename to increase security
 	http.ServeFile(w, r, s[0])
@@ -97,7 +97,7 @@ func EndpointGetProjectLayouts(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// TODO: remove this in favor of calling during git push receive operation
-	s := processProjectFilePaths(project.ProjectFolder, project.Layouts)
+	s := processProjectFilePaths(RepoDir, project.ProjectFolder, project.Layouts)
 
 	// TODO: obscure filename to increase security
 	http.ServeFile(w, r, s[0])
@@ -112,7 +112,10 @@ func EndpointGetProjectModels(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusUnprocessableEntity), http.StatusUnprocessableEntity)
 		return
 	}
-	w.Write([]byte(fmt.Sprintf("title:%s", project.Description)))
+
+	s := processProjectFilePaths(CacheGLBDir, project.ProjectFolder, project.Models)
+	http.ServeFile(w, r, s[0])
+	// w.Write([]byte(fmt.Sprintf("title:%s", project.Description)))
 }
 
 var (
