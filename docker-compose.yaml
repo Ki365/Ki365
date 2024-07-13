@@ -7,8 +7,8 @@ services:
     ports:
       - "8080:8080"
     image: ghcr.io/ki365/ki365:latest
-  ki365-git:
-    container_name: ki365-git
+  git:
+    container_name: git
     build:
       dockerfile: ./docker/Dockerfile.git
   kicad:
