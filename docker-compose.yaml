@@ -19,3 +19,7 @@ services:
       KI365_KICAD_PASSWORD: ${KI365_KICAD_PASSWORD}
     ports:
       - "22"
+  gltfpack:
+    container_name: gltfpack
+    build:
+      dockerfile: ./docker/Dockerfile.gltfpack

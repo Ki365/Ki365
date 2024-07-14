@@ -1,0 +1,24 @@
+# docker run --rm -a stdout -it --name gltfpacktest --mount type=bind,source="$(pwd)"/target,target=/app alpine:3.19 /bin/sh -c 'apk add git make musl-dev coreutils gcc g++  && mkdir /app/ -p && cd app && rm -rf /app/meshoptimizer/build && cd meshoptimizer && make -j2 config=release gltfpack'
+
+FROM alpine:3.19 as base
+
+RUN apk add git make musl-dev g++
+# coreutils gcc
+
+RUN mkdir /app -p
+WORKDIR	/app
+
+RUN git clone --branch v0.21 https://github.com/zeux/meshoptimizer.git --depth 1
+WORKDIR /app/meshoptimizer
+
+RUN sed -i 's/LDFLAGS=/LDFLAGS=-static/' /app/meshoptimizer/Makefile
+
+RUN make -j2 config=release gltfpack
+
+WORKDIR /app/meshoptimizer/build/release/
+RUN strip gltfpack --only-keep-debug -o gltfpack.dbg
+RUN strip gltfpack
+
+FROM scratch
+
+COPY --from=base /app/meshoptimizer/build/release/gltfpack /app/meshoptimizer/build/release/gltfpack.dbg /
