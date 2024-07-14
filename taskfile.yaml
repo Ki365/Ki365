@@ -46,3 +46,15 @@ tasks:
       - docker cp $(docker create --name tc ki365-ki365-git:latest --sleep 10):/libexec/git-core/git-http-backend.dbg . && docker rm tc
       # NOTE: To verify version uncomment this line and run ./bin/git --version
       # - docker cp $(docker create --name tc ki365-ki365-git:latest --sleep 10):/bin/git . && docker rm tc
+  build-gltfpack:
+    desc: Build and copy the gltfpack dependency
+    dir: './bin'
+    cmds:
+      - docker compose build gltfpack
+      - docker rm tc || true
+      - docker cp $(docker create --name tc ki365-gltfpack:latest --sleep 10):/gltfpack . && docker rm tc
+      - docker cp $(docker create --name tc ki365-gltfpack:latest --sleep 10):/gltfpack.dbg . && docker rm tc
+  copy-bin:
+    desc: Builds and copies executables from utility docker images for development
+    dir: '.'
+    deps: [build-git, build-gltfpack]
