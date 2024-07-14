@@ -101,10 +101,15 @@ To start the development environment run:
 ```
 git clone https://github.com/Ki365/Ki365.git
 cd Ki365
-task dev
+task copy-bin
+# Terminal one
+task dev-backend
+# Terminal two
+task dev-frontend
 ```
+**_NOTE: 1_** The copy-bin and dev-backend commands must be run on a Linux based system. Refer [here](https://github.com/Ki365/Ki365/issues/1).
 
-**_NOTE:_** These commands require that the git, task, npm, yarn and golang CLI tools are installed 
+**_NOTE: 2_** These commands require that the git, task, npm, yarn golang, and docker CLI tools are installed. 
 
 For further information on contributing please read the [CONTRIBUTING.md](https://github.com/Ki365/Ki365/blob/main/CONTRIBUTING.md)
 
