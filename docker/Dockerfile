@@ -1,5 +1,5 @@
 # NODE JS Frontend Image
-FROM node:22.3-alpine3.20 as frontend
+FROM node:22.3-alpine3.20 AS frontend
 
 
 # Create non root user for scratch
@@ -19,7 +19,7 @@ WORKDIR /app/frontend/
 RUN yarn build
 
 # GOLANG Server Image
-FROM golang:1.22-alpine3.20 as server
+FROM golang:1.22-alpine3.20 AS server
 WORKDIR /app/
 COPY . .
 RUN go mod tidy
@@ -27,7 +27,7 @@ WORKDIR /app/server/
 RUN GOOS=linux go build -ldflags="-s" -o "../build/server" -v
 
 # SCRATCH Image for Production
-FROM scratch as prod
+FROM scratch AS prod
 
 # All image metadata
 LABEL org.opencontainers.image.source https://github.com/Ki365/Ki365

@@ -1,6 +1,6 @@
 # docker run --rm -a stdout -it --name gittest --mount type=bind,source="$(pwd)"/target,target=/app alpine:3.19 /bin/sh -c 'apk add git curl-dev openssl autoconf musl-dev build-base zlib-static g++ && mkdir /app/build -p && cd app && rm -rf /app/git && git clone https://github.com/git/git.git --depth 1 && cd git && autoreconf -fi && ./configure prefix=/app/build CFLAGS="${CFLAGS} -static" --with-curl=/usr/bin/curl --with-openssl=/usr/bin/openssl && make && make install'
 
-FROM alpine:3.19 as base
+FROM alpine:3.19 AS base
 
 RUN apk add git curl-dev openssl autoconf musl-dev build-base zlib-static g++ gettext
 	

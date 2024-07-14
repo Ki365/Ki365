@@ -1,6 +1,6 @@
 # docker run --rm -a stdout -it --name gltfpacktest --mount type=bind,source="$(pwd)"/target,target=/app alpine:3.19 /bin/sh -c 'apk add git make musl-dev coreutils gcc g++  && mkdir /app/ -p && cd app && rm -rf /app/meshoptimizer/build && cd meshoptimizer && make -j2 config=release gltfpack'
 
-FROM alpine:3.19 as base
+FROM alpine:3.19 AS base
 
 RUN apk add git make musl-dev g++
 # coreutils gcc
