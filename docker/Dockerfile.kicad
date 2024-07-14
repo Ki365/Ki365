@@ -1,3 +1,4 @@
+# TODO: Move away from nightly to have deterministic behavior
 FROM kicad/kicad:nightly-full
 
 USER root
