@@ -24,9 +24,10 @@ type Project struct {
 	Models           []string `json:"Models`
 }
 
-var RepoDir = "./repos"
-var RepoConfig = RepoDir + "/store/repos.json"
-var CacheDir = RepoDir + "/cache"
+var DataDir = "./repos"
+var RepoDir = DataDir + "/repos"
+var RepoConfig = DataDir + "/store/repos.json"
+var CacheDir = DataDir + "/cache"
 var CacheGLBDir = CacheDir + "/glb"
 
 type PathStruct struct {
