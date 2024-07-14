@@ -86,7 +86,7 @@ const RenderCanvas = (props: {type : string, id : any}) => {
                 return (
                     <>
                         <Suspense>
-                            <Canvas style={{ background: '#dfdfdf' }}>
+                            <Canvas className="max-h-fit  sm:aspect-[2/2] md:aspect-[2/1.85] max-md:[2/1.75] lg:aspect-[2/1.5] max-lg:aspect-auto aspect-[3/2]" style={{ background: '#dfdfdf' }}>
                                 <PerspectiveCamera makeDefault position={[0, 1, 5]} />
                                 <ambientLight />
                                 <Stage preset="rembrandt" intensity={0.01} environment="warehouse">
@@ -158,7 +158,7 @@ export default function ProjectPage() {
             <div className="h-[80vh]">
                 {/* <script type="module" src="@/assets/kicanvas.js"></script> */}
                 <Tabs defaultValue="sch">
-                    <div className="flex">
+                    <div className="flex flex-wrap gap-x-4 gap-y-2">
                         <Select defaultValue="main" >
                             <SelectTrigger className="w-[150px]">
                                 <div className="text-muted-foreground">Branch: </div>
@@ -171,7 +171,6 @@ export default function ProjectPage() {
                                 {/* TODO: Limit KiCanvas to just this page*/}
                             </SelectContent>
                         </Select>
-                        <div className="px-2"></div>
                         <TabsList>
                             <TabsTrigger value="sch">Schematic</TabsTrigger>
                             <TabsTrigger value="pcb">Board</TabsTrigger>
@@ -179,7 +178,6 @@ export default function ProjectPage() {
                             <TabsTrigger value="drt">Drafting</TabsTrigger> {/* NOTE: Stands for 3D View */}
                             <TabsTrigger value="bom">BOM</TabsTrigger>
                         </TabsList>
-                        <div className="px-2"></div>
 						<Link to={PATH.USER.PROJECT_RELEASES}>
 							<Button>View Releases</Button>
 						</Link>
