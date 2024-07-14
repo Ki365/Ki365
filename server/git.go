@@ -12,6 +12,7 @@ import (
 
 	"github.com/go-git/go-git/v5"
 	"github.com/ki365/ki365/kicad"
+	"github.com/ki365/ki365/optimization"
 )
 
 type ErrorRepoNotClean struct {
@@ -150,6 +151,8 @@ func handleNewProject(archivePath string, unarchivePath string, id string, image
 	if err != nil {
 		return err
 	}
+
+	optimization.OptimizeGLB("./" + filepath.Join(CacheGLBDir, projectFolder, filepath.Base(list_glb[0])))
 
 	// Marshal new data
 	fmt.Println("Marshalling JSON")

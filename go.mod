@@ -6,9 +6,12 @@ require (
 	github.com/go-chi/chi/v5 v5.0.14
 	github.com/go-git/go-git/v5 v5.12.0
 	github.com/ki365/ki365/kicad v0.0.0
+	github.com/ki365/ki365/optimization v0.0.0
 )
 
 replace github.com/ki365/ki365/kicad => ./server/internal/kicad
+
+replace github.com/ki365/ki365/optimization => ./server/internal/optimization
 
 require (
 	dario.cat/mergo v1.0.0 // indirect
