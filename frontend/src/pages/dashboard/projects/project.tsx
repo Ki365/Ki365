@@ -8,7 +8,243 @@ import { PerspectiveCamera, Stage, useGLTF } from '@react-three/drei'
 import { OrbitControls } from '@react-three/drei'
 import { PATH } from "@/routes/routes";
 import { Button } from "@/components/ui/button";
+import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import RingLoader from "react-spinners/RingLoader";
+import { ScrollArea } from "@/components/ui/scroll-area";
+
+// TODO: make responsive
+const bom = [
+    {
+        Reference: "C1",
+        Value: "10n",
+        Datasheet: "",
+        Footprint: "SMD-CMN:SMD-0603C",
+        Qty: "1",
+        DNP: "",
+        Num: "1",
+        Description: ""
+    },
+    {
+      Reference: "C1",
+      Value: "10n",
+      Datasheet: "",
+      Footprint: "SMD-CMN:SMD-0603C",
+      Qty: "1",
+      DNP: "",
+      Num: "1",
+      Description: ""
+    },
+    {
+      Reference: "C2",
+      Value: "CAPACITOR",
+      Datasheet: "",
+      Footprint: "SMD-CMN:SMD-0603C",
+      Qty: "1",
+      DNP: "",
+      Num: "2",
+      Description: ""
+    },
+    {
+      Reference: "C3",
+      Value: "CAPACITOR",
+      Datasheet: "",
+      Footprint: "SMD-CMN:SMD-0603C",
+      Qty: "1",
+      DNP: "",
+      Num: "3",
+      Description: ""
+    },
+    {
+      Reference: "C4",
+      Value: "20pF",
+      Datasheet: "",
+      Footprint: "SMD-CMN:SMD-0603C",
+      Qty: "1",
+      DNP: "",
+      Num: "4",
+      Description: ""
+    },
+    {
+      Reference: "C5",
+      Value: "20pF",
+      Datasheet: "",
+      Footprint: "SMD-CMN:SMD-0603C",
+      Qty: "1",
+      DNP: "",
+      Num: "5",
+      Description: ""
+    },
+    {
+      Reference: "C6",
+      Value: "0.1uF",
+      Datasheet: "",
+      Footprint: "SMD-CMN:SMD-0603C",
+      Qty: "1",
+      DNP: "",
+      Num: "6",
+      Description: ""
+    },
+    {
+      Reference: "C7",
+      Value: "0.1uF",
+      Datasheet: "",
+      Footprint: "SMD-CMN:SMD-0603C",
+      Qty: "1",
+      DNP: "",
+      Num: "7",
+      Description: ""
+    },
+    {
+      Reference: "C8",
+      Value: "0.1uF",
+      Datasheet: "",
+      Footprint: "SMD-CMN:SMD-0603C",
+      Qty: "1",
+      DNP: "",
+      Num: "8",
+      Description: ""
+    },
+    {
+      Reference: "C9",
+      Value: "0.1uF",
+      Datasheet: "",
+      Footprint: "SMD-CMN:SMD-0603C",
+      Qty: "1",
+      DNP: "",
+      Num: "9",
+      Description: ""
+    },
+    {
+      Reference: "C10",
+      Value: "0.1uF",
+      Datasheet: "",
+      Footprint: "SMD-CMN:SMD-0603C",
+      Qty: "1",
+      DNP: "",
+      Num: "10",
+      Description: ""
+    },
+    {
+      Reference: "C11",
+      Value: "10nF",
+      Datasheet: "",
+      Footprint: "SMD-CMN:SMD-0603C",
+      Qty: "1",
+      DNP: "",
+      Num: "11",
+      Description: ""
+    },
+    {
+      Reference: "C12",
+      Value: "10nF",
+      Datasheet: "",
+      Footprint: "SMD-CMN:SMD-0603C",
+      Qty: "1",
+      DNP: "",
+      Num: "12",
+      Description: ""
+    },
+    {
+      Reference: "C13",
+      Value: "2.2uF",
+      Datasheet: "",
+      Footprint: "SMD-CMN:SMD-0603C",
+      Qty: "1",
+      DNP: "",
+      Num: "13",
+      Description: ""
+    },
+    {
+      Reference: "C14",
+      Value: "2.2uF",
+      Datasheet: "",
+      Footprint: "SMD-CMN:SMD-0603C",
+      Qty: "1",
+      DNP: "",
+      Num: "14",
+      Description: ""
+    },
+    {
+      Reference: "C15",
+      Value: "10uF",
+      Datasheet: "",
+      Footprint: "SMD-CMN:SMD-1206C",
+      Qty: "1",
+      DNP: "",
+      Num: "15",
+      Description: ""
+    },
+    {
+      Reference: "C16",
+      Value: "4.7uF",
+      Datasheet: "",
+      Footprint: "SMD-CMN:SMD-0805C",
+      Qty: "1",
+      DNP: "",
+      Num: "16",
+      Description: ""
+    },
+    {
+      Reference: "C17",
+      Value: "10uF",
+      Datasheet: "",
+      Footprint: "SMD-CMN:SMD-1206C",
+      Qty: "1",
+      DNP: "",
+      Num: "17",
+      Description: ""
+    },
+    {
+      Reference: "C18",
+      Value: "1uF",
+      Datasheet: "",
+      Footprint: "SMD-CMN:SMD-0603C",
+      Qty: "1",
+      DNP: "",
+      Num: "18",
+      Description: ""
+    },
+    {
+      Reference: "C19",
+      Value: "0.1uF",
+      Datasheet: "",
+      Footprint: "SMD-CMN:SMD-0603C",
+      Qty: "1",
+      DNP: "",
+      Num: "19",
+      Description: ""
+    },
+    {
+      Reference: "C20",
+      Value: "0.1uF",
+      Datasheet: "",
+      Footprint: "SMD-CMN:SMD-0603C",
+      Qty: "1",
+      DNP: "",
+      Num: "20",
+      Description: ""
+    },
+    {
+      Reference: "C21",
+      Value: "1uF",
+      Datasheet: "",
+      Footprint: "SMD-CMN:SMD-0603C",
+      Qty: "1",
+      DNP: "",
+      Num: "21",
+      Description: ""
+    },
+    {
+      Reference: "C22",
+      Value: "100n",
+      Datasheet: "",
+      Footprint: "SMD-CMN:SMD-0603C",
+      Qty: "1",
+      DNP: "",
+      Num: "22",
+      Description: ""
+    },
+  ]
 
 declare global {
     namespace JSX {
@@ -218,13 +454,41 @@ export default function ProjectPage() {
                         </div>
                     </TabsContent>
                     <TabsContent forceMount value="bom" className='data-[state=inactive]:hidden'>
-                        <div className="h-[75vh]">
-                            <div className="flex flex-col min-h-full justify-center items-center">
-                                <div>
-                                    BOM data coming soon 🧨💥🤯
-                                </div>
-                                <div className="grow-2 p-28"></div>
-                            </div>
+                        <div className="flex flex-col justify-between h-[75vh]">
+                            <ScrollArea className="rounded-md border h-max-[70vh]" >
+                                <Table>
+                                    <TableHeader>
+                                        <TableRow className="divide-x">
+                                            <TableHead>Designator</TableHead>
+                                            <TableHead>Value</TableHead>
+                                            <TableHead>Description</TableHead>
+                                            <TableHead>Footprint</TableHead>
+                                            <TableHead>DNP</TableHead>
+                                            <TableHead className=" text-right">Quantity</TableHead>
+                                        </TableRow>
+                                    </TableHeader>
+                                    {/* <div className="static"> */}
+                                    <TableBody className="">
+                                        {bom.map(b => (
+                                            <TableRow key={b.Reference} className="divide-x">
+                                                <TableCell className="font-medium">{b.Reference}</TableCell>
+                                                <TableCell className="">{b.Value}</TableCell>
+                                                <TableCell className="">{b.Description}</TableCell>
+                                                <TableCell className="">{b.Footprint}</TableCell>
+                                                <TableCell className="">{b.DNP}</TableCell>
+                                                <TableCell className="text-right">{b.Qty}</TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                    <TableFooter>
+                                        <TableRow>
+                                            <TableCell colSpan={5}>Total</TableCell>
+                                            <TableCell className="text-right">{bom.reduce((acc, curr) => acc + ~~Number(curr.Qty), 0)}:{bom.length}</TableCell>
+                                        </TableRow>
+                                    </TableFooter>
+                                </Table>
+                            </ScrollArea>
+                            <div className="flex flex-col justify-center items-center m-3">BOM data for building: 🤯</div>
                         </div>
                     </TabsContent>
                 </Tabs>
