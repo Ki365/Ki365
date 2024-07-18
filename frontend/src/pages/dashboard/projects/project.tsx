@@ -346,7 +346,7 @@ const RenderCanvas = (props: {type : string, id : any}) => {
         if (props.type == "mod") {
             return (
                 <>
-                    <div className="flex flex-col items-center justify-center content-center h-full gap-8">
+                    <div className="flex flex-col items-center justify-center content-center h-full gap-8 rounded-md border">
                         <RingLoader />
                         <div>Loading Model viewer...</div>
                     </div>
@@ -355,7 +355,7 @@ const RenderCanvas = (props: {type : string, id : any}) => {
         }
 		return (
 			<>
-				<div className="flex flex-col items-center justify-center content-center h-full gap-8">
+				<div className="flex flex-col items-center justify-center content-center h-full gap-8 rounded-md border">
 					<RingLoader />
 					<div>Loading schematic...</div>
 				</div>
@@ -419,17 +419,17 @@ export default function ProjectPage() {
 						</Link>
                     </div>
                     <TabsContent forceMount value="sch" className='data-[state=inactive]:hidden'>
-                        <div className="h-[75vh]">
+                        <div className="h-[75vh] rounded-md border">
                             <RenderCanvas id={id} type="sch"/>
                         </div>
                     </TabsContent>
                     <TabsContent forceMount value="pcb" className='data-[state=inactive]:hidden'>
-                        <div className="h-[75vh]">
+                        <div className="h-[75vh] rounded-md border">
 							<RenderCanvas id={id} type="pcb"/>
                         </div>
                     </TabsContent>
                     <TabsContent forceMount value="3dv" className='data-[state=inactive]:hidden'>
-                        <div className="h-[75vh]">
+                        <div className="h-[75vh] rounded-md border">
                             <RenderCanvas id={id} type="mod"/>
                         </div>
                     </TabsContent>
