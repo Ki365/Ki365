@@ -2,7 +2,7 @@ build
 .vscode
 repos
 ki365
-bin
+bin*
 node_modules
 .env
 target*
