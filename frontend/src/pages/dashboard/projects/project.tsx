@@ -467,7 +467,6 @@ export default function ProjectPage() {
                                             <TableHead className=" text-right">Quantity</TableHead>
                                         </TableRow>
                                     </TableHeader>
-                                    {/* <div className="static"> */}
                                     <TableBody className="">
                                         {bom.map(b => (
                                             <TableRow key={b.Reference} className="divide-x">
