@@ -23,3 +23,10 @@ services:
     container_name: gltfpack
     build:
       dockerfile: ./docker/Dockerfile.gltfpack
+  # TODO: see note in corresponding dockerfile
+  tracespace:
+    container_name: tracespace
+    build:
+      dockerfile: ./docker/Dockerfile.tracespace
+    environment:
+      KI365_TRACESPACE_PASSWORD: ${KI365_TRACESPACE_PASSWORD}

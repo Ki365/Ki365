@@ -1,0 +1,18 @@
+# TODO: Replace all links to tracespace with statically linked modern CLI application with ABI support (preferrably golang).
+#  This is to reduce the number of containers and images needed to support Ki365.
+
+FROM node:lts-alpine3.20
+
+RUN apk add openssh
+
+RUN addgroup -S ts && adduser -S tsu -G ts -s /bin/ash
+
+RUN npm install -g @tracespace/cli@next 
+
+RUN sed -i '/PasswordAuthentication yes/s/^# *//g' /etc/ssh/sshd_config
+
+RUN ssh-keygen -A
+
+WORKDIR /home/tsu
+
+CMD ["sh", "-c", "echo tsu:$KI365_TRACESPACE_PASSWORD | chpasswd ; /usr/sbin/sshd -D"]
