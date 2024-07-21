@@ -23,11 +23,17 @@ func RequestGLTFModelFromKiCadCLI(inputFile string, outputFilePath string) error
 
 	homePath := "/home/kicad/"
 
+	// TODO: move this functionality elsewhere to enable .env files
+	pswd, wasSet := os.LookupEnv("KI365_KICAD_PASSWORD")
+	if !wasSet {
+		return fmt.Errorf("KI365_KICAD_PASSWORD was not set, cannot connect to KiCad instance.")
+	}
+
 	config := &ssh.ClientConfig{
 		User:            "kicad",
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
 		Auth: []ssh.AuthMethod{
-			ssh.Password(""), // TODO: Include from env configuration
+			ssh.Password(pswd),
 		},
 	}
 
