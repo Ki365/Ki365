@@ -2,8 +2,7 @@ import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Separator } from "@/components/ui/separator";
-import { BellOffIcon, BookOpenIcon, CircleUserIcon, CpuIcon, FoldersIcon, MenuIcon, PartyPopperIcon, SearchIcon, ShieldEllipsisIcon, SunMoonIcon, UserRoundCogIcon, UsersIcon } from "lucide-react";
+import { BellOffIcon, CircleUserIcon, MenuIcon, SearchIcon, SunMoonIcon } from "lucide-react";
 
 import banner from '@/assets/banner.svg'
 

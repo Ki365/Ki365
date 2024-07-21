@@ -26,6 +26,12 @@ RUN go mod tidy
 WORKDIR /app/server/
 RUN GOOS=linux go build -ldflags="-s" -o "../build/server" -v
 
+# TODO: include svgcleaner as dependency including pull request #210 and implmentation for style="default-color"
+
+FROM ki365-gltfpack AS gltfpack
+
+FROM ki365-git AS git
+
 # SCRATCH Image for Production
 FROM scratch AS prod
 
@@ -35,6 +41,9 @@ LABEL org.opencontainers.image.source https://github.com/Ki365/Ki365
 # Copy all program data to final image
 COPY --from=frontend /etc/passwd /etc/passwd
 USER appuser
+COPY --from=git /libexec/git-core/git-http-backend /bin/.
+COPY --from=git /libexec/git-core/git-http-backend.dbg /bin/.
+COPY --from=gltfpack / /bin/.
 COPY --from=frontend /app/build/ .
 COPY --from=server /app/build/ .
 ENTRYPOINT ["/server", "-p", "8080", "-d", "/frontend"]
