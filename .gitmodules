@@ -1,0 +1,21 @@
+[submodule "examples/source/Hardware"]
+	path = examples/source/Hardware
+	url = https://github.com/Ki365/Hardware.git
+[submodule "examples/source/OLINUXINO"]
+	path = examples/source/OLINUXINO
+	url = https://github.com/Ki365/OLINUXINO.git
+[submodule "examples/source/POV-Display"]
+	path = examples/source/POV-Display
+	url = https://github.com/Ki365/POV-Display.git
+[submodule "examples/source/SPACEDOS01"]
+	path = examples/source/SPACEDOS01
+	url = https://github.com/Ki365/SPACEDOS01.git
+[submodule "examples/source/ext-con-breakout-board"]
+	path = examples/source/ext-con-breakout-board
+	url = https://github.com/Ki365/ext-con-breakout-board.git
+[submodule "examples/source/nuco-v"]
+	path = examples/source/nuco-v
+	url = https://github.com/Ki365/nuco-v.git
+[submodule "examples/source/upsat-comms-hardware"]
+	path = examples/source/upsat-comms-hardware
+	url = https://github.com/Ki365/upsat-comms-hardware.git
