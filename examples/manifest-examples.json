@@ -1,0 +1,68 @@
+{
+	"Projects": [
+	{
+		"ID": "EX-100001",
+		"Image": "https://www.kicad.org/made-with-kicad/olinuxino/olinuxino.jpg",
+		"ProjectName": "Olimex: A64-OLinuXino",
+		"ProjectFolder": "OLINUXINO",
+		"Description": "single-board computer running Linux & Android. The design based on a 64-bit ARM CPU and includes 1 or 2 GB DDR3 RAM, 4 GB flash memory, microSD card socket, WiFi & BLE4.0, Ethernet, HDMI & audio output.",
+		"ShortDescription": "single-board computer running Linux & ...",
+		"RepositoryLink": "OLINUXINO.git"
+	},
+	{
+		"ID": "EX-100002",
+		"Image": "https://www.kicad.org/made-with-kicad/ciaa-project-acc/CIAA-ACC.jpg",
+		"ProjectName": "CIAA: CIAA-ACC (HPC)",
+		"ProjectFolder": "Hardware",
+		"Description": "12 layer PCB design for High Performance Computing. It has a Xilinx Zynq-7000 SoC with an ARM 2x Cortex A9 CPU and a Kintex-7 FPGA. The form factor is the expandable PCIe-104. Peripherals: 1GB DDR3 memory, Quad SPI Flash, Gbit Ethernet, Micro SDHC, USB 2.0, dual role HDMI, PCIe 1x.",
+		"ShortDescription": "12 layer PCB design for High Performance ...",
+		"RepositoryLink": "Hardware.git"
+	},
+	{
+		"ID": "EX-100003",
+		"Image": "https://www.kicad.org/made-with-kicad/librem-5-ext-con-rigid-flex-breakout-board/Librem_5_EXT_CON_Rigid_Flex_Breakout_Board_v0.6.png",
+		"ProjectName": "Purism: Librem 5 EXT CON",
+		"ProjectFolder": "ext-con-breakout-board",
+		"Description": "Small board that connects to the FPC connector J10 on the Librem 5 while the rigid section mounts inside of the phone using the center M.2 cover-plate threaded insert. The breakout board provides UART, I2C, SPI, two GPIOs, 3.3V, and 1.8V; making it really useful for custom projects",
+		"ShortDescription": "Small board that connects to the FPC ...",
+		"RepositoryLink": "ext-con-breakout-board.git"
+	},
+	{
+		"ID": "EX-100004",
+		"Image": "https://www.kicad.org/made-with-kicad/nuco-v/nuco-v.jpg",
+		"ProjectName": "Dmitry: NUCO-V",
+		"ProjectFolder": "nuco-v",
+		"Description": "NUCLEO-64© compatible development board for the STM32F7 and STM32H7 series with integrated Black Magic Probe",
+		"ShortDescription": "NUCLEO-64© compatible development ...",
+		"RepositoryLink": "nuco-v.git"
+	},
+	{
+		"ID": "EX-100005",
+		"Image": "https://www.kicad.org/made-with-kicad/pov_display_using_esp32/3d-view-ofpcb.jpg",
+		"ProjectName": "Jobit: POV Display",
+		"ProjectFolder": "POV-Display",
+		"Description": "128 pixels resoultion and a maximum frame rate of 20FPS. This display is capable of displaying images as well as animation. The display is built around the ESP32 SoC, and used 74HC595 shift registers for controlling each pixel",
+		"ShortDescription": "128 pixels resoultion and a maximum frame ...",
+		"RepositoryLink": "POV-Display.git"
+	},
+	{
+		"ID": "EX-100006",
+		"Image": "https://www.kicad.org/made-with-kicad/spacedos/spacedos.jpg",
+		"ProjectName": "UST: SPACEDOS dosimeters",
+		"ProjectFolder": "SPACEDOS01",
+		"Description": "semiconductor detector based ionizing radiation spectrometers and dosimeters",
+		"ShortDescription": "semiconductor detector based ionizing ...",
+		"RepositoryLink": "SPACEDOS01.git"
+	},
+	{
+		"ID": "EX-100007",
+		"Image": "https://www.kicad.org/made-with-kicad/upsat/upsat.jpg",
+		"ProjectName": "LSF: UPSat",
+		"ProjectFolder": "upsat-comms-hardware",
+		"Description": "2U Cubesat satellite constructed and delivered by Libre Space Foundation, started by University of Patras as part of the upsatQB50 mission with ID GR-02.",
+		"ShortDescription": "2U Cubesat satellite constructed and ...",
+		"RepositoryLink": "upsat-comms-hardware.git"
+	}
+	]
+}
+	
