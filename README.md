@@ -5,7 +5,7 @@
   
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![built with Go badge](https://img.shields.io/badge/built_with-Go-367B99.svg)](https://go.dev/talks/2012/splash.article)
-[![Dynamic JSON Badge](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fipitio.github.io%2Fbackage%2FKi365%2FKi365%2FKi365.json&query=%24.downloads&logo=github&label=Pulls)](https://github.com/ki365/Ki365/pkgs/container/ki365)
+[![Dynamic JSON Badge](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fipitio.github.io%2Fbackage%2FKi365%2FKi365%2Fki365.json&query=%24.downloads&logo=github&label=pulls)](https://github.com/ki365/Ki365/pkgs/container/ki365)
 [![Contributors](https://img.shields.io/github/contributors/ki365/ki365)](https://github.com/ki365/ki365/graphs/contributors)
 
 KiCad is a great tool! Until you realize the files are only on your computer and not on your coworkers! By combining industry standard web technologies and support for your favorite hosted platform (including self-hosted), we bring KiCad to your browser! 
