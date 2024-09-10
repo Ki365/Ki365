@@ -6,6 +6,8 @@ tasks:
     cmds:
       - task --version
       - go version
+      - docker --version
+      - yarn --version
 
   dev:
     desc: Runs the development server
