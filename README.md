@@ -82,19 +82,13 @@ KiCad is a great tool! Until you realize the files are only on your computer and
 
 ## Installation
 
-### Docker
-```
-docker pull ghcr.io/ki365/ki365:latest
-docker run -d -p 8080:8080 ghcr.io/ki365/ki365:latest
-```
-Vist: [localhost:8080](http://localhost:8080)
+Ki365 uses the Docker platform to coordinate the application. You can find instructions to start a Ki365 instance, [here](https://ki365.github.io/docs/docs/installation/).
 
-### Bare metal
-```
-Coming soon!
-```
+Ki365 includes versions of the supported extensions (see [here](https://ki365.github.io/docs/docs/extensions/) for a list). As such, this requires several programs which need to be installed. To find a description of the interactions between programs and instructions for running bare metal, see [here](https://ki365.github.io/docs/docs/metal/).
 
 ## Contributing
+
+> **_WARNING:_** Only use this for development purposes. Please see the documentation on production environments for running a Ki365 instance.
 
 To start the development environment run:
 
@@ -102,16 +96,19 @@ To start the development environment run:
 git clone https://github.com/Ki365/Ki365.git
 cd Ki365
 task copy-bin
+cp -n .env.template .env
 # Terminal one
-task dev-backend
+task dev-backend-api
 # Terminal two
+task dev-backend-kicad
+# Terminal three
 task dev-frontend
 ```
 **_NOTE: 1_** The copy-bin and dev-backend commands must be run on a Linux based system. Refer [here](https://github.com/Ki365/Ki365/issues/1).
 
-**_NOTE: 2_** These commands require that the git, task, npm, yarn golang, and docker CLI tools are installed. 
+**_NOTE: 2_** These commands require that the git, task, npm, yarn golang, and docker CLI tools are installed. To check, run the `task check` command.
 
-For further information on contributing please read the [CONTRIBUTING.md](https://github.com/Ki365/Ki365/blob/main/CONTRIBUTING.md)
+For further information on contributing please read the [CONTRIBUTING.md](https://github.com/Ki365/Ki365/blob/main/CONTRIBUTING.md) document.
 
 ## Design Goals
 - Provide a first-class experience for viewing, documenting, and collaborating on KiCad projects
