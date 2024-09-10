@@ -4,6 +4,11 @@ services:
     build:
       dockerfile: ./docker/Dockerfile.git
     profiles: [bin]
+  gltfpack:
+    container_name: gltfpack
+    build:
+      dockerfile: ./docker/Dockerfile.gltfpack
+    profiles: [bin]
   kicad:
     container_name: kicad
     build:
@@ -12,11 +17,6 @@ services:
       KI365_KICAD_PASSWORD: ${KI365_KICAD_PASSWORD}
     ports:
       - "22"
-  gltfpack:
-    container_name: gltfpack
-    build:
-      dockerfile: ./docker/Dockerfile.gltfpack
-    profiles: [bin]
   # TODO: see note in corresponding dockerfile
   tracespace:
     container_name: tracespace
