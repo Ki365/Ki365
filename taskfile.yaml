@@ -1,7 +1,7 @@
 version: '3'
 
 tasks:
-  check-deps:
+  check:
     desc: Checks all dependencies are installed
     cmds:
       - task --version
@@ -22,10 +22,15 @@ tasks:
       - yarn
       - yarn dev
 
-  dev-backend:
-    desc: Runs the development backend
+  dev-backend-api:
+    desc: Runs the development backend (api)
     cmds: 
       - go run ./server/
+
+  dev-backend-kicad:
+    desc: Runs the development backend (kicad)
+    cmds:
+      - docker compose run kicad
 
   build-frontend:
     desc: builds the frontend for production
