@@ -17,6 +17,20 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 )
 
+// Credit: https://www.asciiart.eu/text-to-ascii-art | figlet release 2.1
+// Font: Slant by Glenn Chappell 3/93
+// Configuration: Slant, PlusBox V2, Horizontal padding: 5, Vertical padding: 0
+const header = `
++========================================+
+|         __ __ _ _____ _____ ______     |
+|        / //_/(_)__  // ___// ____/     |
+|       / ,<  / / /_ </ __ \/___ \       |
+|      / /| |/ /___/ / /_/ /___/ /       |
+|     /_/ |_/_//____/\____/_____/        |
+|                                        |
++========================================+
+`
+
 // SPAHandler serves a single page application.
 func SPAHandler(staticPath string) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -144,6 +158,8 @@ func dbGetProject(id string) (*Project, error) {
 }
 
 func main() {
+	log.Println("Initializing Ki365...")
+
 	port := flag.String("p", "8100", "port to serve directory on")
 	directory := flag.String("d", ".", "directory of files to serve")
 	flag.Parse()
@@ -151,6 +167,8 @@ func main() {
 	router := chi.NewRouter()
 	router.Use(middleware.Logger)
 	router.Use(middleware.Recoverer)
+
+	log.Println("Starting Ki365 API build...")
 
 	apiPrefix := "/api"
 	router.Get(apiPrefix+"/ping", EndpointGetPing)                        // responds with pong
@@ -180,6 +198,13 @@ func main() {
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
 	}
+
+	log.Println("Ki365 Initialized.")
+
+	fmt.Print(header)
+	fmt.Println()
+	fmt.Println("Ki365 API Server Backend - Engineering Collaboration")
+	fmt.Println()
 
 	log.Printf("Serving %s on HTTP port: %s\n", *directory, *port)
 	log.Fatal(srv.ListenAndServe())
