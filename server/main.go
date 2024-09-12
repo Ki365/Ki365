@@ -192,11 +192,13 @@ func confirm(s string, tries int) bool {
 }
 
 func main() {
-	log.Println("Initializing Ki365...")
-
+	address := flag.String("a", "localhost", "address of server")
 	port := flag.String("p", "8100", "port to serve directory on")
 	directory := flag.String("d", ".", "directory of files to serve")
+	bypassConfirm := flag.Bool("y", false, "do not prompt for data folder creation")
 	flag.Parse()
+
+	log.Println("Initializing Ki365...")
 
 	router := chi.NewRouter()
 	router.Use(middleware.Logger)
@@ -207,10 +209,16 @@ func main() {
 	_, err := os.Stat(DataDir)
 	if err != nil {
 		log.Println("Data directory does not exist, prompting...")
-		fmt.Println()
-		c := confirm("Do you want to create a \"data\" folder in the current directory?", 3)
-		fmt.Println()
-		if c {
+		var c bool
+		if !*bypassConfirm {
+			fmt.Println()
+			c = confirm("Do you want to create a \"data\" folder in the current directory?", 3)
+			fmt.Println()
+		} else {
+			log.Println("Bypass confirmation flag passed.")
+		}
+		if c || *bypassConfirm {
+			log.Println("Creating data directory...")
 			err := os.MkdirAll(DataDir, os.ModePerm)
 			if err != nil {
 				log.Fatal("Failed to create data directory.")
@@ -250,7 +258,7 @@ func main() {
 
 	srv := &http.Server{
 		Handler:      router,
-		Addr:         ":" + *port,
+		Addr:         *address + ":" + *port,
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
 	}
@@ -263,6 +271,6 @@ func main() {
 	fmt.Println("\tCopyright © Ki365 Contributors")
 	fmt.Println()
 
-	log.Printf("Serving %s on HTTP port: %s\n", *directory, *port)
+	log.Printf("Serving directory %s on HTTP address: %s:%s\n", *directory, *address, *port)
 	log.Fatal(srv.ListenAndServe())
 }
