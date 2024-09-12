@@ -15,6 +15,11 @@ tasks:
       - task dev-frontend &
       - go run ./server/
 
+  setup-examples:
+    - git submodule update --init --progress
+    - git clone --bare
+    - go run ./scripts/examples.go
+
   dev-frontend:
     desc: Runs the development frontend
     dir: './frontend'
