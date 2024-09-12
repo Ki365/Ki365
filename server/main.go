@@ -204,6 +204,7 @@ func main() {
 	fmt.Print(header)
 	fmt.Println()
 	fmt.Println("Ki365 API Server Backend - Engineering Collaboration")
+	fmt.Println("\tCopyright © Ki365 Contributors")
 	fmt.Println()
 
 	log.Printf("Serving %s on HTTP port: %s\n", *directory, *port)
