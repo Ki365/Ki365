@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"context"
 	"encoding/json"
 	"errors"
@@ -11,6 +12,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/go-chi/chi/v5"
@@ -157,6 +159,38 @@ func dbGetProject(id string) (*Project, error) {
 	return nil, errors.New("project not found")
 }
 
+// confirm prompts the user with `s` and returns a bool indicating either a yes or no
+// The user's input will be lowercased and trimmed.
+// If the input begins with anything other than 'y', it returns false.
+// It accepts an int `tries` which represents the number of attempts before it returns false
+func confirm(s string, tries int) bool {
+	r := bufio.NewReader(os.Stdin)
+
+	for ; tries > 0; tries-- {
+		fmt.Printf("%s [y (confirm) / n (cancel)]: ", s)
+
+		res, err := r.ReadString('\n')
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		// Empty input (such as newline character)
+		if len(res) < 2 {
+			continue
+		}
+
+		v := strings.ToLower(strings.TrimSpace(res))[0]
+
+		if v == 'y' {
+			return true
+		} else if v == 'n' {
+			return false
+		}
+	}
+
+	return false
+}
+
 func main() {
 	log.Println("Initializing Ki365...")
 
@@ -167,6 +201,28 @@ func main() {
 	router := chi.NewRouter()
 	router.Use(middleware.Logger)
 	router.Use(middleware.Recoverer)
+
+	log.Println("Checking data folder existence...")
+
+	_, err := os.Stat(DataDir)
+	if err != nil {
+		log.Println("Data directory does not exist, prompting...")
+		fmt.Println()
+		c := confirm("Do you want to create a \"data\" folder in the current directory?", 3)
+		fmt.Println()
+		if c {
+			err := os.MkdirAll(DataDir, os.ModePerm)
+			if err != nil {
+				log.Fatal("Failed to create data directory.")
+			}
+			log.Println("Creating data directory was successful!")
+		} else {
+			log.Println("Permission not given.")
+			log.Fatal("Ki365 must have a data directory. Exiting...")
+		}
+	} else {
+		log.Println("Data directory found!")
+	}
 
 	log.Println("Starting Ki365 API build...")
 
