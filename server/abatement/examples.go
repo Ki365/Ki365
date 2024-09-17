@@ -2,14 +2,16 @@ package abatement
 
 import (
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"os/exec"
+	"path/filepath"
 )
 
-// Generates example projects with customizable source and destination folders
-// Clones source git projects into destination folder
-func GenerateExamples(source string, destination string) {
+// Generates example projects with customizable source and destination folders.
+// Clones source git projects into destination folder.
+func GenerateExamples(source string, destination string, bare bool) {
 	// TODO: make sure to check git submodules
 	// TODO: use go git "github.com/go-git/go-git/v5"
 
@@ -24,8 +26,14 @@ func GenerateExamples(source string, destination string) {
 
 	// Iterate all entries to build .git folders
 	for _, e := range entries {
-		fmt.Print(e.Name() + " .git: ")
-		cmd := exec.Command("git", "clone", "--bare", source+e.Name(), destination+e.Name()+".git")
+		var cmd *exec.Cmd
+		if bare {
+			fmt.Print(e.Name() + " .git: ")
+			cmd = exec.Command("git", "clone", "--bare", filepath.Join(source, e.Name()), filepath.Join(destination, e.Name()+".git"))
+		} else {
+			fmt.Print(e.Name() + " regu: ")
+			cmd = exec.Command("git", "clone", filepath.Join(source, e.Name()), filepath.Join(destination, e.Name()))
+		}
 		_, err := cmd.Output()
 
 		if err != nil {
@@ -33,17 +41,24 @@ func GenerateExamples(source string, destination string) {
 		} else {
 			fmt.Println()
 		}
+	}
+}
 
-		// TODO: remove this block once caching data is done
+func CopyManifest(source string, destination string) {
+	from, err := os.Open(source)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer from.Close()
 
-		fmt.Print(e.Name() + " regu: ")
-		cmd = exec.Command("git", "clone", source+e.Name(), destination+e.Name())
-		_, err = cmd.Output()
+	to, err := os.OpenFile(destination, os.O_RDWR|os.O_CREATE, 0666)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer to.Close()
 
-		if err != nil {
-			fmt.Println(err)
-		} else {
-			fmt.Println()
-		}
+	_, err = io.Copy(to, from)
+	if err != nil {
+		log.Fatal(err)
 	}
 }

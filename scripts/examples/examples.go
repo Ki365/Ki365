@@ -6,5 +6,6 @@ import (
 
 // Generates initial example projects from examples/source to examples/build
 func main() {
-	abatement.GenerateExamples("./examples/source/", "./examples/build/")
+	abatement.GenerateExamples("./examples/source/", "./examples/build/", true)
+	abatement.GenerateExamples("./examples/source/", "./examples/build/", false)
 }
