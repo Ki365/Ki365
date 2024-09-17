@@ -17,6 +17,7 @@ services:
       KI365_KICAD_PASSWORD: ${KI365_KICAD_PASSWORD}
     ports:
       - "22"
+    network_mode: "host"
   # TODO: see note in corresponding dockerfile
   tracespace:
     container_name: tracespace

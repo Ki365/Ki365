@@ -37,7 +37,8 @@ func RequestGLTFModelFromKiCadCLI(inputFile string, outputFilePath string) error
 		},
 	}
 
-	sshClient, err := ssh.Dial("tcp", ("172.18.0.2:22"), config)
+	// TODO: make localhost optional through command line argument
+	sshClient, err := ssh.Dial("tcp", ("localhost:22"), config)
 	if err != nil {
 		fmt.Println("error in dialing")
 		return err
