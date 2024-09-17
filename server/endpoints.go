@@ -114,6 +114,8 @@ func EndpointGetProjectModels(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusUnprocessableEntity), http.StatusUnprocessableEntity)
 		return
 	}
+	// TODO: check if any project.Models else return safe error
+	// TODO: check for all files present
 
 	s := processProjectFilePaths(CacheGLBDir, project.ProjectFolder, project.Models)
 	http.ServeFile(w, r, s[0])

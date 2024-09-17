@@ -53,6 +53,8 @@ func RequestGLTFModelFromKiCadCLI(inputFile string, outputFilePath string) error
 	}
 	defer scpClient.Close()
 
+	// TODO: This should be modified to have some type of hashing algorithm to avoid similarly named projects
+	// TODO: Need to include entire project to ensure local footprints are present for the exporter
 	err = scpClient.CopyFromFile(context.Background(), *f, filepath.Join(homePath, filepath.Base(inputFile)), "0655")
 	if err != nil {
 		fmt.Println("error in copying file")
