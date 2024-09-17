@@ -92,7 +92,7 @@ func EndpointUploadProject(w http.ResponseWriter, r *http.Request) {
 
 	// TODO: Add environment variable to point to mount
 	// Create folder structure if does not exist
-	folderPath := filepath.Join("./repos/upload/archives")
+	folderPath := filepath.Join(filepath.Join(DataDir, "upload/archives"))
 	err = os.MkdirAll(folderPath, os.ModePerm)
 	if err != nil {
 		fmt.Println(err)
@@ -121,13 +121,13 @@ func EndpointUploadProject(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(fileBytes)
 
 	// Handle new imported file
-	err = handleNewProjectArchive(fp, "./repos/repos")
+	err = handleNewProjectArchive(fp, RepoDir)
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	// pass newly created project to handle project function
-	err = handleNewProject(fp, "./repos/repos", "", "", "", "", "", "")
+	err = handleNewProject(fp, RepoDir, "", "", "", "", "", "")
 	if err != nil {
 		fmt.Println(err)
 	}

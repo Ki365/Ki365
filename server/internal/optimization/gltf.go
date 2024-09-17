@@ -14,7 +14,7 @@ func OptimizeGLB(inputFile string) error {
 		fmt.Println("error in resolving input name")
 	}
 
-	// EX: ./repos/cache/glb/{project}/example.glb -> ./repos/cache/glb/{project}/example-old.glb
+	// EX: ./data/cache/glb/{project}/example.glb -> ./data/cache/glb/{project}/example-old.glb
 	newAbs := filepath.Join(filepath.Dir(abs), strings.TrimSuffix(filepath.Base(abs), filepath.Ext(abs))+"-opt"+filepath.Ext(abs))
 	oldAbs := filepath.Join(filepath.Dir(abs), strings.TrimSuffix(filepath.Base(abs), filepath.Ext(abs))+"-old"+filepath.Ext(abs))
 

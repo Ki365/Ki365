@@ -1,6 +1,6 @@
 build
 .vscode
-repos
+/data*
 ki365
 bin*
 node_modules

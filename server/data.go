@@ -24,10 +24,20 @@ type Project struct {
 	Models           []string `json:"Models`
 }
 
-var DataDir = "./repos"
-var RepoDir = DataDir + "/repos"
-var RepoConfig = DataDir + "/store/repos.json"
-var CacheDir = DataDir + "/cache"
+// TODO: unify this with file creation
+var DataDir = "./data"
+
+var RepoFolder = "sources"
+var RepoDir = filepath.Join(DataDir, RepoFolder)
+
+var RepoConfigFolder = "store"
+var RepoConfigDir = filepath.Join(DataDir, RepoConfigFolder)
+var RepoConfig = filepath.Join(RepoConfigDir, "repos.json")
+var RepoConfigDemo = filepath.Join(RepoConfigDir, "manifest-examples.json")
+
+var CacheFolder = "cache"
+var CacheDir = filepath.Join(DataDir, CacheFolder)
+
 var CacheGLBDir = CacheDir + "/glb"
 
 type PathStruct struct {

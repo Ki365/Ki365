@@ -25,7 +25,7 @@ func handleNewProjectArchive(archivePath string, unarchivePath string) error {
 
 	fmt.Println(archivePath)
 	fmt.Println(unarchivePath)
-	// EXAMPLE: repos\upload\archives\ki-102.zip + ./repos/repos = C:\Users\{USER}\Code\Ki365\Ki365\repos\repos\ki-102
+	// EXAMPLE: data\upload\archives\ki-102.zip + ./data/sources = C:\Users\{USER}\Code\Ki365\Ki365\data\sources\ki-102
 	t3, err := createAbsoluteProjectFolderPath(archivePath, unarchivePath)
 	if err != nil {
 		return err

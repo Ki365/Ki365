@@ -20,7 +20,7 @@ func EndpointGetPing(w http.ResponseWriter, r *http.Request) {
 
 func EndpointGetProjects(w http.ResponseWriter, r *http.Request) {
 	// TODO: create and pass enum to these functions regarding config paths
-	file, err := os.Open("./repos/store/repos.json")
+	file, err := os.Open(RepoConfig)
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
 			http.Error(w, "no projects", http.StatusNoContent)
@@ -122,11 +122,10 @@ var (
 	// WARNING: This binary only correctly compiles and runs on x86-64 linux.
 	// TODO: enable correct binary compilation based on running OS
 	git_http_backend_bin = "./bin/git-http-backend"
-	git_repos            = "./repos/repos"
 )
 
 func EndpointGetRepository(w http.ResponseWriter, r *http.Request) {
-	rp, err := filepath.Abs(git_repos)
+	rp, err := filepath.Abs(RepoDir)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -152,7 +151,7 @@ func EndpointGetRepository(w http.ResponseWriter, r *http.Request) {
 	var stdErr bytes.Buffer
 	handler := &cgi.Handler{
 		Path:   bp,
-		Root:   "/repos",
+		Root:   "/repos", // TODO: Does this do anything?
 		Env:    env,
 		Stderr: &stdErr,
 	}
@@ -163,9 +162,10 @@ func EndpointGetRepository(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// TODO: change from "add" to "enable"
 func EndpointAddExampleProjects(w http.ResponseWriter, r *http.Request) {
 
-	projects, err := parseProjectsJSON("./repos/store/repos-demo.json")
+	projects, err := parseProjectsJSON(RepoConfigDemo)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -179,7 +179,9 @@ func EndpointAddExampleProjects(w http.ResponseWriter, r *http.Request) {
 
 		// Handle new imported file
 		// TODO: iterate over all example files
-		fp := filepath.Join("./repos/examples/" + prj.ProjectFolder + ".zip")
+		// TODO: use ".git" folders and remove other folders
+		fp := filepath.Join(DataDir, "examples", prj.ProjectFolder)
+		abatement.GenerateExamples(filepath.Join(DataDir, "examples"), RepoDir, false)
 
 		// err = handleNewProjectArchive(fp, "./repos/repos")
 		// if err != nil {
@@ -192,7 +194,7 @@ func EndpointAddExampleProjects(w http.ResponseWriter, r *http.Request) {
 		// TODO: verify project integrity
 
 		// pass newly created project to handle project function
-		err = handleNewProject(fp, "./repos/repos", prj.Id, prj.Image, prj.ProjectName, prj.ProjectFolder, prj.Description, prj.RepositoryLink)
+		err = handleNewProject(fp, RepoDir, prj.Id, prj.Image, prj.ProjectName, prj.ProjectFolder, prj.Description, prj.RepositoryLink)
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -203,7 +205,7 @@ func EndpointAddExampleProjects(w http.ResponseWriter, r *http.Request) {
 }
 
 func EndpointRemoveExampleProjects(w http.ResponseWriter, r *http.Request) {
-	projects, err := parseProjectsJSON("./repos/store/repos-demo.json")
+	projects, err := parseProjectsJSON(RepoConfigDemo)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -236,12 +238,12 @@ func EndpointRemoveProject(w http.ResponseWriter, r *http.Request) {
 
 // TODO: This should be cached
 func EndpointCheckExampleProjects(w http.ResponseWriter, r *http.Request) {
-	examples, err := parseProjectsJSON("./repos/store/repos-demo.json")
+	examples, err := parseProjectsJSON(RepoConfigDemo)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	projects, err := parseProjectsJSON("./repos/store/repos.json")
+	projects, err := parseProjectsJSON(RepoConfig)
 	if err != nil {
 		fmt.Println(err)
 	}
