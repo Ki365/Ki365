@@ -96,7 +96,7 @@ To start the development environment run:
 git clone https://github.com/Ki365/Ki365.git
 cd Ki365
 task copy-bin
-cp -n .env.template .env
+task setup
 # Terminal one
 task dev-backend-api
 # Terminal two

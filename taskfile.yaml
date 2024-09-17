@@ -15,10 +15,12 @@ tasks:
       - task dev-frontend &
       - go run ./server/
 
-  setup-examples:
-    - git submodule update --init --progress
-    - git clone --bare
-    - go run ./scripts/examples.go
+  setup:
+    desc: Setup development environment
+    cmds:
+      - git submodule update --init --progress
+      - go run ./scripts/setup
+      - go run ./scripts/examples
 
   dev-frontend:
     desc: Runs the development frontend
