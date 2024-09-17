@@ -17,6 +17,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/ki365/ki365/abatement"
 )
 
 // Credit: https://www.asciiart.eu/text-to-ascii-art | figlet release 2.1
@@ -196,9 +197,13 @@ func main() {
 	port := flag.String("p", "8100", "port to serve directory on")
 	directory := flag.String("d", ".", "directory of files to serve")
 	bypassConfirm := flag.Bool("y", false, "do not prompt for data folder creation")
+	skipExamples := flag.Bool("e", false, "do not add example projects")
 	flag.Parse()
 
 	log.Println("Initializing Ki365...")
+
+	// TODO: Check all dependencies exist
+	// TODO: Check all dependencies exist if haven't periodically
 
 	router := chi.NewRouter()
 	router.Use(middleware.Logger)
@@ -219,9 +224,14 @@ func main() {
 		}
 		if c || *bypassConfirm {
 			log.Println("Creating data directory...")
-			err := os.MkdirAll(DataDir, os.ModePerm)
+			err := abatement.GenerateDataFolder(DataDir)
 			if err != nil {
 				log.Fatal("Failed to create data directory.")
+			}
+			if !*skipExamples {
+				log.Println("Adding example repositories...")
+				abatement.CopyManifest("./examples/manifest-examples.json", RepoConfigDemo)
+				abatement.GenerateExamples("./examples/build/", filepath.Join(DataDir, "examples"), false)
 			}
 			log.Println("Creating data directory was successful!")
 		} else {
