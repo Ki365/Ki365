@@ -1,6 +1,6 @@
 module github.com/ki365/ki365
 
-go 1.22.1
+go 1.23.1
 
 require (
 	github.com/go-chi/chi/v5 v5.0.14
@@ -15,6 +15,8 @@ replace github.com/ki365/ki365/kicad => ./server/internal/kicad
 replace github.com/ki365/ki365/optimization => ./server/internal/optimization
 
 replace github.com/ki365/ki365/abatement => ./server/abatement
+
+replace github.com/ki365/ki365/pkg => ./server/pkg
 
 require (
 	dario.cat/mergo v1.0.0 // indirect
