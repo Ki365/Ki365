@@ -176,6 +176,7 @@ func EndpointAddExampleProjects(w http.ResponseWriter, r *http.Request) {
 
 	var prj *Project
 
+	abatement.GenerateExamples(filepath.Join(DataDir, "examples"), RepoDir, false)
 	for _, a := range projects.Projects {
 		// if a.RepositoryLink == "ext-con-breakout-board.git" {
 		prj = &a
@@ -185,15 +186,14 @@ func EndpointAddExampleProjects(w http.ResponseWriter, r *http.Request) {
 		// TODO: iterate over all example files
 		// TODO: use ".git" folders and remove other folders
 		fp := filepath.Join(DataDir, "examples", prj.ProjectFolder)
-		abatement.GenerateExamples(filepath.Join(DataDir, "examples"), RepoDir, false)
 
 		// err = handleNewProjectArchive(fp, "./repos/repos")
 		// if err != nil {
 		// 	fmt.Println(err)
 		// }
+		log.Print("Starting project: ")
 		fmt.Println(prj)
-		fmt.Println(prj.Id)
-		fmt.Println(&prj.Id)
+		// fmt.Println(&prj.Id)
 
 		// TODO: verify project integrity
 

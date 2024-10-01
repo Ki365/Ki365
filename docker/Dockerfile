@@ -13,18 +13,16 @@ WORKDIR /app/frontend/
 RUN cp -a /tmp/node_modules /app/frontend/
 
 # Build frotend
-WORKDIR /app/
-COPY . .
+COPY ./frontend /app/frontend
 WORKDIR /app/frontend/
 RUN yarn build
 
 # GOLANG Server Image
-FROM golang:1.22-alpine3.20 AS server
+FROM golang:1.23-alpine3.20 AS server
 WORKDIR /app/
-COPY . .
-RUN go mod tidy
-WORKDIR /app/server/
-RUN GOOS=linux go build -ldflags="-s" -o "../build/server" -v
+COPY ./server/ /app/server/
+COPY ./go.sum ./go.mod /app/
+RUN GOOS=linux go build -ldflags="-s" -o "./build/server" -v ./server/
 
 # TODO: include svgcleaner as dependency including pull request #210 and implmentation for style="default-color"
 
@@ -41,9 +39,16 @@ LABEL org.opencontainers.image.source https://github.com/Ki365/Ki365
 # Copy all program data to final image
 COPY --from=frontend /etc/passwd /etc/passwd
 USER appuser
+# TODO: strip Debug?
+COPY --from=git /bin/git /bin/.
+COPY --from=git /bin/git-upload-pack /bin/.
 COPY --from=git /libexec/git-core/git-http-backend /bin/.
 COPY --from=git /libexec/git-core/git-http-backend.dbg /bin/.
 COPY --from=gltfpack / /bin/.
 COPY --from=frontend /app/build/ .
 COPY --from=server /app/build/ .
-ENTRYPOINT ["/server", "-p", "8080", "-d", "/frontend"]
+COPY ./examples/build /examples/build/
+COPY ./examples/manifest-examples.json /examples/
+ENTRYPOINT ["/server", "-p", "8080", "-d", "/frontend", "-y"]
+
+USER root

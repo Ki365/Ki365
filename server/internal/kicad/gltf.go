@@ -1,9 +1,10 @@
 package kicad
 
 import (
-	"bytes"
 	"context"
 	"fmt"
+	"io"
+	"log"
 	"os"
 	"path/filepath"
 
@@ -15,6 +16,7 @@ import (
 // Output path does not require an existing file.
 func RequestGLTFModelFromKiCadCLI(inputFile string, outputFilePath string) error {
 
+	log.Println("Opening input file: " + inputFile)
 	f, err := os.Open(inputFile)
 	if err != nil {
 		fmt.Println("error in opening")
@@ -26,7 +28,7 @@ func RequestGLTFModelFromKiCadCLI(inputFile string, outputFilePath string) error
 	// TODO: move this functionality elsewhere to enable .env files
 	pswd, wasSet := os.LookupEnv("KI365_KICAD_PASSWORD")
 	if !wasSet {
-		return fmt.Errorf("KI365_KICAD_PASSWORD was not set, cannot connect to KiCad instance.")
+		return fmt.Errorf("KI365_KICAD_PASSWORD was not set, cannot connect to KiCad instance")
 	}
 
 	config := &ssh.ClientConfig{
@@ -38,12 +40,12 @@ func RequestGLTFModelFromKiCadCLI(inputFile string, outputFilePath string) error
 	}
 
 	// TODO: make localhost optional through command line argument
+	log.Println("Dialing ssh client: localhost:22")
 	sshClient, err := ssh.Dial("tcp", ("localhost:22"), config)
 	if err != nil {
 		fmt.Println("error in dialing")
 		return err
 	}
-	fmt.Println(sshClient)
 	defer sshClient.Close()
 
 	scpClient, err := scp.NewClientBySSH(sshClient)
@@ -68,11 +70,15 @@ func RequestGLTFModelFromKiCadCLI(inputFile string, outputFilePath string) error
 	}
 	defer session.Close()
 
-	var b bytes.Buffer
-	session.Stdout = &b
+	stdout, err := session.StdoutPipe()
+	if err != nil {
+		fmt.Println("error in stdout pipe")
+		return err
+	}
 
-	fmt.Println(f.Name())
-
+	go func() {
+		io.Copy(os.Stdout, stdout)
+	}()
 	err = session.Run("kicad-cli pcb export glb " + filepath.Base(inputFile) + " " +
 		"--subst-models --include-tracks --include-pads --include-inner-copper " +
 		"--include-silkscreen --include-soldermask --include-zones -f")
@@ -80,7 +86,6 @@ func RequestGLTFModelFromKiCadCLI(inputFile string, outputFilePath string) error
 		fmt.Println("error in kicad command")
 		return err
 	}
-	fmt.Println(b.String())
 
 	err = os.MkdirAll(filepath.Dir(outputFilePath), os.ModePerm)
 	if err != nil {
@@ -94,7 +99,9 @@ func RequestGLTFModelFromKiCadCLI(inputFile string, outputFilePath string) error
 		return err
 	}
 
+	// TODO: Check for a suitable binary in the path
 	// NOTE: Unless KiCad CLI supports standalone binary executable, docker will be the only supported platform for this service
+	log.Println("Copying resulting GLTF...")
 	err = scpClient.CopyFromRemote(context.Background(), of, filepath.Join(homePath, filepath.Base(outputFilePath)))
 	if err != nil {
 		fmt.Println("error in copying from remote")

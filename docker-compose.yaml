@@ -37,4 +37,5 @@ services:
     volumes:
       - type: bind
         source: ./repos
-        target: /repos
+        target: /data
+    network_mode: "host"

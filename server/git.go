@@ -10,7 +10,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/go-git/go-git/v5"
 	"github.com/ki365/ki365/kicad"
 	"github.com/ki365/ki365/optimization"
 )
@@ -26,27 +25,27 @@ func (e *ErrorRepoNotClean) Error() string {
 
 func handleNewProject(archivePath string, unarchivePath string, id string, image string, prjName string, prjFolder string, desc string, prjLink string) error {
 
-	repoPath, err := createAbsoluteProjectFolderPath(archivePath, unarchivePath)
-	if err != nil {
-		return err
-	}
+	// repoPath, err := createAbsoluteProjectFolderPath(archivePath, unarchivePath)
+	// if err != nil {
+	// 	return err
+	// }
 
-	fmt.Println(archivePath)
-	fmt.Println(unarchivePath)
-	fmt.Println(repoPath)
+	// fmt.Println(archivePath)
+	// fmt.Println(unarchivePath)
+	// fmt.Println(repoPath)
 
 	// new project is a repository and has no uncommited files (clean)
-	r, err := git.PlainOpen(repoPath)
-	if err != nil {
-		return err
-	}
+	// r, err := git.PlainOpen(repoPath)
+	// if err != nil {
+	// 	return err
+	// }
 
-	w, err := r.Worktree()
-	if err != nil {
-		return err
-	}
+	// w, err := r.Worktree()
+	// if err != nil {
+	// 	return err
+	// }
 
-	fmt.Println(w)
+	// fmt.Println(w)
 
 	// s, err := w.Status()
 	// if err != nil {
@@ -74,7 +73,7 @@ func handleNewProject(archivePath string, unarchivePath string, id string, image
 		return err
 	}
 
-	fmt.Printf("repoPath: %v", rel)
+	fmt.Printf("repoPath: %v\n", rel)
 	list_sch := find(rel, ".kicad_sch")
 	list_pcb := find(rel, ".kicad_pcb")
 

@@ -211,6 +211,7 @@ func main() {
 
 	log.Println("Checking data folder existence...")
 
+	// TODO: check all folder existence
 	_, err := os.Stat(DataDir)
 	if err != nil {
 		log.Println("Data directory does not exist, prompting...")
