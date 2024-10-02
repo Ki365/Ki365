@@ -13,7 +13,7 @@ WORKDIR /app/git
 RUN autoreconf -fi && \
 	./configure prefix=/app/build CFLAGS="${CFLAGS} -static" --with-curl=/usr/bin/curl --with-openssl=/usr/bin/openssl
 
-RUN make && \
+RUN make -j9 && \
 	make install
 
 WORKDIR /app/build/libexec/git-core/
