@@ -231,8 +231,8 @@ func main() {
 			}
 			if !*skipExamples {
 				log.Println("Adding example repositories...")
-				abatement.CopyManifest("./examples/manifest-examples.json", RepoConfigDemo)
 				abatement.GenerateExamples(filepath.Join(DataDir, "examples"), RepoDir, false)
+				abatement.CopyManifest("./examples/manifest-examples.json", RepoConfigDemo)
 			}
 			log.Println("Creating data directory was successful!")
 		} else {
