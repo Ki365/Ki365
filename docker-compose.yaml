@@ -34,8 +34,9 @@ services:
     ports:
       - "8080:8080"
     image: ghcr.io/ki365/ki365:latest
+    user: 1000:1000 
     volumes:
       - type: bind
-        source: ./repos
+        source: ./data
         target: /data
     network_mode: "host"

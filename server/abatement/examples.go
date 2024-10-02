@@ -5,15 +5,15 @@ import (
 	"io"
 	"log"
 	"os"
-	"os/exec"
 	"path/filepath"
+	"sync"
+
+	"github.com/go-git/go-git/v5"
 )
 
 // Generates example projects with customizable source and destination folders.
 // Clones source git projects into destination folder.
-func GenerateExamples(source string, destination string, bare bool) {
-	// TODO: make sure to check git submodules
-	// TODO: use go git "github.com/go-git/go-git/v5"
+func GenerateExamples(source string, destination string) {
 
 	// Get list of all example projects (includes)
 	entries, err := os.ReadDir(source)
@@ -24,46 +24,37 @@ func GenerateExamples(source string, destination string, bare bool) {
 	// TODO: check if folder vs file
 	// TODO: check if folder is submodule
 
-	// Iterate all entries to build .git folders
-
-	var git_cmd string
-
-	// TODO: Make global
-	_, err = os.Stat("./bin/git")
-	if err != nil {
-		git_cmd = "git"
-	} else {
-		git_cmd = "./bin/git"
-	}
-
-	var cmd *exec.Cmd
-
-	// NOTE: May need to call to disable safe directory (required for "shared" drives like WSL):
-	// git config --global --add safe.directory '*'
-
-	// TODO: maybe convert to go-git:
-	// _, err = git.PlainClone(filepath.Join(destination, e.Name()+".git"), true, &git.CloneOptions{
-	// 	URL: filepath.Join(source, e.Name()),
-	// })
+	var wg sync.WaitGroup
 
 	for _, e := range entries {
-		if bare {
-			fmt.Print(e.Name() + " .git: ")
-			cmd = exec.Command(git_cmd, "clone", "--bare", filepath.Join(source, e.Name()), filepath.Join(destination, e.Name()+".git"))
-		} else {
-			fmt.Print(e.Name() + " regu: ")
-			cmd = exec.Command(git_cmd, "clone", filepath.Join(source, e.Name()), filepath.Join(destination, e.Name()))
-		}
-		s, err := cmd.CombinedOutput()
+		// TODO: Add progress bar for large repos
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
 
-		fmt.Println(string(s[:]))
+			t := filepath.Ext(e.Name()) == ".git"
 
-		if err != nil {
-			fmt.Println(err)
-		} else {
-			fmt.Println()
-		}
+			_, err = git.PlainClone(filepath.Join(destination, e.Name()), t, &git.CloneOptions{
+				URL: filepath.Join(source, e.Name()),
+			})
+
+			var s string
+
+			if t {
+				s = ".git"
+			} else {
+				s = "regular"
+			}
+
+			if err != nil {
+				fmt.Printf("Error cloning %s as %s from %s\n", filepath.Base(e.Name()), s, err)
+			} else {
+				fmt.Println("Cloned " + filepath.Base(e.Name()) + " as " + s)
+			}
+		}()
+
 	}
+	wg.Wait()
 }
 
 func CopyManifest(source string, destination string) {

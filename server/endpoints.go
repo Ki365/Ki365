@@ -12,8 +12,6 @@ import (
 	"net/http/httputil"
 	"os"
 	"path/filepath"
-
-	"github.com/ki365/ki365/abatement"
 )
 
 func EndpointGetPing(w http.ResponseWriter, r *http.Request) {
@@ -176,7 +174,6 @@ func EndpointAddExampleProjects(w http.ResponseWriter, r *http.Request) {
 
 	var prj *Project
 
-	abatement.GenerateExamples(filepath.Join(DataDir, "examples"), RepoDir, false)
 	for _, a := range projects.Projects {
 		// if a.RepositoryLink == "ext-con-breakout-board.git" {
 		prj = &a

@@ -212,7 +212,7 @@ func main() {
 	log.Println("Checking data folder existence...")
 
 	// TODO: check all folder existence
-	_, err := os.Stat(DataDir)
+	_, err := os.Stat(filepath.Join(DataDir, "store"))
 	if err != nil {
 		log.Println("Data directory does not exist, prompting...")
 		var c bool
@@ -232,7 +232,7 @@ func main() {
 			if !*skipExamples {
 				log.Println("Adding example repositories...")
 				abatement.CopyManifest("./examples/manifest-examples.json", RepoConfigDemo)
-				abatement.GenerateExamples("./examples/build/", filepath.Join(DataDir, "examples"), false)
+				abatement.GenerateExamples(filepath.Join(DataDir, "examples"), RepoDir)
 			}
 			log.Println("Creating data directory was successful!")
 		} else {

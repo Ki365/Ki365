@@ -39,16 +39,9 @@ LABEL org.opencontainers.image.source https://github.com/Ki365/Ki365
 # Copy all program data to final image
 COPY --from=frontend /etc/passwd /etc/passwd
 USER appuser
-# TODO: strip Debug?
-COPY --from=git /bin/git /bin/.
-COPY --from=git /bin/git-upload-pack /bin/.
 COPY --from=git /libexec/git-core/git-http-backend /bin/.
-COPY --from=git /libexec/git-core/git-http-backend.dbg /bin/.
-COPY --from=gltfpack / /bin/.
+COPY --from=gltfpack /gltfpack /bin/.
 COPY --from=frontend /app/build/ .
 COPY --from=server /app/build/ .
-COPY ./examples/build /examples/build/
 COPY ./examples/manifest-examples.json /examples/
 ENTRYPOINT ["/server", "-p", "8080", "-d", "/frontend", "-y"]
-
-USER root
