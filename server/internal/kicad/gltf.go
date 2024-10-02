@@ -40,8 +40,8 @@ func RequestGLTFModelFromKiCadCLI(inputFile string, outputFilePath string) error
 	}
 
 	// TODO: make localhost optional through command line argument
-	log.Println("Dialing ssh client: localhost:22")
-	sshClient, err := ssh.Dial("tcp", ("localhost:22"), config)
+	log.Println("Dialing ssh client: localhost:2233")
+	sshClient, err := ssh.Dial("tcp", ("localhost:2233"), config)
 	if err != nil {
 		fmt.Println("error in dialing")
 		return err

@@ -40,3 +40,5 @@ services:
         source: ./data
         target: /data
     network_mode: "host"
+    environment:
+      KI365_KICAD_PASSWORD: ${KI365_KICAD_PASSWORD}

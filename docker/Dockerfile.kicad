@@ -6,6 +6,7 @@ USER root
 RUN apt-get update && apt-get -y install openssh-server ssh
 
 RUN sed -i '/PasswordAuthentication yes/s/^#//g' /etc/ssh/sshd_config
+RUN sed -i 's/\(^Port\)/#\1/' /etc/ssh/sshd_config && echo Port 2233 >> /etc/ssh/sshd_config
 
 RUN service ssh start
 
