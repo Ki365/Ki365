@@ -13,7 +13,8 @@ import (
 
 // Generates example projects with customizable source and destination folders.
 // Clones source git projects into destination folder.
-func GenerateExamples(source string, destination string) {
+// If initial is enabled, generates bare and basic clones of repositories.
+func GenerateExamples(source string, destination string, initial bool) {
 
 	// Get list of all example projects (includes)
 	entries, err := os.ReadDir(source)
@@ -31,30 +32,49 @@ func GenerateExamples(source string, destination string) {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
+			if initial {
+				copyRepo(source, destination, e.Name(), true, true)
+				copyRepo(source, destination, e.Name(), false, false)
 
-			t := filepath.Ext(e.Name()) == ".git"
-
-			_, err = git.PlainClone(filepath.Join(destination, e.Name()), t, &git.CloneOptions{
-				URL: filepath.Join(source, e.Name()),
-			})
-
-			var s string
-
-			if t {
-				s = ".git"
 			} else {
-				s = "regular"
-			}
-
-			if err != nil {
-				fmt.Printf("Error cloning %s as %s from %s\n", filepath.Base(e.Name()), s, err)
-			} else {
-				fmt.Println("Cloned " + filepath.Base(e.Name()) + " as " + s)
+				t := filepath.Ext(e.Name()) == ".git"
+				copyRepo(source, destination, e.Name(), t, false)
 			}
 		}()
 
 	}
 	wg.Wait()
+}
+
+// Copies a repo from source to destination parent folder with folder name.
+// Bare controls whether clone should be a bare git repository.
+// Append adds ".git" to the destination folder name.
+func copyRepo(source, destination, name string, bare bool, append bool) {
+
+	var destFullPath string
+	if append {
+		destFullPath = filepath.Join(destination, name, ".git")
+	} else {
+		destFullPath = filepath.Join(destination, name)
+	}
+
+	_, err := git.PlainClone(destFullPath, bare, &git.CloneOptions{
+		URL: filepath.Join(source, name),
+	})
+
+	var s string
+
+	if bare {
+		s = ".git"
+	} else {
+		s = "regular"
+	}
+
+	if err != nil {
+		fmt.Printf("Error cloning %s as %s from %s\n", filepath.Base(name), s, err)
+	} else {
+		fmt.Println("Cloned " + filepath.Base(name) + " as " + s)
+	}
 }
 
 func CopyManifest(source string, destination string) {
