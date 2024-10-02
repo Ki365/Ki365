@@ -39,6 +39,8 @@ LABEL org.opencontainers.image.source https://github.com/Ki365/Ki365
 # Copy all program data to final image
 COPY --from=frontend /etc/passwd /etc/passwd
 USER appuser
+COPY --from=git /bin/git /bin/.
+COPY --from=git /bin/git-upload-pack /bin/.
 COPY --from=git /libexec/git-core/git-http-backend /bin/.
 COPY --from=gltfpack /gltfpack /bin/.
 COPY --from=frontend /app/build/ .
