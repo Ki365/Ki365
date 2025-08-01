@@ -22,7 +22,14 @@ FROM golang:1.23-alpine3.20 AS server
 WORKDIR /app/
 COPY ./server/ /app/server/
 COPY ./go.sum ./go.mod /app/
-RUN GOOS=linux go build -ldflags="-s" -o "./build/server" -v ./server/
+# Build for Linux (default)
+RUN GOOS=linux GOARCH=amd64 go build -ldflags="-s" -o "./build/server-linux-amd64" -v ./server/
+# Build for Windows
+RUN GOOS=windows GOARCH=amd64 go build -ldflags="-s" -o "./build/server-windows-amd64.exe" -v ./server/
+# Build for macOS (Intel)
+RUN GOOS=darwin GOARCH=amd64 go build -ldflags="-s" -o "./build/server-darwin-amd64" -v ./server/
+# Build for macOS (Apple Silicon)
+RUN GOOS=darwin GOARCH=arm64 go build -ldflags="-s" -o "./build/server-darwin-arm64" -v ./server/
 
 # TODO: include svgcleaner as dependency including pull request #210 and implmentation for style="default-color"
 
@@ -46,4 +53,5 @@ COPY --from=gltfpack /gltfpack /bin/.
 COPY --from=frontend /app/build/ .
 COPY --from=server /app/build/ .
 COPY ./examples/manifest-examples.json /examples/
-ENTRYPOINT ["/server", "-p", "8080", "-d", "/frontend", "-y"]
+# Use the Linux binary as default entrypoint
+ENTRYPOINT ["/server-linux-amd64", "-p", "8080", "-d", "/frontend", "-y"]

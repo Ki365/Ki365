@@ -48,7 +48,23 @@ tasks:
   build-server:
     desc: Builds the server for production
     cmds:
-      - go build -o ki365 -ldflags="-s -w" -trimpath ./server/ 
+      - go build -o ki365 -ldflags="-s -w" -trimpath ./server/
+
+  build-server-cross:
+    desc: Builds the server for multiple platforms (Linux, Windows, macOS)
+    cmds:
+      - GOOS=linux GOARCH=amd64 go build -o ki365-linux-amd64 -ldflags="-s -w" -trimpath ./server/
+      - GOOS=windows GOARCH=amd64 go build -o ki365-windows-amd64.exe -ldflags="-s -w" -trimpath ./server/
+      - GOOS=darwin GOARCH=amd64 go build -o ki365-darwin-amd64 -ldflags="-s -w" -trimpath ./server/
+      - GOOS=darwin GOARCH=arm64 go build -o ki365-darwin-arm64 -ldflags="-s -w" -trimpath ./server/
+      # Create universal binary for macOS (requires lipo on macOS)
+      - |
+        if command -v lipo >/dev/null 2>&1; then
+          lipo -create -output ki365-darwin-universal ki365-darwin-amd64 ki365-darwin-arm64
+          echo "Created universal binary: ki365-darwin-universal"
+        else
+          echo "lipo not found - skipping universal binary creation"
+        fi 
 
   build-git:
     desc: Build the static git binary dependency
@@ -72,3 +88,15 @@ tasks:
     desc: Builds and copies executables from utility docker images for development
     dir: '.'
     deps: [build-git, build-gltfpack]
+
+  check-binaries:
+    desc: Check binary architectures and file types
+    cmds:
+      - |
+        echo "Checking binary architectures:"
+        for binary in ki365-*; do
+          if [ -f "$binary" ]; then
+            echo "$binary:"
+            file "$binary"
+          fi
+        done
