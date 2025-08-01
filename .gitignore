@@ -6,3 +6,4 @@ bin*
 node_modules
 .env
 target*
+.cursor
