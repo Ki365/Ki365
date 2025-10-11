@@ -82,31 +82,35 @@ KiCad is a great tool! Until you realize the files are only on your computer and
 
 ## Installation
 
-Ki365 uses the Docker platform to coordinate the application. You can find instructions to start a Ki365 instance, [here](https://ki365.github.io/docs/docs/installation/).
-
-Ki365 includes versions of the supported extensions (see [here](https://ki365.github.io/docs/docs/extensions/) for a list). As such, this requires several programs which need to be installed. To find a description of the interactions between programs and instructions for running bare metal, see [here](https://ki365.github.io/docs/docs/metal/).
+Ki365 can either be setup using the Docker container system or entirely bare metal on the host operating system. You can find detailed instructions on starting a new Ki365 instance [here](https://ki365.github.io/docs/docs/installation/).
 
 ## Contributing
 
-> **_WARNING:_** Only use this for development purposes. Please see the documentation on production environments for running a Ki365 instance.
+> **_NOTE:_** The following information is for development purposes only. Please see the documentation on production environments above for starting a new Ki365 instance.
 
-To start the development environment run:
+To download all the development sources, run:
 
 ```
 git clone https://github.com/Ki365/Ki365.git
 cd Ki365
-task copy-bin
 task setup
+```
+
+To ensure all dependencies are installed for local development, run:
+
+> **_NOTE:_** Docker is only required if developing using containers
+
+```
+task check
+```
+
+To start the development environment, run:
+```
 # Terminal one
-task dev-backend-api
+task dev-backend
 # Terminal two
-task dev-backend-kicad
-# Terminal three
 task dev-frontend
 ```
-**_NOTE: 1_** The copy-bin and dev-backend commands must be run on a Linux based system. Refer [here](https://github.com/Ki365/Ki365/issues/1).
-
-**_NOTE: 2_** These commands require that the git, task, npm, yarn golang, and docker CLI tools are installed. To check, run the `task check` command.
 
 For further information on contributing please read the [CONTRIBUTING.md](https://github.com/Ki365/Ki365/blob/main/CONTRIBUTING.md) document.
 

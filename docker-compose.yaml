@@ -23,8 +23,6 @@ services:
     container_name: tracespace
     build:
       dockerfile: ./docker/Dockerfile.tracespace
-    environment:
-      KI365_TRACESPACE_PASSWORD: ${KI365_TRACESPACE_PASSWORD}
   # NOTE: This image needs to be last as it depends on the above images to be built
   ki365:
     container_name: ki365

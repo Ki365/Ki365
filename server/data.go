@@ -25,6 +25,7 @@ type Project struct {
 }
 
 // TODO: unify this with file creation
+// TODO: Use getter function to output os.File interface
 var DataDir = "./data"
 
 var RepoFolder = "sources"
@@ -39,6 +40,15 @@ var CacheFolder = "cache"
 var CacheDir = filepath.Join(DataDir, CacheFolder)
 
 var CacheGLBDir = CacheDir + "/glb"
+
+// Conditional prefix changes executable locations for when local bin flag is set
+// TODO: Refactor using interfaces
+var ConditionalBinPrefix = "./bin/"
+var GLTFPackExecutablePath = "gltfpack"
+var GitHTTPBackendExecutablePath = "git-http-backend"
+var TracespaceExecutablePath = "tracespace"
+
+var UseDockerKiCadCLI = false
 
 type PathStruct struct {
 	RepoConfig string

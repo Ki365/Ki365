@@ -120,19 +120,13 @@ func EndpointGetProjectModels(w http.ResponseWriter, r *http.Request) {
 	// w.Write([]byte(fmt.Sprintf("title:%s", project.Description)))
 }
 
-var (
-	// WARNING: This binary only correctly compiles and runs on x86-64 linux.
-	// TODO: enable correct binary compilation based on running OS
-	git_http_backend_bin = "./bin/git-http-backend"
-)
-
 func EndpointGetRepository(w http.ResponseWriter, r *http.Request) {
 	rp, err := filepath.Abs(RepoDir)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	bp, err := filepath.Abs(git_http_backend_bin)
+	bp, err := filepath.Abs(GitHTTPBackendExecutablePath)
 	if err != nil {
 		fmt.Println(err)
 	}

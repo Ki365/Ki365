@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func OptimizeGLB(inputFile string) error {
+func OptimizeGLB(inputFile string, gltfpackExecutable string) error {
 	abs, err := filepath.Abs(inputFile)
 	if err != nil {
 		fmt.Println("error in resolving input name")
@@ -26,7 +26,7 @@ func OptimizeGLB(inputFile string) error {
 	fmt.Println(args)
 	fmt.Print("\n\n\n")
 	// fmt.Println("-o " + abs)
-	output, err := exec.Command("./bin/gltfpack", args...).Output()
+	output, err := exec.Command(gltfpackExecutable, args...).Output()
 	if err != nil {
 		fmt.Print("\n\n\n")
 		fmt.Println(string(output))

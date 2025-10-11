@@ -53,7 +53,7 @@ func copyRepo(source, destination, name string, bare bool, append bool) {
 
 	var destFullPath string
 	if append {
-		destFullPath = filepath.Join(destination, name, ".git")
+		destFullPath = filepath.Join(destination, name+".git")
 	} else {
 		destFullPath = filepath.Join(destination, name)
 	}
@@ -65,13 +65,13 @@ func copyRepo(source, destination, name string, bare bool, append bool) {
 	var s string
 
 	if bare {
-		s = ".git"
+		s = "bare/.git"
 	} else {
-		s = "regular"
+		s = "non-bare/regular"
 	}
 
 	if err != nil {
-		fmt.Printf("Error cloning %s as %s from %s\n", filepath.Base(name), s, err)
+		fmt.Printf("Error cloning %s as %s from %s\n", name, s, err.Error())
 	} else {
 		fmt.Println("Cloned " + filepath.Base(name) + " as " + s)
 	}

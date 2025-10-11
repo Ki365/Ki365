@@ -1,5 +1,5 @@
-# TODO: Move away from nightly to have deterministic behavior
-FROM kicad/kicad:nightly-full
+# TODO: Move away from nightly once v10 comes out
+FROM kicad/nightly-full-trixie
 
 USER root
 

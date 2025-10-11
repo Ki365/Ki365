@@ -8,7 +8,7 @@ RUN apk add git make musl-dev g++
 RUN mkdir /app -p
 WORKDIR	/app
 
-RUN git clone --branch v0.21 https://github.com/zeux/meshoptimizer.git --depth 1
+RUN git clone --branch v0.24 https://github.com/zeux/meshoptimizer.git --depth 1
 WORKDIR /app/meshoptimizer
 
 RUN sed -i 's/LDFLAGS=/LDFLAGS=-static/' /app/meshoptimizer/Makefile

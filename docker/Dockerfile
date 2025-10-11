@@ -12,7 +12,7 @@ RUN yarn install
 WORKDIR /app/frontend/
 RUN cp -a /tmp/node_modules /app/frontend/
 
-# Build frotend
+# Build frontend
 COPY ./frontend /app/frontend
 WORKDIR /app/frontend/
 RUN yarn build
@@ -24,7 +24,7 @@ COPY ./server/ /app/server/
 COPY ./go.sum ./go.mod /app/
 RUN GOOS=linux go build -ldflags="-s" -o "./build/server" -v ./server/
 
-# TODO: include svgcleaner as dependency including pull request #210 and implmentation for style="default-color"
+# TODO: include svgcleaner as dependency including pull request #210 and implementation for style="default-color"
 
 FROM ki365-gltfpack AS gltfpack
 
@@ -46,4 +46,4 @@ COPY --from=gltfpack /gltfpack /bin/.
 COPY --from=frontend /app/build/ .
 COPY --from=server /app/build/ .
 COPY ./examples/manifest-examples.json /examples/
-ENTRYPOINT ["/server", "-p", "8080", "-d", "/frontend", "-y"]
+ENTRYPOINT ["/server", "-p", "8080", "-d", "/frontend", "-y", "--docker"]

@@ -146,12 +146,13 @@ func handleNewProject(archivePath string, unarchivePath string, id string, image
 	//  TODO: iterate over range of glb paths
 	err = kicad.RequestGLTFModelFromKiCadCLI(
 		"./"+filepath.Join(RepoDir, projectFolder, list_pcb[0]),
-		"./"+filepath.Join(CacheGLBDir, projectFolder, filepath.Base(list_glb[0])))
+		"./"+filepath.Join(CacheGLBDir, projectFolder, filepath.Base(list_glb[0])),
+		UseDockerKiCadCLI)
 	if err != nil {
 		return err
 	}
 
-	optimization.OptimizeGLB("./" + filepath.Join(CacheGLBDir, projectFolder, filepath.Base(list_glb[0])))
+	optimization.OptimizeGLB("./"+filepath.Join(CacheGLBDir, projectFolder, filepath.Base(list_glb[0])), GLTFPackExecutablePath)
 
 	// Marshal new data
 	fmt.Println("Marshalling JSON")

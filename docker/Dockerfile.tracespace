@@ -1,13 +1,39 @@
-# TODO: Replace all links to tracespace with statically linked modern CLI application with ABI support (preferrably golang).
-#  This is to reduce the number of containers and images needed to support Ki365.
+# TODO: Replace all links to tracespace with statically linked modern CLI application with ABI support (preferably golang).
+#       This is to reduce the infrastructure complexity needed to support Ki365.
 
-FROM node:lts-alpine3.20
+# NOTE: This will always require either a glibc or musl runtime until bun is compiled statically
+#       When this happens, move to binary call rather than FUSE/gRPC/SSH solution 
+# FROM debian:trixie-slim AS base
+
+# RUN apt update && apt install -y wget unzip git
+
+# WORKDIR	/app
+
+# RUN wget https://github.com/oven-sh/bun/releases/download/bun-v1.2.19/bun-linux-x64.zip
+
+# RUN unzip bun-linux-x64.zip
+
+# RUN cp /app/bun-linux-x64/bun /usr/bin/bun
+
+# RUN git clone https://github.com/tracespace/tracespace && cd tracespace && git switch main
+
+# WORKDIR /app/tracespace
+
+# RUN bun install && bun build --compile ./packages/cli/index.js --productions --target=bun-linux-x64 --outfile tracespace
+
+# FROM scratch
+
+# COPY --from=base /app/tracespace/tracespace .
+
+# Start from here when refactoring
+
+FROM node:lts-alpine3.22
 
 RUN apk add openssh
 
 RUN addgroup -S ts && adduser -S tsu -G ts -s /bin/ash
 
-RUN npm install -g @tracespace/cli@next 
+RUN npm install -g @tracespace/cli@v4.2.8
 
 RUN sed -i '/PasswordAuthentication yes/s/^# *//g' /etc/ssh/sshd_config
 

@@ -193,14 +193,37 @@ func confirm(s string, tries int) bool {
 }
 
 func main() {
+
+	// Flags and parameters
 	address := flag.String("a", "localhost", "address of server")
 	port := flag.String("p", "8100", "port to serve directory on")
 	directory := flag.String("d", ".", "directory of files to serve")
 	bypassConfirm := flag.Bool("y", false, "do not prompt for data folder creation")
 	skipExamples := flag.Bool("e", false, "do not add example projects")
+
+	// Executable flags
+	setDocker := flag.Bool("docker", false, "set if running executable in docker container")
+	setLocalBin := flag.Bool("local-bin", false, "set if using executables from ./bin directory for testing")
+
 	flag.Parse()
 
 	log.Println("Initializing Ki365...")
+
+	// Always use local bin directory when executing in Docker environment
+	if *setDocker {
+		// Make sure to set use local bin as programs are not in PATH in docker image
+		*setLocalBin = true
+		// Temporarily set flag to use correct code path
+		UseDockerKiCadCLI = true
+	}
+
+	// Set correct code paths based on bin prefix
+	if *setLocalBin {
+		GLTFPackExecutablePath = filepath.Join(ConditionalBinPrefix, GLTFPackExecutablePath)
+		GitHTTPBackendExecutablePath = filepath.Join(ConditionalBinPrefix, GitHTTPBackendExecutablePath)
+		// NOTE: tracespace is not statically compilable, meaning it cannot be used yet in the docker image
+		TracespaceExecutablePath = filepath.Join(ConditionalBinPrefix, TracespaceExecutablePath)
+	}
 
 	// TODO: Check all dependencies exist
 	// TODO: Check all dependencies exist if haven't periodically
@@ -231,7 +254,7 @@ func main() {
 			}
 			if !*skipExamples {
 				log.Println("Adding example repositories...")
-				abatement.GenerateExamples(filepath.Join(DataDir, "examples"), RepoDir, false)
+				abatement.GenerateExamples(filepath.Join("examples", "build"), RepoDir, false)
 				abatement.CopyManifest("./examples/manifest-examples.json", RepoConfigDemo)
 			}
 			log.Println("Creating data directory was successful!")
