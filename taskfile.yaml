@@ -9,7 +9,7 @@ tasks:
       - go version
       - yarn --version
       - kicad-cli --version
-      - gltfpack --version
+      - gltfpack -v
       - docker --version
       # - tracespace --version # for rendering SVGs from KiCAD Gerbers
 
