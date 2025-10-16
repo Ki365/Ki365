@@ -10,8 +10,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ki365/ki365/kicad"
-	"github.com/ki365/ki365/optimization"
+	"github.com/ki365/ki365/server/internal/kicad"
+	"github.com/ki365/ki365/server/internal/optimization"
 )
 
 type ErrorRepoNotClean struct {

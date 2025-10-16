@@ -17,7 +17,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-	"github.com/ki365/ki365/abatement"
+	"github.com/ki365/ki365/server/abatement"
 )
 
 // Credit: https://www.asciiart.eu/text-to-ascii-art | figlet release 2.1

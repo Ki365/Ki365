@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/ki365/ki365/abatement"
+	"github.com/ki365/ki365/server/abatement"
 )
 
 // Generates initial example projects from examples/source to examples/build
