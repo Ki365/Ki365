@@ -1,4 +1,4 @@
-package main
+package projects
 
 import (
 	"encoding/json"
@@ -8,22 +8,39 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"time"
 
 	"github.com/ki365/ki365/server/internal/kicad"
 	"github.com/ki365/ki365/server/internal/optimization"
+	"github.com/ki365/ki365/server/structure"
 )
 
-type ErrorRepoNotClean struct {
-	When time.Time
-	What string
+// TODO: iterate over all in slice argument
+func ProcessProjectFilePaths(basepath string, projectPath string, filepathSlice []string) []string {
+	var s []string
+	s = append(s, filepath.Join(basepath, projectPath, filepathSlice[0]))
+	fmt.Println(s)
+	return s
 }
 
-func (e *ErrorRepoNotClean) Error() string {
-	return fmt.Sprintf("at %v, %s", e.When, e.What)
+func find(root, ext string) []string {
+	var a []string
+	var b []string
+	filepath.WalkDir(root, func(s string, d fs.DirEntry, e error) error {
+		if e != nil {
+			return e
+		}
+		if filepath.Ext(d.Name()) == ext {
+			a = append(a, s)
+		}
+		return nil
+	})
+	for _, e := range a {
+		b = append(b, strings.TrimPrefix(e, filepath.Join(root)))
+	}
+	return b
 }
 
-func handleNewProject(archivePath string, unarchivePath string, id string, image string, prjName string, prjFolder string, desc string, prjLink string) error {
+func HandleNewProject(archivePath string, unarchivePath string, id string, image string, prjName string, prjFolder string, desc string, prjLink string) error {
 
 	// repoPath, err := createAbsoluteProjectFolderPath(archivePath, unarchivePath)
 	// if err != nil {
@@ -68,7 +85,7 @@ func handleNewProject(archivePath string, unarchivePath string, id string, image
 		return err
 	}
 
-	projects, err := parseProjectsJSON(RepoConfig)
+	projects, err := structure.ParseProjectsJSON(structure.RepoConfig)
 	if err != nil {
 		return err
 	}
@@ -125,7 +142,7 @@ func handleNewProject(archivePath string, unarchivePath string, id string, image
 	}
 
 	// TODO: maybe want to move away from JSON file store for project repos, (fixed project index right now)
-	proj := Project{
+	proj := structure.Project{
 		id,
 		imageLink,
 		projectName,
@@ -145,14 +162,14 @@ func handleNewProject(archivePath string, unarchivePath string, id string, image
 
 	//  TODO: iterate over range of glb paths
 	err = kicad.RequestGLTFModelFromKiCadCLI(
-		"./"+filepath.Join(RepoDir, projectFolder, list_pcb[0]),
-		"./"+filepath.Join(CacheGLBDir, projectFolder, filepath.Base(list_glb[0])),
-		UseDockerKiCadCLI)
+		"./"+filepath.Join(structure.RepoDir, projectFolder, list_pcb[0]),
+		"./"+filepath.Join(structure.CacheGLBDir, projectFolder, filepath.Base(list_glb[0])),
+		structure.UseDockerKiCadCLI)
 	if err != nil {
 		return err
 	}
 
-	optimization.OptimizeGLB("./"+filepath.Join(CacheGLBDir, projectFolder, filepath.Base(list_glb[0])), GLTFPackExecutablePath)
+	optimization.OptimizeGLB("./"+filepath.Join(structure.CacheGLBDir, projectFolder, filepath.Base(list_glb[0])), structure.GLTFPackExecutablePath)
 
 	// Marshal new data
 	fmt.Println("Marshalling JSON")
@@ -162,7 +179,7 @@ func handleNewProject(archivePath string, unarchivePath string, id string, image
 	}
 
 	fmt.Println("Writing to file")
-	err = os.WriteFile(RepoConfig, b, 0755)
+	err = os.WriteFile(structure.RepoConfig, b, 0755)
 	if err != nil {
 		return err
 	}
@@ -173,9 +190,9 @@ func handleNewProject(archivePath string, unarchivePath string, id string, image
 	return nil
 }
 
-func handleRemoveProject(id string) error {
+func HandleRemoveProject(id string) error {
 	// Load in projects from JSON store
-	projects, err := parseProjectsJSON(RepoConfig)
+	projects, err := structure.ParseProjectsJSON(structure.RepoConfig)
 	if err != nil {
 		return err
 	}
@@ -207,7 +224,7 @@ func handleRemoveProject(id string) error {
 
 	// Writing to file
 	fmt.Println("Writing to file")
-	err = os.WriteFile(RepoConfig, b, 0755)
+	err = os.WriteFile(structure.RepoConfig, b, 0755)
 	if err != nil {
 		return err
 	}
@@ -216,30 +233,4 @@ func handleRemoveProject(id string) error {
 
 	// project removal was successful, return no error
 	return nil
-}
-
-// TODO: iterate over all in slice argument
-func processProjectFilePaths(basepath string, projectPath string, filepathSlice []string) []string {
-	var s []string
-	s = append(s, filepath.Join(basepath, projectPath, filepathSlice[0]))
-	fmt.Println(s)
-	return s
-}
-
-func find(root, ext string) []string {
-	var a []string
-	var b []string
-	filepath.WalkDir(root, func(s string, d fs.DirEntry, e error) error {
-		if e != nil {
-			return e
-		}
-		if filepath.Ext(d.Name()) == ext {
-			a = append(a, s)
-		}
-		return nil
-	})
-	for _, e := range a {
-		b = append(b, strings.TrimPrefix(e, filepath.Join(root)))
-	}
-	return b
 }

@@ -1,4 +1,4 @@
-package main
+package structure
 
 import (
 	"encoding/json"
@@ -54,7 +54,7 @@ type PathStruct struct {
 	RepoConfig string
 }
 
-func parseProjectsJSON(conf string) (*Projects, error) {
+func ParseProjectsJSON(conf string) (*Projects, error) {
 	// repoConfig: ./repos/store/repos.json + unarchivepath: ./repos/repos"
 
 	// TODO: change os.Executable() for repo directory

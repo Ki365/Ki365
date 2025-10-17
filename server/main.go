@@ -3,11 +3,9 @@ package main
 import (
 	"bufio"
 	"context"
-	"encoding/json"
 	"errors"
 	"flag"
 	"fmt"
-	"io"
 	"log"
 	"net/http"
 	"os"
@@ -18,6 +16,8 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/ki365/ki365/server/abatement"
+	e "github.com/ki365/ki365/server/endpoints"
+	s "github.com/ki365/ki365/server/structure"
 )
 
 // Credit: https://www.asciiart.eu/text-to-ascii-art | figlet release 2.1
@@ -71,68 +71,6 @@ func SPAHandler(staticPath string) http.HandlerFunc {
 	})
 }
 
-func EndpointUploadProject(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Uploading file...")
-
-	// Fixed 167.7MB limit on file upload
-	// TODO: have a better way to handle this
-	r.ParseMultipartForm(10 << 2)
-
-	file, header, err := r.FormFile("project-archive")
-
-	if err != nil {
-		fmt.Println("Error retrieving the uploaded file, canceling upload...")
-		fmt.Println(err)
-		return
-	}
-	defer file.Close()
-	fmt.Printf("Uploaded filename: %+v\n", header.Filename)
-	fmt.Printf("Filesize: %+v\n", header.Size)
-	fmt.Printf("MIME: header: %+v\n", header.Header)
-
-	// TODO: Add environment variable to point to mount
-	// Create folder structure if does not exist
-	folderPath := filepath.Join(filepath.Join(DataDir, "upload/archives"))
-	err = os.MkdirAll(folderPath, os.ModePerm)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	// TODO: remove original filename and obscure to increase security
-	// Create empty file
-	fp := filepath.Join(folderPath, header.Filename)
-
-	dst, err := os.Create(fp)
-	if err != nil {
-		fmt.Println(err)
-	}
-	defer dst.Close()
-
-	// Write contents of upload to file
-	fileBytes, err := io.Copy(dst, file)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	// TODO: Add more information to JSON response for client
-	// Return JSON response with success
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(fileBytes)
-
-	// Handle new imported file
-	err = handleNewProjectArchive(fp, RepoDir)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	// pass newly created project to handle project function
-	err = handleNewProject(fp, RepoDir, "", "", "", "", "", "")
-	if err != nil {
-		fmt.Println(err)
-	}
-}
-
 func ProjectCtx(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		projectID := chi.URLParam(r, "projectID")
@@ -146,8 +84,8 @@ func ProjectCtx(next http.Handler) http.Handler {
 	})
 }
 
-func dbGetProject(id string) (*Project, error) {
-	projects, err := parseProjectsJSON(RepoConfig)
+func dbGetProject(id string) (*s.Project, error) {
+	projects, err := s.ParseProjectsJSON(s.RepoConfig)
 	if err != nil {
 		return nil, err
 	}
@@ -214,15 +152,15 @@ func main() {
 		// Make sure to set use local bin as programs are not in PATH in docker image
 		*setLocalBin = true
 		// Temporarily set flag to use correct code path
-		UseDockerKiCadCLI = true
+		s.UseDockerKiCadCLI = true
 	}
 
 	// Set correct code paths based on bin prefix
 	if *setLocalBin {
-		GLTFPackExecutablePath = filepath.Join(ConditionalBinPrefix, GLTFPackExecutablePath)
-		GitHTTPBackendExecutablePath = filepath.Join(ConditionalBinPrefix, GitHTTPBackendExecutablePath)
+		s.GLTFPackExecutablePath = filepath.Join(s.ConditionalBinPrefix, s.GLTFPackExecutablePath)
+		s.GitHTTPBackendExecutablePath = filepath.Join(s.ConditionalBinPrefix, s.GitHTTPBackendExecutablePath)
 		// NOTE: tracespace is not statically compilable, meaning it cannot be used yet in the docker image
-		TracespaceExecutablePath = filepath.Join(ConditionalBinPrefix, TracespaceExecutablePath)
+		s.TracespaceExecutablePath = filepath.Join(s.ConditionalBinPrefix, s.TracespaceExecutablePath)
 	}
 
 	// TODO: Check all dependencies exist
@@ -235,7 +173,7 @@ func main() {
 	log.Println("Checking data folder existence...")
 
 	// TODO: check all folder existence
-	_, err := os.Stat(filepath.Join(DataDir, "store"))
+	_, err := os.Stat(filepath.Join(s.DataDir, "store"))
 	if err != nil {
 		log.Println("Data directory does not exist, prompting...")
 		var c bool
@@ -248,14 +186,14 @@ func main() {
 		}
 		if c || *bypassConfirm {
 			log.Println("Creating data directory...")
-			err := abatement.GenerateDataFolder(DataDir)
+			err := abatement.GenerateDataFolder(s.DataDir)
 			if err != nil {
 				log.Fatal("Failed to create data directory.")
 			}
 			if !*skipExamples {
 				log.Println("Adding example repositories...")
-				abatement.GenerateExamples(filepath.Join("examples", "build"), RepoDir, false)
-				abatement.CopyManifest("./examples/manifest-examples.json", RepoConfigDemo)
+				abatement.GenerateExamples(filepath.Join("examples", "build"), s.RepoDir, false)
+				abatement.CopyManifest("./examples/manifest-examples.json", s.RepoConfigDemo)
 			}
 			log.Println("Creating data directory was successful!")
 		} else {
@@ -269,21 +207,21 @@ func main() {
 	log.Println("Starting Ki365 API build...")
 
 	apiPrefix := "/api"
-	router.Get(apiPrefix+"/ping", EndpointGetPing)                        // responds with pong
-	router.HandleFunc(apiPrefix+"/upload/project", EndpointUploadProject) // upload project endpoint
-	router.HandleFunc(apiPrefix+"/git/project/*", EndpointGetRepository)
-	router.Post(apiPrefix+"/toggle-example-projects", EndpointAddExampleProjects)      // lists all example projects
-	router.Delete(apiPrefix+"/toggle-example-projects", EndpointRemoveExampleProjects) // unlists all example projects
-	router.Get(apiPrefix+"/toggle-example-projects", EndpointCheckExampleProjects)     // check if example projects are listed
+	router.Get(apiPrefix+"/ping", e.EndpointGetPing)                        // responds with pong
+	router.HandleFunc(apiPrefix+"/upload/project", e.EndpointUploadProject) // upload project endpoint
+	router.HandleFunc(apiPrefix+"/git/project/*", e.EndpointGetRepository)
+	router.Post(apiPrefix+"/toggle-example-projects", e.EndpointAddExampleProjects)      // lists all example projects
+	router.Delete(apiPrefix+"/toggle-example-projects", e.EndpointRemoveExampleProjects) // unlists all example projects
+	router.Get(apiPrefix+"/toggle-example-projects", e.EndpointCheckExampleProjects)     // check if example projects are listed
 	router.Route(apiPrefix+"/projects", func(r chi.Router) {
-		r.Get("/", EndpointGetProjects) // get list of all projects in federation
+		r.Get("/", e.EndpointGetProjects) // get list of all projects in federation
 		r.Route("/{projectID}", func(r chi.Router) {
 			r.Use(ProjectCtx)
-			r.Get("/", EndpointGetProject)
-			r.Get("/schematics", EndpointGetProjectSchematics)
-			r.Get("/layouts", EndpointGetProjectLayouts)
-			r.Get("/models", EndpointGetProjectModels)
-			r.Delete("/", EndpointRemoveProject) // delete specific project
+			r.Get("/", e.EndpointGetProject)
+			r.Get("/schematics", e.EndpointGetProjectSchematics)
+			r.Get("/layouts", e.EndpointGetProjectLayouts)
+			r.Get("/models", e.EndpointGetProjectModels)
+			r.Delete("/", e.EndpointRemoveProject) // delete specific project
 		}) // get files of specific project
 
 	})
@@ -300,11 +238,13 @@ func main() {
 	log.Println("Ki365 Initialized.")
 
 	fmt.Print(header)
+
 	fmt.Println()
 	fmt.Println("Ki365 API Server Backend - Engineering Collaboration")
 	fmt.Println("\tCopyright © Ki365 Contributors")
 	fmt.Println()
 
 	log.Printf("Serving directory %s on HTTP address: %s:%s\n", *directory, *address, *port)
+
 	log.Fatal(srv.ListenAndServe())
 }

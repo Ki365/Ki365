@@ -1,4 +1,4 @@
-package main
+package projects
 
 import (
 	"archive/tar"
@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func handleNewProjectArchive(archivePath string, unarchivePath string) error {
+func HandleNewProjectArchive(archivePath string, unarchivePath string) error {
 	// TODO: move seperate file types as dedicated functions with defer keyword on file
 
 	// unzip tar or zip file to repos/
