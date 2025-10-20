@@ -206,6 +206,7 @@ func main() {
 
 	log.Println("Starting Ki365 API build...")
 
+	// TODO: Wrap this in router.Route for api prefix
 	apiPrefix := "/api"
 	router.Get(apiPrefix+"/ping", e.EndpointGetPing)                        // responds with pong
 	router.HandleFunc(apiPrefix+"/upload/project", e.EndpointUploadProject) // upload project endpoint
@@ -214,15 +215,16 @@ func main() {
 	router.Delete(apiPrefix+"/toggle-example-projects", e.EndpointRemoveExampleProjects) // unlists all example projects
 	router.Get(apiPrefix+"/toggle-example-projects", e.EndpointCheckExampleProjects)     // check if example projects are listed
 	router.Route(apiPrefix+"/projects", func(r chi.Router) {
-		r.Get("/", e.EndpointGetProjects) // get list of all projects in federation
+		r.Get("/", e.EndpointGetProjects)             // get list of all projects in organization
+		r.Post("/link", e.EndpointPostLinkConnection) // add project link to organization
 		r.Route("/{projectID}", func(r chi.Router) {
 			r.Use(ProjectCtx)
-			r.Get("/", e.EndpointGetProject)
+			r.Get("/", e.EndpointGetProject) // get files of specific project
 			r.Get("/schematics", e.EndpointGetProjectSchematics)
 			r.Get("/layouts", e.EndpointGetProjectLayouts)
 			r.Get("/models", e.EndpointGetProjectModels)
 			r.Delete("/", e.EndpointRemoveProject) // delete specific project
-		}) // get files of specific project
+		})
 
 	})
 	router.Get("/", SPAHandler(*directory))

@@ -6,3 +6,5 @@ bin*
 node_modules
 .env
 target*
+.zed
+tmp

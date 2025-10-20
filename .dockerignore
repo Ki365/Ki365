@@ -2,7 +2,6 @@
 .git
 build
 */node_modules
-build
 .vscode
 repos
 ki365
@@ -10,3 +9,5 @@ bin*
 node_modules
 .env
 target*
+.zed
+tmp

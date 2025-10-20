@@ -11,6 +11,10 @@ tasks:
       - kicad-cli --version
       - gltfpack -v
       - docker --version
+      # Optional (for debugging):
+      # - air -v
+      # - dlv version
+      #
       # - tracespace --version # for rendering SVGs from KiCAD Gerbers
 
   dev:

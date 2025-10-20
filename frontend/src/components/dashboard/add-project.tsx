@@ -15,6 +15,8 @@ export function AddProject() {
 
 	const file = useRef<HTMLInputElement>(document.createElement("input"))
 	const ref = useRef<HTMLFormElement>(document.createElement("form"))
+	
+	const [linkInputValue, setLinkInputValue] = useState("")
 
 	const [isConfirmationDialogOpen, setIsConfirmationDialogOpen] = useState(false);
 	const [isWarningDialogOpen, setIsWarningDialogOpen] = useState(false);
@@ -96,6 +98,37 @@ export function AddProject() {
 				fetch('/api/toggle-example-projects', {
 					method: method,
 					body: "",
+					signal: cancelRequest.signal
+				})
+					.then((data) => {
+						if (data?.ok) {
+							resolve(1)
+						} else {
+							reject()
+						}
+					})
+					.catch(error => {
+						console.error(error)
+						reject()
+					}).finally(() => {
+						// props.setShouldResolve(true)
+						context?.setUser(true)
+					}))
+
+			// TODO: make toaster component unique to this toggle
+			toaster(response)
+
+		} catch (e) {
+			console.log(e)
+		}
+	}
+	
+	const handleAddLink = () => {
+		try {
+			const response = new Promise<any>((resolve, reject) =>
+				fetch('/api/projects/link', {
+					method: "POST",
+					body: linkInputValue,
 					signal: cancelRequest.signal
 				})
 					.then((data) => {
@@ -224,7 +257,7 @@ export function AddProject() {
 					</DialogHeader>
 					<div className="grid flex-1 gap-2">
 						<Label htmlFor="link" className="sr-only">Link</Label>
-						<Input id="link" placeholder="https://github.io/Ki365/example-project" />
+            <Input id="link" onChangeCapture={e => setLinkInputValue(e.currentTarget.value)} placeholder="https://github.io/Ki365/example-project" />
 					</div>
 					<DialogFooter className="sm:justify-start">
 						<div className="grid flex-1 gap-2">
@@ -233,8 +266,7 @@ export function AddProject() {
 								<DialogClose asChild>
 									<Button type="button" variant="secondary">Close</Button>
 								</DialogClose>
-								{/* TODO: Add functionality to this button */}
-								<Button type="button" variant="default">Submit</Button>
+								<Button type="button" variant="default" onClick={handleAddLink}>Submit</Button>
 							</div>
 						</div>
 					</DialogFooter>

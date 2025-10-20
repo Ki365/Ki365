@@ -11,7 +11,10 @@ import (
 	"net/http/cgi"
 	"net/http/httputil"
 	"os"
+	"path"
 	"path/filepath"
+
+	"github.com/go-chi/render"
 
 	p "github.com/ki365/ki365/server/internal/projects"
 	s "github.com/ki365/ki365/server/structure"
@@ -77,6 +80,79 @@ func EndpointUploadProject(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println(err)
 	}
+}
+
+// ErrResponse renderer type for handling all sorts of errors.
+//
+// In the best case scenario, the excellent github.com/pkg/errors package
+// helps reveal information on the error, setting it on Err, and in the Render()
+// method, using it to set the application-specific error code in AppCode.
+type ErrResponse struct {
+	Err            error `json:"-"` // low-level runtime error
+	HTTPStatusCode int   `json:"-"` // http response status code
+
+	StatusText string `json:"status"`          // user-level status message
+	AppCode    int64  `json:"code,omitempty"`  // application-specific error code
+	ErrorText  string `json:"error,omitempty"` // application-level error message, for debugging
+}
+
+func (e *ErrResponse) Render(w http.ResponseWriter, r *http.Request) error {
+	render.Status(r, e.HTTPStatusCode)
+	return nil
+}
+
+// var va = &ErrResponse{HTTPStatusCode: 401, StatusText: "Resource not found."}
+
+func EndpointPostLinkConnection(w http.ResponseWriter, r *http.Request) {
+	// Read project URL from request body
+	bodyBytes, err := io.ReadAll(r.Body)
+	if err != nil {
+		render.Render(w, r, &ErrResponse{
+			HTTPStatusCode: http.StatusInternalServerError,
+			StatusText:     "Error reading request body.",
+		})
+		return
+	}
+	defer r.Body.Close() // Important: close the body after reading
+
+	// Convert the byte slice to a string (or parse as JSON/XML etc.)
+	bodyString := string(bodyBytes)
+	// Print resulting string
+	fmt.Printf("Received request body: %s\n", bodyString)
+
+	// Quickly check if repository exists, otherwise error out and report
+	err = p.CheckRemoteProject(bodyString)
+	if err != nil {
+		render.Render(w, r, &ErrResponse{
+			HTTPStatusCode: http.StatusBadRequest,
+			StatusText:     "Error checking remote project, check URL.",
+		})
+		return
+	}
+
+	// TODO: Add this code once queues are in place
+	// Download repository to server
+	err = p.HandleRemoteProject(bodyString)
+	if err != nil {
+		render.Render(w, r, &ErrResponse{
+			HTTPStatusCode: http.StatusInternalServerError,
+			StatusText:     "Error handling remote project, check remote.",
+		})
+		return
+	}
+
+	// Add repository to queue
+	// TODO: refactor these functions
+	err = p.HandleNewProject("./data/sources/"+path.Base(bodyString)+".git", "./data/sources/", "", "", "", "", "", "")
+	// err = p.HandleNewProject("./data/store/linked/"+path.Base(bodyString), "./data/store/linked/", "", "", "", "", "", "")
+	if err != nil {
+		fmt.Println("ERROR handling new project!")
+		fmt.Println(err)
+		return
+	}
+
+	render.Render(w, r, &ErrResponse{HTTPStatusCode: http.StatusAccepted, StatusText: "Resource found and accepted for processing."})
+	w.Write([]byte("Response successfull!"))
 }
 
 func EndpointGetProjects(w http.ResponseWriter, r *http.Request) {
