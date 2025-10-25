@@ -41,7 +41,7 @@ func EndpointUploadProject(w http.ResponseWriter, r *http.Request) {
 
 	// TODO: Add environment variable to point to mount
 	// Create folder structure if does not exist
-	folderPath := filepath.Join(filepath.Join(s.DataDir, "upload/archives"))
+	folderPath := filepath.Join(filepath.Join(s.Dirs().DataDir, "upload/archives"))
 	err = os.MkdirAll(folderPath, os.ModePerm)
 	if err != nil {
 		fmt.Println(err)
@@ -70,13 +70,13 @@ func EndpointUploadProject(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(fileBytes)
 
 	// Handle new imported file
-	err = p.HandleNewProjectArchive(fp, s.RepoDir)
+	err = p.HandleNewProjectArchive(fp, s.Dirs().RepoDir)
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	// pass newly created project to handle project function
-	err = p.HandleNewProject(fp, s.RepoDir, "", "", "", "", "", "")
+	err = p.HandleNewProject(fp, s.Dirs().RepoDir, "", "", "", "", "", "")
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -157,7 +157,7 @@ func EndpointPostLinkConnection(w http.ResponseWriter, r *http.Request) {
 
 func EndpointGetProjects(w http.ResponseWriter, r *http.Request) {
 	// TODO: create and pass enum to these functions regarding config paths
-	file, err := os.Open(s.RepoConfig)
+	file, err := os.Open(s.Dirs().Store.RepoConfig)
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
 			http.Error(w, "no projects", http.StatusNoContent)
@@ -218,7 +218,7 @@ func EndpointGetProjectSchematics(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// TODO: remove this in favor of calling during git push receive operation
-	s := p.ProcessProjectFilePaths(s.RepoDir, project.ProjectFolder, project.Schematics)
+	s := p.ProcessProjectFilePaths(s.Dirs().RepoDir, project.ProjectFolder, project.Schematics)
 
 	// TODO: obscure filename to increase security
 	http.ServeFile(w, r, s[0])
@@ -234,7 +234,7 @@ func EndpointGetProjectLayouts(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// TODO: remove this in favor of calling during git push receive operation
-	s := p.ProcessProjectFilePaths(s.RepoDir, project.ProjectFolder, project.Layouts)
+	s := p.ProcessProjectFilePaths(s.Dirs().RepoDir, project.ProjectFolder, project.Layouts)
 
 	// TODO: obscure filename to increase security
 	http.ServeFile(w, r, s[0])
@@ -252,13 +252,13 @@ func EndpointGetProjectModels(w http.ResponseWriter, r *http.Request) {
 	// TODO: check if any project.Models else return safe error
 	// TODO: check for all files present
 
-	s := p.ProcessProjectFilePaths(s.CacheGLBDir, project.ProjectFolder, project.Models)
+	s := p.ProcessProjectFilePaths(s.Dirs().Cache.GLBDir, project.ProjectFolder, project.Models)
 	http.ServeFile(w, r, s[0])
 	// w.Write([]byte(fmt.Sprintf("title:%s", project.Description)))
 }
 
 func EndpointGetRepository(w http.ResponseWriter, r *http.Request) {
-	rp, err := filepath.Abs(s.RepoDir)
+	rp, err := filepath.Abs(s.Dirs().RepoDir)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -298,7 +298,7 @@ func EndpointGetRepository(w http.ResponseWriter, r *http.Request) {
 // TODO: change from "add" to "enable"
 func EndpointAddExampleProjects(w http.ResponseWriter, r *http.Request) {
 
-	projects, err := s.ParseProjectsJSON(s.RepoConfigDemo)
+	projects, err := s.ParseProjectsJSON(s.Dirs().Store.ExManifest)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -313,7 +313,7 @@ func EndpointAddExampleProjects(w http.ResponseWriter, r *http.Request) {
 		// Handle new imported file
 		// TODO: iterate over all example files
 		// TODO: use ".git" folders and remove other folders
-		fp := filepath.Join(s.DataDir, "examples", prj.ProjectFolder)
+		fp := filepath.Join(s.Dirs().DataDir, "examples", prj.ProjectFolder)
 
 		// err = handleNewProjectArchive(fp, "./repos/repos")
 		// if err != nil {
@@ -326,7 +326,7 @@ func EndpointAddExampleProjects(w http.ResponseWriter, r *http.Request) {
 		// TODO: verify project integrity
 
 		// pass newly created project to handle project function
-		err = p.HandleNewProject(fp, s.RepoDir, prj.Id, prj.Image, prj.ProjectName, prj.ProjectFolder, prj.Description, prj.RepositoryLink)
+		err = p.HandleNewProject(fp, s.Dirs().RepoDir, prj.Id, prj.Image, prj.ProjectName, prj.ProjectFolder, prj.Description, prj.RepositoryLink)
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -337,7 +337,7 @@ func EndpointAddExampleProjects(w http.ResponseWriter, r *http.Request) {
 }
 
 func EndpointRemoveExampleProjects(w http.ResponseWriter, r *http.Request) {
-	projects, err := s.ParseProjectsJSON(s.RepoConfigDemo)
+	projects, err := s.ParseProjectsJSON(s.Dirs().Store.ExManifest)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -370,12 +370,12 @@ func EndpointRemoveProject(w http.ResponseWriter, r *http.Request) {
 
 // TODO: This should be cached
 func EndpointCheckExampleProjects(w http.ResponseWriter, r *http.Request) {
-	examples, err := s.ParseProjectsJSON(s.RepoConfigDemo)
+	examples, err := s.ParseProjectsJSON(s.Dirs().Store.ExManifest)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	projects, err := s.ParseProjectsJSON(s.RepoConfig)
+	projects, err := s.ParseProjectsJSON(s.Dirs().Store.RepoConfig)
 	if err != nil {
 		fmt.Println(err)
 	}

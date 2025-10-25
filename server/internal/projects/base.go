@@ -85,7 +85,7 @@ func HandleNewProject(archivePath string, unarchivePath string, id string, image
 		return err
 	}
 
-	projects, err := structure.ParseProjectsJSON(structure.RepoConfig)
+	projects, err := structure.ParseProjectsJSON(structure.Dirs().Store.RepoConfig)
 	if err != nil {
 		return err
 	}
@@ -162,14 +162,14 @@ func HandleNewProject(archivePath string, unarchivePath string, id string, image
 
 	//  TODO: iterate over range of glb paths
 	err = kicad.RequestGLTFModelFromKiCadCLI(
-		"./"+filepath.Join(structure.RepoDir, projectFolder, list_pcb[0]),
-		"./"+filepath.Join(structure.CacheGLBDir, projectFolder, filepath.Base(list_glb[0])),
+		"./"+filepath.Join(structure.Dirs().RepoDir, projectFolder, list_pcb[0]),
+		"./"+filepath.Join(structure.Dirs().Cache.GLBDir, projectFolder, filepath.Base(list_glb[0])),
 		structure.UseDockerKiCadCLI)
 	if err != nil {
 		return err
 	}
 
-	optimization.OptimizeGLB("./"+filepath.Join(structure.CacheGLBDir, projectFolder, filepath.Base(list_glb[0])), structure.GLTFPackExecutablePath)
+	optimization.OptimizeGLB("./"+filepath.Join(structure.Dirs().Cache.GLBDir, projectFolder, filepath.Base(list_glb[0])), structure.GLTFPackExecutablePath)
 
 	// Marshal new data
 	fmt.Println("Marshalling JSON")
@@ -179,7 +179,7 @@ func HandleNewProject(archivePath string, unarchivePath string, id string, image
 	}
 
 	fmt.Println("Writing to file")
-	err = os.WriteFile(structure.RepoConfig, b, 0755)
+	err = os.WriteFile(structure.Dirs().Store.RepoConfig, b, 0755)
 	if err != nil {
 		return err
 	}
@@ -192,7 +192,7 @@ func HandleNewProject(archivePath string, unarchivePath string, id string, image
 
 func HandleRemoveProject(id string) error {
 	// Load in projects from JSON store
-	projects, err := structure.ParseProjectsJSON(structure.RepoConfig)
+	projects, err := structure.ParseProjectsJSON(structure.Dirs().Store.RepoConfig)
 	if err != nil {
 		return err
 	}
@@ -224,7 +224,7 @@ func HandleRemoveProject(id string) error {
 
 	// Writing to file
 	fmt.Println("Writing to file")
-	err = os.WriteFile(structure.RepoConfig, b, 0755)
+	err = os.WriteFile(structure.Dirs().Store.RepoConfig, b, 0755)
 	if err != nil {
 		return err
 	}

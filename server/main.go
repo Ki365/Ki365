@@ -85,7 +85,7 @@ func ProjectCtx(next http.Handler) http.Handler {
 }
 
 func dbGetProject(id string) (*s.Project, error) {
-	projects, err := s.ParseProjectsJSON(s.RepoConfig)
+	projects, err := s.ParseProjectsJSON(s.Dirs().Store.RepoConfig)
 	if err != nil {
 		return nil, err
 	}
@@ -173,7 +173,7 @@ func main() {
 	log.Println("Checking data folder existence...")
 
 	// TODO: check all folder existence
-	_, err := os.Stat(filepath.Join(s.DataDir, "store"))
+	_, err := os.Stat(filepath.Join(s.Dirs().DataDir, "store"))
 	if err != nil {
 		log.Println("Data directory does not exist, prompting...")
 		var c bool
@@ -186,14 +186,14 @@ func main() {
 		}
 		if c || *bypassConfirm {
 			log.Println("Creating data directory...")
-			err := abatement.GenerateDataFolder(s.DataDir)
+			err := abatement.GenerateDataFolder(s.Dirs().DataDir)
 			if err != nil {
 				log.Fatal("Failed to create data directory.")
 			}
 			if !*skipExamples {
 				log.Println("Adding example repositories...")
-				abatement.GenerateExamples(filepath.Join("examples", "build"), s.RepoDir, false)
-				abatement.CopyManifest("./examples/manifest-examples.json", s.RepoConfigDemo)
+				abatement.GenerateExamples(filepath.Join("examples", "build"), s.Dirs().RepoDir, false)
+				abatement.CopyManifest("./examples/manifest-examples.json", s.Dirs().Store.ExManifest)
 			}
 			log.Println("Creating data directory was successful!")
 		} else {

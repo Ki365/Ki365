@@ -19,27 +19,69 @@ type Project struct {
 	Description      string   `json:"Description"`
 	ShortDescription string   `json:"Short Description"` // TODO delete in favor of dynamically generated short description on react
 	RepositoryLink   string   `json:"RepositoryLink"`
-	Schematics       []string `json:"Schematics`
-	Layouts          []string `json:"Layouts`
-	Models           []string `json:"Models`
+	Schematics       []string `json:"Schematics"`
+	Layouts          []string `json:"Layouts"`
+	Models           []string `json:"Models"`
 }
 
-// TODO: unify this with file creation
-// TODO: Use getter function to output os.File interface
-var DataDir = "./data"
+type data struct {
+	DataDir string
+	RepoDir string
+	Cache   cache
+	Store   store
+}
 
-var RepoFolder = "sources"
-var RepoDir = filepath.Join(DataDir, RepoFolder)
+type cache struct {
+	Dir    string
+	GLBDir string
+}
 
-var RepoConfigFolder = "store"
-var RepoConfigDir = filepath.Join(DataDir, RepoConfigFolder)
-var RepoConfig = filepath.Join(RepoConfigDir, "repos.json")
-var RepoConfigDemo = filepath.Join(RepoConfigDir, "manifest-examples.json")
+type store struct {
+	Dir        string
+	ExManifest string
+	RepoConfig string
+}
 
-var CacheFolder = "cache"
-var CacheDir = filepath.Join(DataDir, CacheFolder)
+const dataDir = "./data"
+const repoDir = "sources"
+const storeDir = "store"
+const cacheDir = "cache"
+const gLBDir = "glb"
 
-var CacheGLBDir = CacheDir + "/glb"
+const repoConfig = "repos.json"
+const repoManifest = "manifest-examples.json"
+
+// Dirs() generates a nested structure of complete relative filepaths
+// for an individual organization.
+//
+// The organization directories are setup as the following:
+//
+// - dataDir
+//
+//	1 - sources
+//	2 - examples
+//	3 - releases
+//	4 - store
+//	5 - upload
+//	6 - cache
+//	  	- glb
+//
+// TODO: Rename to Data
+func Dirs() data {
+	return data{
+		DataDir: filepath.Join(dataDir),
+		RepoDir: filepath.Join(dataDir, repoDir),
+		Cache: cache{
+			Dir:    filepath.Join(dataDir, cacheDir),
+			GLBDir: filepath.Join(dataDir, cacheDir, gLBDir),
+		},
+		Store: store{
+			Dir:        filepath.Join(dataDir, storeDir),
+			ExManifest: filepath.Join(dataDir, storeDir, repoManifest),
+			RepoConfig: filepath.Join(dataDir, storeDir, repoConfig),
+		},
+	}
+}
 
 // Conditional prefix changes executable locations for when local bin flag is set
 // TODO: Refactor using interfaces
