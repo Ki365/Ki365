@@ -1,10 +1,12 @@
+root = "."
+tmp_dir = "."
+
 [build]
-  full_bin = ""
-  bin = "./ki365"
+  full_bin = "$HOME/go/bin/dlv --listen=127.0.0.1:44544 --headless --accept-multiclient exec ./ki365"
   pre_cmd = ["pkill ki365 || true"]
-  cmd = "go build -o ./ki365 ./server/"
+  cmd = "go build -gcflags='all=-N -l' -o ./ki365 ./server/"
   delay = 1000
-  exclude_dir = ["assets", "tmp", "vendor", "testdata"]
+  exclude_dir = ["assets", "tmp", "vendor", "testdata", "data"]
   exclude_file = []
   exclude_regex = ["_test.go", ".*_templ.go"]
   exclude_unchanged = false
