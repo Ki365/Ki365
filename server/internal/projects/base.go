@@ -11,7 +11,7 @@ import (
 
 	"github.com/ki365/ki365/server/internal/kicad"
 	"github.com/ki365/ki365/server/internal/optimization"
-	"github.com/ki365/ki365/server/structure"
+	s "github.com/ki365/ki365/server/structure"
 )
 
 // TODO: iterate over all in slice argument
@@ -40,52 +40,16 @@ func find(root, ext string) []string {
 	return b
 }
 
-func HandleNewProject(archivePath string, unarchivePath string, id string, image string, prjName string, prjFolder string, desc string, prjLink string) error {
+func HandleNewProject(archivePath string, unarchivePath string, projectInst s.Project) error {
 
-	// repoPath, err := createAbsoluteProjectFolderPath(archivePath, unarchivePath)
-	// if err != nil {
-	// 	return err
-	// }
-
-	// fmt.Println(archivePath)
-	// fmt.Println(unarchivePath)
-	// fmt.Println(repoPath)
-
-	// new project is a repository and has no uncommited files (clean)
-	// r, err := git.PlainOpen(repoPath)
-	// if err != nil {
-	// 	return err
-	// }
-
-	// w, err := r.Worktree()
-	// if err != nil {
-	// 	return err
-	// }
-
-	// fmt.Println(w)
-
-	// s, err := w.Status()
-	// if err != nil {
-	// 	return err
-	// }
-
-	// fmt.Println(s)
-
-	// fmt.Println(s.IsClean())
-	// fmt.Println(!s.IsClean())
-	// if !s.IsClean() {
-	// 	return &ErrorRepoNotClean{
-	// 		time.Now(),
-	// 		"repository is not clean",
-	// 	}
-	// }
+	// TODO: Check that repository in archivePath is a valid repository
 
 	rel, err := createRelativeProjectFolderPath(archivePath, unarchivePath)
 	if err != nil {
 		return err
 	}
 
-	projects, err := structure.ParseProjectsJSON(structure.Dirs().Store.RepoConfig)
+	projects, err := s.ParseProjectsJSON(s.Dirs().Store.RepoConfig)
 	if err != nil {
 		return err
 	}
@@ -101,75 +65,46 @@ func HandleNewProject(archivePath string, unarchivePath string, id string, image
 		list_glb = append(list_glb, s)
 	}
 
-	var projectName string
-
-	if prjName != "" {
-		projectName = prjName
-	} else {
-		projectName = strings.TrimSuffix(filepath.Base(archivePath), filepath.Ext(archivePath))
+	if projectInst.ProjectName == "" {
+		projectInst.ProjectName = strings.TrimSuffix(filepath.Base(archivePath), filepath.Ext(archivePath))
 	}
 
-	var projectFolder string
-
-	if prjFolder != "" {
-		projectFolder = prjFolder
-	} else {
-		strings.TrimSuffix(filepath.Base(archivePath), filepath.Ext(archivePath))
+	if projectInst.ProjectFolder == "" {
+		projectInst.ProjectFolder = strings.TrimSuffix(filepath.Base(archivePath), filepath.Ext(archivePath))
 	}
 
-	var description string
-
-	if desc != "" {
-		description = desc
-	} else {
-		description = "No description available"
+	if projectInst.Description == "" {
+		projectInst.Description = "No description available"
 	}
 
-	var projectLink string
-
-	if prjLink != "" {
-		projectLink = prjLink
-	} else {
-		projectLink = strings.TrimSuffix(filepath.Base(archivePath), filepath.Ext(archivePath))
+	if projectInst.RepositoryLink == "" {
+		projectInst.RepositoryLink = strings.TrimSuffix(filepath.Base(archivePath), filepath.Ext(archivePath))
 	}
 
-	var imageLink string
-
-	if image != "" {
-		imageLink = image
-	} else {
-		imageLink = "https://dummyimage.com/470x300/0F6983/fff&text=Temp+Image"
+	if projectInst.Image == "" {
+		projectInst.Image = "https://dummyimage.com/470x300/0F6983/fff&text=Temp+Image"
 	}
 
 	// TODO: maybe want to move away from JSON file store for project repos, (fixed project index right now)
-	proj := structure.Project{
-		id,
-		imageLink,
-		projectName,
-		projectFolder,
-		description,
-		"",
-		projectLink,
-		list_sch,
-		list_pcb,
-		list_glb, // TODO: add a isgenerating flag to notify users of progress
-	}
+	projectInst.Schematics = list_sch
+	projectInst.Layouts = list_pcb
+	projectInst.Models = list_glb
 
-	projects.Projects = append(projects.Projects, proj)
+	projects.Projects = append(projects.Projects, projectInst)
 
 	// TODO: move long processes like zip and generating files to asynchronous operations
 	// TODO: frontend: expose multi model boards to the interface
 
 	//  TODO: iterate over range of glb paths
 	err = kicad.RequestGLTFModelFromKiCadCLI(
-		"./"+filepath.Join(structure.Dirs().RepoDir, projectFolder, list_pcb[0]),
-		"./"+filepath.Join(structure.Dirs().Cache.GLBDir, projectFolder, filepath.Base(list_glb[0])),
-		structure.UseDockerKiCadCLI)
+		"./"+filepath.Join(s.Dirs().RepoDir, projectInst.ProjectFolder, list_pcb[0]),
+		"./"+filepath.Join(s.Dirs().Cache.GLBDir, projectInst.ProjectFolder, filepath.Base(list_glb[0])),
+		s.UseDockerKiCadCLI)
 	if err != nil {
 		return err
 	}
 
-	optimization.OptimizeGLB("./"+filepath.Join(structure.Dirs().Cache.GLBDir, projectFolder, filepath.Base(list_glb[0])), structure.GLTFPackExecutablePath)
+	optimization.OptimizeGLB("./"+filepath.Join(s.Dirs().Cache.GLBDir, projectInst.ProjectFolder, filepath.Base(list_glb[0])), s.GLTFPackExecutablePath)
 
 	// Marshal new data
 	fmt.Println("Marshalling JSON")
@@ -179,7 +114,7 @@ func HandleNewProject(archivePath string, unarchivePath string, id string, image
 	}
 
 	fmt.Println("Writing to file")
-	err = os.WriteFile(structure.Dirs().Store.RepoConfig, b, 0755)
+	err = os.WriteFile(s.Dirs().Store.RepoConfig, b, 0755)
 	if err != nil {
 		return err
 	}
@@ -192,7 +127,7 @@ func HandleNewProject(archivePath string, unarchivePath string, id string, image
 
 func HandleRemoveProject(id string) error {
 	// Load in projects from JSON store
-	projects, err := structure.ParseProjectsJSON(structure.Dirs().Store.RepoConfig)
+	projects, err := s.ParseProjectsJSON(s.Dirs().Store.RepoConfig)
 	if err != nil {
 		return err
 	}
@@ -224,7 +159,7 @@ func HandleRemoveProject(id string) error {
 
 	// Writing to file
 	fmt.Println("Writing to file")
-	err = os.WriteFile(structure.Dirs().Store.RepoConfig, b, 0755)
+	err = os.WriteFile(s.Dirs().Store.RepoConfig, b, 0755)
 	if err != nil {
 		return err
 	}

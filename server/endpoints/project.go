@@ -76,7 +76,7 @@ func EndpointUploadProject(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// pass newly created project to handle project function
-	err = p.HandleNewProject(fp, s.Dirs().RepoDir, "", "", "", "", "", "")
+	err = p.HandleNewProject(fp, s.Dirs().RepoDir, s.Project{})
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -142,9 +142,7 @@ func EndpointPostLinkConnection(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Add repository to queue
-	// TODO: refactor these functions
-	err = p.HandleNewProject("./data/sources/"+path.Base(bodyString)+".git", "./data/sources/", "", "", "", "", "", "")
-	// err = p.HandleNewProject("./data/store/linked/"+path.Base(bodyString), "./data/store/linked/", "", "", "", "", "", "")
+	err = p.HandleNewProject("./data/sources/"+path.Base(bodyString), s.Dirs().RepoDir, s.Project{})
 	if err != nil {
 		fmt.Println("ERROR handling new project!")
 		fmt.Println(err)
@@ -326,7 +324,7 @@ func EndpointAddExampleProjects(w http.ResponseWriter, r *http.Request) {
 		// TODO: verify project integrity
 
 		// pass newly created project to handle project function
-		err = p.HandleNewProject(fp, s.Dirs().RepoDir, prj.Id, prj.Image, prj.ProjectName, prj.ProjectFolder, prj.Description, prj.RepositoryLink)
+		err = p.HandleNewProject(fp, s.Dirs().RepoDir, *prj)
 		if err != nil {
 			fmt.Println(err)
 		}
