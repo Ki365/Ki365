@@ -3,8 +3,11 @@ package structure
 import (
 	"encoding/json"
 	"io"
+	"log"
 	"os"
 	"path/filepath"
+
+	bolt "go.etcd.io/bbolt"
 )
 
 type Projects struct {
@@ -41,6 +44,9 @@ type store struct {
 	ExManifest string
 	RepoConfig string
 }
+
+// TODO: This is temporary until fully move to bolt.db
+var db bolt.DB
 
 const dataDir = "./data"
 const repoDir = "sources"
@@ -81,6 +87,23 @@ func Dirs() data {
 			RepoConfig: filepath.Join(dataDir, storeDir, repoConfig),
 		},
 	}
+}
+
+func CreateDB() {
+	db := OpenDB()
+	defer db.Close()
+}
+
+func OpenDB() *bolt.DB {
+	db, err := bolt.Open(filepath.Join(Dirs().DataDir, "tempdb.db"), 0600, nil)
+	if err != nil {
+		log.Fatal("Critical error in creating database")
+	}
+	return db
+}
+
+func GetDB() *bolt.DB {
+	return &db
 }
 
 // Conditional prefix changes executable locations for when local bin flag is set

@@ -7,11 +7,14 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 
 	"github.com/ki365/ki365/server/internal/kicad"
 	"github.com/ki365/ki365/server/internal/optimization"
 	s "github.com/ki365/ki365/server/structure"
+
+	bolt "go.etcd.io/bbolt"
 )
 
 // TODO: iterate over all in slice argument
@@ -63,6 +66,27 @@ func HandleNewProject(archivePath string, unarchivePath string, projectInst s.Pr
 		// TODO: each folder should have a unique generated cache dir
 		s := filepath.Join(strings.TrimSuffix(filepath.Base(p), filepath.Ext(p)) + ".glb")
 		list_glb = append(list_glb, s)
+	}
+
+	if projectInst.Id == "" {
+		db := s.OpenDB()
+		defer db.Close()
+
+		err := db.Update(func(tx *bolt.Tx) error {
+			b, err := tx.CreateBucketIfNotExists([]byte("Increments"))
+			if err != nil {
+				return err
+			}
+			a, _ := b.NextSequence()
+			fmt.Println(a)
+			projectInst.Id = "P-" + strconv.Itoa(int(a))
+
+			return nil
+		})
+		if err != nil {
+			fmt.Println("Fatal database error:  " + err.Error())
+			return err
+		}
 	}
 
 	if projectInst.ProjectName == "" {

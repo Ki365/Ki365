@@ -163,6 +163,8 @@ func main() {
 		s.TracespaceExecutablePath = filepath.Join(s.ConditionalBinPrefix, s.TracespaceExecutablePath)
 	}
 
+	s.CreateDB()
+
 	// TODO: Check all dependencies exist
 	// TODO: Check all dependencies exist if haven't periodically
 
